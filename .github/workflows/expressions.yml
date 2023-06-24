@@ -90,11 +90,16 @@ jobs:
           echo "${env:windir}"
           Add-Content -Path ${env:GITHUB_ENV} -Value "sleep_state1=red"
 
-      - name: Windows System
-        if: ${{ env.sleep_state1 == 'red' && env.sleep_state1 == 'red' }}
+      - name: env sleep_state1 eq red
+        if: ${{ matrix.os == 'windows-latest' && env.sleep_state1 == 'red' }}
         run: |
           echo "env sleep_state1 eq red"
+          
 
+      - name: windows and mingw compilers
+        if: ${{ matrix.os == 'windows-latest' && ( matrix.compiler = 'mingw64' || matrix.compiler = 'mingw32' ) }}
+        run: |
+          echo "windows and mingw compilers"
 
 
 
