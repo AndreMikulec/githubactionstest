@@ -88,9 +88,9 @@ jobs:
           echo "${env:windir}"
 
       - name: Windows System
-        if: ${{ matrix.os == 'windows-latest' && "${env:windir}" != "" }}
+        if: ${{ matrix.os == 'windows-latest' && github.event.repository.name != "" }}
         run: |
-          echo "true windows environment variable windir is seen"
+          echo "github actions variable github.event.repository.name is seen"
 
 
 
