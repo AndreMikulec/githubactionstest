@@ -8,10 +8,6 @@ on: [push, pull_request]
 # how to read the pre-processors
 # https://docs.github.com/en/actions/learn-github-actions/contexts
 
-name: plr CI NIX
-
-on: [push, pull_request]
-
 jobs:
 
   information_env:
