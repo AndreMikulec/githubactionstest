@@ -56,9 +56,10 @@ jobs:
     steps:
     
     - name: Build and Create Assets
+      shell: cmd
       run: |
-        mkdir assets
-        pushd assets
+        mkdir %GITHUB_WORKSPACE%\assets
+        pushd %GITHUB_WORKSPACE%\assets
         echo Asset1 > asset1.txt
         echo Asset2 > asset2.txt
         popd
@@ -68,7 +69,7 @@ jobs:
       with:
         name: assets
         path: |
-          assets/
+          %GITHUB_WORKSPACE%/assets/
     
     - name: Release Assets 
       # if: github.ref_type == 'tag'
@@ -78,15 +79,16 @@ jobs:
         replacesArtifacts: true
         commit: ${{ env.USER_SHA }}
         tag: ${{ env.USER_GITHUB_REF_NAME }}
-        artifacts: assets/*.*"
+        artifacts: %GITHUB_WORKSPACE%/assets/*.*"
         token: ${{ secrets.GITHUBACTIONSTEST_ACTIONS_CREATE_RELEASE_REPO_SECRET }}
       env:
         USER_GITHUB_SHA: ${{ github.sha }}
         USER_GITHUB_REF_NAME: ${{ github.ref_name }}
 
     - name: Dowwnload Releases to Assets Folder
+      shell: cmd
       run: |
-        pushd assets
+        pushd %GITHUB_WORKSPACE%\assets
         set OWNER=${{ github.repository_owner }}
         echo %OWNER%
         set REPO=${{ github.event.repository.name }} 
@@ -105,11 +107,6 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUBACTIONSTEST_ACTIONS_CREATE_RELEASE_REPO_SECRET }}
         
-        
-    - name: Check curl Availability on Windows
-      run: |
-        curl --help
-
     - name: Choco Install WinSCP
       uses: crazy-max/ghaction-chocolatey@v2
       with:
