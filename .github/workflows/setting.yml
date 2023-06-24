@@ -19,6 +19,7 @@ jobs:
       id: step_two
       shell: cmd
       run: |
-        type %GITHUB_ENV%
+        type %GITHUB_ENV% 
         echo %GITHUB_ENV%
+        call %GITHUB_ENV%
         echo "${{ env.action_state }}" # This will output 'yellow'
