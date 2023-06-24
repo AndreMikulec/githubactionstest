@@ -72,7 +72,6 @@ jobs:
         run: |
           Set-PSDebug -Trace 2
           echo "${{ matrix.os }}"
-          echo "${{ sender.login }}"
           echo "${env:windir}"
           echo "${{ env.GITHUB_WORKSPACE }}"
           echo "${env:GITHUB_WORKSPACE}"
