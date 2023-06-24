@@ -83,7 +83,7 @@ jobs:
 
 #           echo "${GITHUB_WORKSPACE}"
 
-          # D:\a\githubactionstest\githubactionstest
+          # D\a\githubactionstest\githubactionstest
           echo "${env:GITHUB_WORKSPACE}"
 
           # githubactionstest
@@ -98,6 +98,6 @@ jobs:
           echo "${{ github.ref_name }}"
 #           echo "${windir}"
 
-          # C:\Windows
+          # C\Windows
           echo "${env:windir}"
 
