@@ -69,7 +69,7 @@ jobs:
       with:
         name: assets
         path: |
-          %GITHUB_WORKSPACE%/assets/
+          assets/
     
     - name: Release Assets 
       # if: github.ref_type == 'tag'
