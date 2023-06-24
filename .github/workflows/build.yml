@@ -77,27 +77,27 @@ jobs:
       - name: Variables Test 1
         run: |
           Set-PSDebug -Trace 2
-          
+
           # windows-latext
-          echo "${{ matrix.os }}" 
-                             
+          echo "${{ matrix.os }}"
+
 #           echo "${GITHUB_WORKSPACE}"
 
           # D:\a\githubactionstest\githubactionstest
-          echo "${env:GITHUB_WORKSPACE}"           
-            
+          echo "${env:GITHUB_WORKSPACE}"
+
           # githubactionstest
           echo "${{ github.event.repository.name }}"
-           
+
 #           echo "${{ env.USER_GITHUB_REF_NAME }}"
 
           # 4d14ad88c7e2f4231500bcdcf635511ec593b75a
-          echo "${{ github.sha }}" 
-          
+          echo "${{ github.sha }}"
+
           # master
-          echo "${{ github.ref_name }}"              
+          echo "${{ github.ref_name }}"
 #           echo "${windir}"
 
           # C:\Windows
-          echo "${env:windir}"                       
+          echo "${env:windir}"
 
