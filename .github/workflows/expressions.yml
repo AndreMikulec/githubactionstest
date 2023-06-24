@@ -91,9 +91,9 @@ jobs:
           Add-Content -Path ${env:GITHUB_ENV} -Value "sleep_state1=red"
 
       - name: Windows System
-        if: contains(fromJSON('["push", "pull_request"]'), github.event_name)
+        if: matrix.pg = 'repository'
         run: |
-          echo "contains"
+          echo "matrix.pg"
 
 
 
