@@ -91,7 +91,7 @@ jobs:
           Add-Content -Path ${env:GITHUB_ENV} -Value "sleep_state1=red"
 
       - name: Windows System
-        if: env.sleep_state1 == 'red'
+        if: ${{ env.sleep_state1 == 'red' && env.sleep_state1 == 'red' }}
         run: |
           echo "env sleep_state1 eq red"
 
