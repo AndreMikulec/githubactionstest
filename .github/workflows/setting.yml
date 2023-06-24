@@ -33,26 +33,39 @@ jobs:
       id: step_two2
       shell: cmd
       run: |
-        set action_state=${{ env.action_state }} # Setting works ("echo" is broken using shell "cmd")
+        set action_state=${{ env.action_state }} # Setting works 
+        rem echo" is broken using shell "cmd"
+        printf "State is: '${{ env.action_state }}'" # Output works
 
         
   build_windows_latest:
     runs-on: windows-latest
 
     steps:
-    - name: Set the value
-      id: step_one
+    - name: Set the value1
+      id: step_one1
       run: |
-        Add-Content -Path ${env:GITHUB_ENV}  -Value 'sleep_state=red' 
+        Add-Content -Path ${env:GITHUB_ENV}  -Value 'sleep_state1=red' 
+        echo "Sleep State 1 is: '${{ env.sleep_state` }}'" # No output since same step
+        
+    - name: Set the value2
+      id: step_one2
+      run: |
+        printf "sleep_state2=purple" >> %GITHUB_ENV%
+        printf "Sleep State 2 is: '${{ env.sleep_state2 }}'" # No output since same step
         
     - name: Use the value again 1
       id: step_two1
       run: |
-        echo "Sleep State is: '${{ env.sleep_state }}'" # Output works
+        echo "Sleep State 1 is: '${{ env.sleep_state1 }}'" # Output works
+        echo "Sleep State 2 is: '${{ env.sleep_state2 }}'" # Output works
         
     - name: Use the value again 2
       id: step_two2
       shell: cmd
       run: |
-        set sleep_state=${{ env.sleep_state }} # Setting works
-
+        rem set sleep_state=${{ env.sleep_state }} # Setting works
+        rem echo is broken using shell "cmd"
+        printf "Sleep State 1 is: '${{ env.sleep_state1 }}'" # Output works
+        printf "Sleep State 2 is: '${{ env.sleep_state2 }}'" # Output works
+        
