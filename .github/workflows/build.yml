@@ -91,7 +91,7 @@ jobs:
         id: step_a
         run: |
           Set-PSDebug -Trace 2
-          ${env:DERIVED} = "DERIVED ${env:GITHUB_WORKSPACE}"
+          ${env:DERIVED} = "${env:GITHUB_WORKSPACE}"
           echo "${env:DERIVED}"
           echo "DERIVED=${env:DERIVED}" >> "$GITHUB_ENV"
 
@@ -99,7 +99,7 @@ jobs:
         id: step_b
         run: |
           Set-PSDebug -Trace 2
-          echo "${{ env.DERIVED }}"
+          echo "'${{ env.DERIVED }}'"
 
       - name: Set the value
         id: step_one
@@ -111,7 +111,8 @@ jobs:
         id: step_two
         run: |
           Set-PSDebug -Trace 2
-          echo "${{ env.action_state }}" # This will output 'yellow'
+          echo "'${{ env.action_state }}'" # This will output 'yellow'
+
 
 
 
