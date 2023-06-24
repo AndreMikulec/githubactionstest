@@ -91,9 +91,9 @@ jobs:
           Add-Content -Path ${env:GITHUB_ENV} -Value "sleep_state1=red"
 
       - name: Windows System
-        if: matrix.pg == 'repository'
+        if: sleep_state1 != 'repository'
         run: |
-          echo "matrix.pg"
+          echo "sleep_state1 ne repository"
 
 
 
