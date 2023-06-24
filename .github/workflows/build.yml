@@ -70,22 +70,13 @@ jobs:
 
       - name: Variables Test 1
         run: |
-          echo shell windir
-          echo ${env:windir}
-          echo env windir
-          echo ${{ env.windir }}
-          echo matrix.os
+          Set-PSDebug -Trace 2
           echo ${{ matrix.os }}
-
-          echo env.USER_SHA
+          echo ${{ env.windir }}
           echo ${{ env.USER_SHA }}
-          echo shell USER_SHA
           echo ${env:USER_SHA}
-
           ${env:DERIVED} = "${{ env.USER_SHA }} ${{ matrix.os }} ${env:windir}"
-          echo shell DERIVED
           echo ${env:DERIVED}
-          echo env DERIVED
           echo ${{ env.DERIVED }}
 
       - name: shell DERIVED detected in further step 
