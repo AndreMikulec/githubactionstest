@@ -112,7 +112,7 @@ jobs:
         run: |
           Set-PSDebug -Trace 2
           echo "'${{ env.action_state }}'" # This will output 'yellow'
-        with:
+        env:
           action_state: ${{ env.action_state }}
 
 
