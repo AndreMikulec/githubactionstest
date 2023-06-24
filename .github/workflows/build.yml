@@ -114,14 +114,14 @@ jobs:
         run: |
           echo if expression - env.USER_SHA detected
 
-      - name: shell USER_SHA detected
-        if: ${{ matrix.os == 'windows-latest' &&  ${env:USER_SHA} != '' }}
-        shell: cmd
-        run: |
-          echo if expression - shell USER_SHA detected
-
-      - name: shell DERIVED detected
-        if: ${{ matrix.os == 'windows-latest' &&  ${env:DERIVED} != '' }}
-        shell: cmd
-        run: |
-          echo if expression - shell DERIVED detected
+#       - name: shell USER_SHA detected # Unexpected symbol: '${env:USER_SHA}'
+#         if: ${{ matrix.os == 'windows-latest' &&  ${env:USER_SHA} != '' }}
+#         shell: cmd
+#         run: |
+#           echo if expression - shell USER_SHA detected
+# 
+#       - name: shell DERIVED detected # Unexpected symbol: '${env:DERIVED}'
+#         if: ${{ matrix.os == 'windows-latest' &&  ${env:DERIVED} != '' }}
+#         shell: cmd
+#         run: |
+#           echo if expression - shell DERIVED detected
