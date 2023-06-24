@@ -8,6 +8,9 @@ on: [push, pull_request]
 # how to read the pre-processors
 # https://docs.github.com/en/actions/learn-github-actions/contexts
 
+# Setting an environment variable
+# https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#environment-files
+
 jobs:
 
   information_env:
@@ -83,18 +86,20 @@ jobs:
           echo "${{ github.sha }}"
           echo "${{ github.ref_name }}"
           echo "${env:windir}"
-          
+
       - name: Variables Test Set Env Variables
         run: |
+          Set-PSDebug -Trace 2
           ${env:DERIVED} = "DERIVED ${env:GITHUB_WORKSPACE}"
           echo "${env:DERIVED}"
-          
+          echo "DERIVED = ${env:DERIVED}" >> "$GITHUB_ENV"
+
       - name: Variables Test Get Env Variables
         run: |
-          echo "${env:DERIVED}"
-          
-          
-          
-          
-          
-          
+          Set-PSDebug -Trace 2
+          echo "${{ env.DERIVED }}"
+
+
+
+
+
