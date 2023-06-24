@@ -1,21 +1,25 @@
 
 on: [push, pull_request]
 
+# GitHub Action Set $GITHUB_ENV Not Saving
+# 2022
+# https://stackoverflow.com/questions/71333335/github-action-set-github-env-not-saving
+
 jobs:
 
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
     - name: Set the value
       id: step_one
-      shell: cmd
+      shell: bash
       run: |
-        echo "set action_state=yellow" >> variables.bat
+        echo "action_state=yellow" >> $GITHUB_ENV
+        echo "State is: '${{ env.action_state }}'" # No output since same step
 
     - name: Use the value
       id: step_two
-      shell: cmd
+      shell: bash
       run: |
-        call variables.bat 1>nul
-        echo "%action_state%" # This will output 'yellow'
+        echo "State is: '${{ env.action_state }}'" # Output works
