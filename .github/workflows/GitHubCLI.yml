@@ -79,7 +79,7 @@ jobs:
         replacesArtifacts: true
         commit: ${{ env.USER_SHA }}
         tag: ${{ env.USER_GITHUB_REF_NAME }}
-        artifacts: %GITHUB_WORKSPACE%/assets/*.*"
+        artifacts: assets/*.*"
         token: ${{ secrets.GITHUBACTIONSTEST_ACTIONS_CREATE_RELEASE_REPO_SECRET }}
       env:
         USER_GITHUB_SHA: ${{ github.sha }}
