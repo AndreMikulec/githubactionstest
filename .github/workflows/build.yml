@@ -2,6 +2,12 @@ name: plr CI NIX
 
 on: [push, pull_request]
 
+# based much upon (with an online build that passed)
+# https://github.com/AndreMikulec/testapp/blob/f13d725a9fcfa5daff3d25ff00f9899b417cbc5d/.github/workflows/build_everything.yml
+
+# how to read the pre-processors
+# https://docs.github.com/en/actions/learn-github-actions/contexts
+
 jobs:
 
   information_env:
@@ -71,13 +77,27 @@ jobs:
       - name: Variables Test 1
         run: |
           Set-PSDebug -Trace 2
-          echo "${{ matrix.os }}"                    # windows-latext
+          
+          # windows-latext
+          echo "${{ matrix.os }}" 
+                             
 #           echo "${GITHUB_WORKSPACE}"
-          echo "${env:GITHUB_WORKSPACE}"             # D:\a\githubactionstest\githubactionstest
-          echo "${{ github.event.repository.name }}" # githubactionstest
+
+          # D:\a\githubactionstest\githubactionstest
+          echo "${env:GITHUB_WORKSPACE}"           
+            
+          # githubactionstest
+          echo "${{ github.event.repository.name }}"
+           
 #           echo "${{ env.USER_GITHUB_REF_NAME }}"
-          echo "${{ github.sha }}"                   # 4d14ad88c7e2f4231500bcdcf635511ec593b75a
-          echo "${{ github.ref_name }}"              # master
+
+          # 4d14ad88c7e2f4231500bcdcf635511ec593b75a
+          echo "${{ github.sha }}" 
+          
+          # master
+          echo "${{ github.ref_name }}"              
 #           echo "${windir}"
-          echo "${env:windir}"                       # C:\Windows
+
+          # C:\Windows
+          echo "${env:windir}"                       
 
