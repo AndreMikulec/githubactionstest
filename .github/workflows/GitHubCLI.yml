@@ -88,17 +88,19 @@ jobs:
     - name: Dowwnload Releases to Assets Folder
       shell: cmd
       run: |
-        pushd %GITHUB_WORKSPACE%\assets
+        rmdir %GITHUB_WORKSPACE%\assets /s /q
+        pushd %GITHUB_WORKSPACE%
         set OWNER=${{ github.repository_owner }}
-        echo %OWNER%
+        echo OWNER %OWNER%
         set REPO=${{ github.event.repository.name }} 
-        echo %REPO%
+        echo REPO %REPO%
         set OWNER_REPO=${{ github.repository }}
         echo OWNER_REPO %OWNER_REPO%
         set COMMIT_SHA=${{ github.sha }}
         echo COMMIT_SHA %COMMIT_SHA%
         set RUNID=${{ github.run_id }}
         echo RUNID_1 %RUNID%
+        gh --help
         gh run download %RUNID%
         popd
       env:
