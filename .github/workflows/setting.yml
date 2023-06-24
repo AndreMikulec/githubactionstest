@@ -33,5 +33,5 @@ jobs:
       id: step_two2
       shell: cmd
       run: |
-        set action_state=${{ env.action_state }}
-        echo "State"
+        set action_state=${{ env.action_state }} # Setting works
+        echo State
