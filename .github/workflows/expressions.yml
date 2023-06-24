@@ -5,11 +5,13 @@ on: [push, pull_request]
 # based much upon (with an online build that passed)
 # https://github.com/AndreMikulec/testapp/blob/f13d725a9fcfa5daff3d25ff00f9899b417cbc5d/.github/workflows/build_everything.yml
 
-# how to read the pre-processors
-# https://docs.github.com/en/actions/learn-github-actions/contexts
+# Expressions
+# https://docs.github.com/en/actions/learn-github-actions/expressions
 
-# Setting an environment variable
-# https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#environment-files
+# You can use the jobs.<job_id>.if conditional to prevent a job from running unless a condition is met.
+# https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idif
+
+
 
 jobs:
 
@@ -89,9 +91,9 @@ jobs:
           Add-Content -Path ${env:GITHUB_ENV} -Value "sleep_state1=red"
 
       - name: Windows System
-        if: "1" == "1"
+        if: github.repository != ''
         run: |
-          echo "one is one"
+          echo "github.repository"
 
 
 
