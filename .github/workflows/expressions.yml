@@ -89,9 +89,9 @@ jobs:
           Add-Content -Path ${env:GITHUB_ENV} -Value "sleep_state1=red"
 
       - name: Windows System
-        if: ${{ matrix.os == 'windows-latest' && env.sleep_state1 != "" }}
+        if: ${{ matrix.os == 'windows-latest' &&  matrix.os == 'windows-latest' }}
         run: |
-          echo "github actions user created env variable env.sleep_state1 is seen"
+          echo "testing expression AND"
 
 
 
