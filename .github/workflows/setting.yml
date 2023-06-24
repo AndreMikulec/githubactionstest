@@ -40,7 +40,11 @@ jobs:
         # powershell
         Add-Content -Path ${env:GITHUB_ENV} -Value "sleep_state1=red"
         # No output since same step
-        echo "Sleep State 1 is ${{ env.sleep_state1 }}" 
+        echo "Sleep State 1 is ${{ env.sleep_state1 }}"
+        Add-Content -Path ${env:GITHUB_ENV} -Value "sleep_stateX=${env:windir}"
+        #
+        function Set-EnvVar {param($X) Add-Content -Path ${env:GITHUB_ENV} -Value "$X"}
+        Set-EnvVar "gafile=${env:GITHUB_ENV}"
 
     - name: Set the value2
       id: step_one2
@@ -57,6 +61,8 @@ jobs:
         # powershell
         echo "Sleep State 1 is ${{ env.sleep_state1 }}" # Output works
         echo "Sleep State 2 is ${{ env.sleep_state2 }}" # Output works
+        echo "sleep_stateX  is ${{ env.sleep_stateX }}"
+        echo "gafile is        ${{ env.gafile }}"
 
     - name: Use the value again 2
       id: step_two2
@@ -67,4 +73,5 @@ jobs:
         printf "Sleep State 1 is ${{ env.sleep_state1 }}\n"
         rem Output works
         printf "Sleep State 2 is ${{ env.sleep_state2 }}\n"
+
 
