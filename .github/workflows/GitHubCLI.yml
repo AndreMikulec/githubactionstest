@@ -1,5 +1,8 @@
 name: TEST_RELEASE_AND_DEPLOY
 
+permissions:
+  contents: write
+
 on: [push, pull_request]
 
 # Using GitHub CLI in workflows
@@ -105,6 +108,8 @@ jobs:
         popd
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUBACTIONSTEST_ACTIONS_CREATE_RELEASE_REPO_SECRET }}
+        OWNER: ${{ github.repository_owner }}
+        REPO: ${{ github.event.repository.name }}
         
     - name: Choco Install WinSCP
       uses: crazy-max/ghaction-chocolatey@v2
