@@ -107,7 +107,7 @@ jobs:
         gh run download %RUNID%
         popd
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUBACTIONSTEST_ACTIONS_CREATE_RELEASE_REPO_SECRET }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         OWNER: ${{ github.repository_owner }}
         REPO: ${{ github.event.repository.name }}
         
