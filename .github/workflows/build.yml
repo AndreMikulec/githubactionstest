@@ -39,7 +39,7 @@ jobs:
     defaults:
       run:
     strategy:
-      # Disable fail-fast as we want results from all even if one fails.
+      # Disable fail-fast as we want results from all even if one fails
       fail-fast: false
       matrix:
         include:
