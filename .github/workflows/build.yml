@@ -62,7 +62,6 @@ jobs:
 
       - name: Windows System
         if: matrix.os == 'windows-latest'
-        shell: cmd
         run: |
           systeminfo
 
@@ -70,7 +69,6 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Variables Test 1
-        shell: cmd
         run: |
           echo shell windir
           echo ${env:windir}
@@ -91,37 +89,31 @@ jobs:
           echo ${{ env.DERIVED }}
 
       - name: shell DERIVED detected in further step 
-        shell: cmd
         run: |
           echo shell DERIVED
           echo ${env:DERIVED}
 
       - name: env DERIVED detected in further step
-        shell: cmd
         run: |
           echo env.DERIVED
           echo ${{ env.DERIVED }}
 
       - name: env.windir detected
         if: ${{ matrix.os == 'windows-latest' &&  env.windir != '' }}
-        shell: cmd
         run: |
           echo if expression - env.windir detected
 
       - name: env.USER_SHA detected
         if: ${{ matrix.os == 'windows-latest' &&  env.USER_SHA != '' }}
-        shell: cmd
         run: |
           echo if expression - env.USER_SHA detected
 
 #       - name: shell USER_SHA detected # Unexpected symbol: '${env:USER_SHA}'
 #         if: ${{ matrix.os == 'windows-latest' &&  ${env:USER_SHA} != '' }}
-#         shell: cmd
 #         run: |
 #           echo if expression - shell USER_SHA detected
 # 
 #       - name: shell DERIVED detected # Unexpected symbol: '${env:DERIVED}'
 #         if: ${{ matrix.os == 'windows-latest' &&  ${env:DERIVED} != '' }}
-#         shell: cmd
 #         run: |
 #           echo if expression - shell DERIVED detected
