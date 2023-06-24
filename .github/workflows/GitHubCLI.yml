@@ -52,6 +52,37 @@ on: [push, pull_request]
 # help from
 # https://github.com/AndreMikulec/testapp/blob/f13d725a9fcfa5daff3d25ff00f9899b417cbc5d/.github/workflows/build_everything.yml
 
+
+# GitHub provides a token that you can use to authenticate 
+# on behalf of GitHub Actions.
+# ---------------------------------------------------------------
+# 
+# Using the GITHUB_TOKEN in a workflow
+# You can use the GITHUB_TOKEN by using the standard syntax for referencing secrets: 
+# ${{ secrets.GITHUB_TOKEN }}
+# 
+# An action can access the GITHUB_TOKEN through the 
+#   github.token 
+# context even if the workflow does not explicitly pass the 
+# GITHUB_TOKEN to the action
+# 
+# As a good security practice, you should always make sure that actions only have the minimum access they require by limiting the permissions granted to the GITHUB_TOKEN
+# 
+# Example 1: passing the GITHUB_TOKEN as an input
+# 
+# ${{ secrets.GITHUB_TOKEN }}
+# 
+# default permissions to be either permissive or restricted. 
+# 
+# https://docs.github.com/en/actions/security-guides/automatic-token-authentication
+# 
+# Permissions required for GitHub Apps
+# https://docs.github.com/en/rest/overview/permissions-required-for-github-apps?apiVersion=2022-11-28
+# 
+# Document required permissions for access tokens for each CLI command #489
+# https://github.com/cli/cli/issues/4897
+
+
 jobs:
   build_and_deploy:
     runs-on: windows-latest
@@ -102,7 +133,7 @@ jobs:
         set COMMIT_SHA=${{ github.sha }}
         echo COMMIT_SHA %COMMIT_SHA%
         set RUNID=${{ github.run_id }}
-        echo RUNID_1 %RUNID%
+        echo RUNID %RUNID%
         gh --help
         gh run download %RUNID%
         popd
