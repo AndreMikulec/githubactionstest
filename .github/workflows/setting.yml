@@ -34,4 +34,4 @@ jobs:
       shell: cmd
       run: |
         set action_state=${{ env.action_state }}
-        echo "State is: %action_state%"
+        echo "State"
