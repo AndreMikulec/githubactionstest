@@ -91,9 +91,9 @@ jobs:
           Add-Content -Path ${env:GITHUB_ENV} -Value "sleep_state1=red"
 
       - name: Windows System
-        if: sleep_state1 != 'repository'
+        if: env.sleep_state1 != 'repository'
         run: |
-          echo "sleep_state1 ne repository"
+          echo "env sleep_state1 ne repository"
 
 
 
