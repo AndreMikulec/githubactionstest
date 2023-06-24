@@ -5,6 +5,10 @@ on: [push, pull_request]
 # 2022
 # https://stackoverflow.com/questions/71333335/github-action-set-github-env-not-saving
 
+# based on
+# Example of writing an environment variable to GITHUB_ENV
+# https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#setting-an-environment-variable
+
 jobs:
 
   build_ubuntu_latest:
@@ -15,6 +19,7 @@ jobs:
       id: step_one
       shell: bash
       run: |
+        # bash
         echo "action_state=yellow" >> $GITHUB_ENV
         echo "State is: '${{ env.action_state }}'" # No output since same step
 
@@ -22,6 +27,7 @@ jobs:
       id: step_two
       shell: bash
       run: |
+        # bash
         echo "Action State is: '${{ env.action_state }}'" # Output works
 
   build_windows_latest:
@@ -31,29 +37,34 @@ jobs:
     - name: Set the value1
       id: step_one1
       run: |
+        # powershell
         Add-Content -Path ${env:GITHUB_ENV} -Value "sleep_state1=red"
-        echo "Sleep State 1 is ${{ env.sleep_state1 }}" # No output since same step
+        # No output since same step
+        echo "Sleep State 1 is ${{ env.sleep_state1 }}" 
 
     - name: Set the value2
       id: step_one2
       shell: cmd
       run: |
+        rem windows command
         printf "sleep_state2=purple" >> %GITHUB_ENV%
         rem No output since same step
-        printf "Sleep State 2 is: '${{ env.sleep_state2 }}'"
+        printf "Sleep State 2 is ${{ env.sleep_state2 }}"
 
     - name: Use the value again 1
       id: step_two1
       run: |
-        echo "Sleep State 1 is: ${{ env.sleep_state1 }}" # Output works
-        echo "Sleep State 2 is: ${{ env.sleep_state2 }}" # Output works
+        # powershell
+        echo "Sleep State 1 is ${{ env.sleep_state1 }}" # Output works
+        echo "Sleep State 2 is ${{ env.sleep_state2 }}" # Output works
 
     - name: Use the value again 2
       id: step_two2
       shell: cmd
       run: |
+        rem windows command
         rem Output works
-        printf "Sleep State 1 is: '${{ env.sleep_state1 }}'"
+        printf "Sleep State 1 is ${{ env.sleep_state1 }}"
         rem Output works
-        printf "Sleep State 2 is: '${{ env.sleep_state2 }}'"
+        printf "Sleep State 2 is ${{ env.sleep_state2 }}"
 
