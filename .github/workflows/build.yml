@@ -83,3 +83,18 @@ jobs:
           echo "${{ github.sha }}"
           echo "${{ github.ref_name }}"
           echo "${env:windir}"
+          
+      - name: Variables Test Set Env Variables
+        run: |
+          ${env:DERIVED} = "DERIVED ${env:GITHUB_WORKSPACE}"
+          echo "${env:DERIVED}"
+          
+      - name: Variables Test Get Env Variables
+        run: |
+          echo "${env:DERIVED}"
+          
+          
+          
+          
+          
+          
