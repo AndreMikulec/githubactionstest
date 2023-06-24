@@ -78,12 +78,12 @@ jobs:
           echo ${{ env.windir }}
           echo matrix.os
           echo ${{ matrix.os }}
-          # addition by Github Actions
+
           echo env.USER_SHA
           echo ${{ env.USER_SHA }}
           echo shell USER_SHA
           echo ${env:USER_SHA}
-          #
+
           ${env:DERIVED} = "${{ env.USER_SHA }} ${{ matrix.os }} ${env:windir}"
           echo shell DERIVED
           echo ${env:DERIVED}
