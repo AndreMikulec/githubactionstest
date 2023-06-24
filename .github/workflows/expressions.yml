@@ -89,9 +89,9 @@ jobs:
           Add-Content -Path ${env:GITHUB_ENV} -Value "sleep_state1=red"
 
       - name: Windows System
-        if: "${env:GITHUB_WORKSPACE}" != ""
+        if: "1" == "1"
         run: |
-          echo "env GITHUB_WORKSPACE"
+          echo "one is one"
 
 
 
