@@ -64,7 +64,7 @@ jobs:
       run: |
         rem windows command
         rem Output works
-        printf "Sleep State 1 is ${{ env.sleep_state1 }}"
+        printf "Sleep State 1 is ${{ env.sleep_state1 }}\n"
         rem Output works
-        printf "Sleep State 2 is ${{ env.sleep_state2 }}"
+        printf "Sleep State 2 is ${{ env.sleep_state2 }}\n"
 
