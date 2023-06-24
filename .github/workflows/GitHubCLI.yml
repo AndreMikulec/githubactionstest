@@ -79,7 +79,7 @@ jobs:
         replacesArtifacts: true
         commit: ${{ env.USER_SHA }}
         tag: ${{ env.USER_GITHUB_REF_NAME }}
-        artifacts: assets/*.*"
+        artifacts: "assets/*.*"
         token: ${{ secrets.GITHUBACTIONSTEST_ACTIONS_CREATE_RELEASE_REPO_SECRET }}
       env:
         USER_GITHUB_SHA: ${{ github.sha }}
@@ -96,12 +96,9 @@ jobs:
         set OWNER_REPO=${{ github.repository }}
         echo OWNER_REPO %OWNER_REPO%
         set COMMIT_SHA=${{ github.sha }}
-        echo %COMMIT_SHA%
+        echo COMMIT_SHA %COMMIT_SHA%
         set RUNID=${{ github.run_id }}
         echo RUNID_1 %RUNID%
-        rem Later. I need a Nix.
-        rem RUNID=$(gh api repos/$OWNER/$REPO/commits/$COMMIT_SHA/check-runs | jq -r '.check_runs[] | select(.name == "TEST_RELEASE_AND_DEPLOY") | .html_url | capture("/runs/(?<number>[0-9]+)/jobs") | .number' | sed 's/"//g' | head -n 1)
-        echo RUNID_2 %RUNID%
         gh run download %RUNID%
         popd
       env:
