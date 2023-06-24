@@ -87,33 +87,6 @@ jobs:
           echo "${{ github.ref_name }}"
           echo "${env:windir}"
 
-      - name: Variables Test Set Env Variables
-        id: step_a
-        run: |
-          Set-PSDebug -Trace 2
-          ${env:DERIVED} = "${env:GITHUB_WORKSPACE}"
-          echo "${env:DERIVED}"
-          echo "DERIVED=${env:DERIVED}" >> "$GITHUB_ENV"
-
-      - name: Variables Test Get Env Variables
-        id: step_b
-        run: |
-          Set-PSDebug -Trace 2
-          echo "'${{ env.DERIVED }}'"
-
-      - name: Set the value
-        id: step_one
-        run: |
-          Set-PSDebug -Trace 2
-          echo "action_state=yellow" >> "$GITHUB_ENV"
-
-      - name: Use the value
-        id: step_two
-        run: |
-          Set-PSDebug -Trace 2
-          echo "'${{ env.action_state }}'" # This will output 'yellow'
-        env:
-          action_state: ${{ env.action_state }}
 
 
 
