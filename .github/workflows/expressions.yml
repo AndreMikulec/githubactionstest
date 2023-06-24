@@ -91,9 +91,9 @@ jobs:
           Add-Content -Path ${env:GITHUB_ENV} -Value "sleep_state1=red"
 
       - name: Windows System
-        if: github.sha != ''
+        if: contains(fromJSON('["push", "pull_request"]'), github.event_name)
         run: |
-          echo "github.sha"
+          echo "contains"
 
 
 
