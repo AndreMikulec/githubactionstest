@@ -72,39 +72,13 @@ jobs:
         run: |
           Set-PSDebug -Trace 2
           echo "${{ matrix.os }}"
-          echo "${env:windir}"
-          echo "${{ env.GITHUB_WORKSPACE }}"
+          echo "${GITHUB_WORKSPACE}"
           echo "${env:GITHUB_WORKSPACE}"
-          ${env:DERIVED} = "${env:GITHUB_WORKSPACE} ${{ matrix.os }} ${env:windir} ${{ sender.login }}"
-          echo "${env:DERIVED}"
-          echo ${{ env.DERIVED }}
+          echo "${{ github.event.repository.name }}"
+          echo "${{ env.USER_GITHUB_REF_NAME }}"
+          echo "${{ github.sha }}"
+          echo "${{ github.ref_name }}"
 
-      - name: shell DERIVED detected in further step 
-        run: |
-          echo shell DERIVED
-          echo ${env:DERIVED}
+          echo "${windir}"
+          echo "${env:windir}"
 
-      - name: env DERIVED detected in further step
-        run: |
-          echo env.DERIVED
-          echo ${{ env.DERIVED }}
-
-      - name: env.windir detected
-        if: ${{ matrix.os == 'windows-latest' &&  env.windir != '' }}
-        run: |
-          echo if expression - env.windir detected
-
-      - name: env.USER_SHA detected
-        if: ${{ matrix.os == 'windows-latest' &&  env.USER_SHA != '' }}
-        run: |
-          echo if expression - env.USER_SHA detected
-
-#       - name: shell USER_SHA detected # Unexpected symbol: '${env:USER_SHA}'
-#         if: ${{ matrix.os == 'windows-latest' &&  ${env:USER_SHA} != '' }}
-#         run: |
-#           echo if expression - shell USER_SHA detected
-# 
-#       - name: shell DERIVED detected # Unexpected symbol: '${env:DERIVED}'
-#         if: ${{ matrix.os == 'windows-latest' &&  ${env:DERIVED} != '' }}
-#         run: |
-#           echo if expression - shell DERIVED detected
