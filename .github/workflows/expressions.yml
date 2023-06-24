@@ -89,7 +89,7 @@ jobs:
           echo "${{ github.ref_name }}"
           echo "${env:windir}"
           Add-Content -Path ${env:GITHUB_ENV} -Value "sleep_state1=red"
-
+          Add-Content -Path ${env:GITHUB_ENV} -Value "sleep_stateX=${env:windir}"
 
       - name: env sleep_state1 eq red
         if: ${{ matrix.os == 'windows-latest' && env.sleep_state1 == 'red' }}
@@ -105,6 +105,15 @@ jobs:
         if: github.ref_name == 'master' 
         run: |
           echo "github ref_name is master"
+          
+      - name: env sleep_stateX contains Windows
+        if: contains(env.sleep_stateX, 'Windows') 
+        run: |
+          echo "env sleep_stateX contains Windows"
+          
+
+          
+          
 
 
 
