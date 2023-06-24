@@ -36,8 +36,6 @@ jobs:
 
     name: ${{ matrix.os }} ${{ matrix.pg }} ${{ matrix.Platform}} ${{ matrix.Configuration }} ${{ matrix.rversion }} ${{ matrix.Compiler}}
     runs-on: ${{ matrix.os }}
-    defaults:
-      run:
     strategy:
       # Disable fail-fast as we want results from all even if one fails
       fail-fast: false
@@ -92,7 +90,7 @@ jobs:
           echo env DERIVED
           echo ${{ env.DERIVED }}
 
-      - name: shell DERIVED detected in further step
+      - name: shell DERIVED detected in further step 
         shell: cmd
         run: |
           echo shell DERIVED
@@ -105,25 +103,25 @@ jobs:
           echo ${{ env.DERIVED }}
 
       - name: env.windir detected
-        if: ${{ matrix.os == 'windows-latest' &&  env.windir != "" }}
+        if: ${{ matrix.os == 'windows-latest' &&  env.windir != '' }}
         shell: cmd
         run: |
           echo if expression - env.windir detected
 
       - name: env.USER_SHA detected
-        if: ${{ matrix.os == 'windows-latest' &&  env.USER_SHA != "" }}
+        if: ${{ matrix.os == 'windows-latest' &&  env.USER_SHA != '' }}
         shell: cmd
         run: |
           echo if expression - env.USER_SHA detected
 
       - name: shell USER_SHA detected
-        if: ${{ matrix.os == 'windows-latest' &&  ${env:USER_SHA} != "" }}
+        if: ${{ matrix.os == 'windows-latest' &&  ${env:USER_SHA} != '' }}
         shell: cmd
         run: |
           echo if expression - shell USER_SHA detected
 
       - name: shell DERIVED detected
-        if: ${{ matrix.os == 'windows-latest' &&  ${env:DERIVED} != "" }}
+        if: ${{ matrix.os == 'windows-latest' &&  ${env:DERIVED} != '' }}
         shell: cmd
         run: |
           echo if expression - shell DERIVED detected
