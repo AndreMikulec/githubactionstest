@@ -45,7 +45,7 @@ jobs:
     - name: Set the value1
       id: step_one1
       run: |
-        Add-Content -Path ${env:GITHUB_ENV}  -Value 'sleep_state1=red' 
+        Add-Content -Path ${env:GITHUB_ENV}  -Value "sleep_state1=red" 
         echo "Sleep State 1 is: ${{ env.sleep_state1` }}" # No output since same step
         
     - name: Set the value2
