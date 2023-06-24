@@ -46,7 +46,7 @@ jobs:
       id: step_one1
       run: |
         Add-Content -Path ${env:GITHUB_ENV}  -Value 'sleep_state1=red' 
-        echo "Sleep State 1 is: '${{ env.sleep_state` }}'" # No output since same step
+        echo "Sleep State 1 is: '${{ env.sleep_state1` }}'" # No output since same step
         
     - name: Set the value2
       id: step_one2
@@ -64,7 +64,8 @@ jobs:
       id: step_two2
       shell: cmd
       run: |
-        rem set sleep_state=${{ env.sleep_state }} # Setting works
+        rem set sleep_state1=${{ env.sleep_state1 }} # Setting works
+        rem set sleep_state2=${{ env.sleep_state2 }} # Setting works
         rem echo is broken using shell "cmd"
         printf "Sleep State 1 is: '${{ env.sleep_state1 }}'" # Output works
         printf "Sleep State 2 is: '${{ env.sleep_state2 }}'" # Output works
