@@ -15,6 +15,7 @@ jobs:
       id: step_one
       shell: bash
       run: |
+        set -x -v -e
         echo "action_state=yellow" >> $GITHUB_ENV
         echo "State is: '${{ env.action_state }}'" # No output since same step
 
@@ -22,4 +23,5 @@ jobs:
       id: step_two
       shell: bash
       run: |
+        set -x -v -e
         echo "State is: '${{ env.action_state }}'" # Output works
