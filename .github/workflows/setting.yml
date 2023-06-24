@@ -7,7 +7,7 @@ on: [push, pull_request]
 
 jobs:
 
-  build ubuntu-latest:
+  build_ubuntu_latest:
     runs-on: ubuntu-latest
 
     steps:
@@ -33,10 +33,10 @@ jobs:
       id: step_two2
       shell: cmd
       run: |
-        set action_state=${{ env.action_state }} # Setting works (echo is broken using shell "cmd")
+        set action_state=${{ env.action_state }} # Setting works ("echo" is broken using shell "cmd")
 
         
-  build windows-latest:
+  build_windows_latest:
     runs-on: windows-latest
 
     steps:
