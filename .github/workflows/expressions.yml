@@ -1,0 +1,100 @@
+name: plr CI NIX
+
+on: [push, pull_request]
+
+# based much upon (with an online build that passed)
+# https://github.com/AndreMikulec/testapp/blob/f13d725a9fcfa5daff3d25ff00f9899b417cbc5d/.github/workflows/build_everything.yml
+
+# how to read the pre-processors
+# https://docs.github.com/en/actions/learn-github-actions/contexts
+
+# Setting an environment variable
+# https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#environment-files
+
+jobs:
+
+  information_env:
+    name: Knowledge About env
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dump github context global data
+        run:   export
+        shell: bash
+
+  information_github:
+    name: Knowledge About github
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dump github context global data
+        run:   echo "$GITHUB_CONTEXT"
+        shell: bash
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+
+  information_ubuntu:
+    name: Knowledge About runner ubuntu
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dump runner context global data
+        run:   echo "$RUNNER_CONTEXT"
+        shell: bash
+        env:
+          RUNNER_CONTEXT: ${{ toJson(runner) }}
+
+  build_NIX:
+
+    name: ${{ matrix.os }} ${{ matrix.pg }} ${{ matrix.Platform}} ${{ matrix.Configuration }} ${{ matrix.rversion }} ${{ matrix.Compiler}}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      # Disable fail-fast as we want results from all even if one fails
+      fail-fast: false
+      matrix:
+        include:
+
+          - pg: repository
+            configuration: Debug
+            Platform: x64
+            os: windows-latest
+            rversion: 4.2.3
+            compiler: mingw64
+            asset_extension: .7z
+
+          - pg: repository
+            configuration: Debug
+            Platform: x64
+            os: windows-latest
+            rversion: 4.3.1
+            compiler: mingw64
+            asset_extension: .7z
+
+    steps:
+
+      - name: Windows System
+        if: matrix.os == 'windows-latest'
+        run: |
+          systeminfo
+
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Variables Test 1
+        run: |
+          Set-PSDebug -Trace 2
+          echo "${{ matrix.os }}"
+          echo "${env:GITHUB_WORKSPACE}"
+          echo "${{ github.event.repository.name }}"
+          echo "${{ github.sha }}"
+          echo "${{ github.ref_name }}"
+          echo "${env:windir}"
+
+      - name: Windows System
+        if: ${{ matrix.os == 'windows-latest' && "${env:windir}" != "" }}
+        run: |
+          echo "true windows environment variable windir is seen"
+
+
+
+
+
+
+
