@@ -91,9 +91,9 @@ jobs:
           Add-Content -Path ${env:GITHUB_ENV} -Value "sleep_state1=red"
 
       - name: Windows System
-        if: github.repository != ''
+        if: github.sha != ''
         run: |
-          echo "github.repository"
+          echo "github.sha"
 
 
 
