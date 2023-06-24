@@ -93,7 +93,7 @@ jobs:
           Set-PSDebug -Trace 2
           ${env:DERIVED} = "DERIVED ${env:GITHUB_WORKSPACE}"
           echo "${env:DERIVED}"
-          echo "DERIVED = ${env:DERIVED}" >> "$GITHUB_ENV"
+          echo "DERIVED=${env:DERIVED}" >> "$GITHUB_ENV"
 
       - name: Variables Test Get Env Variables
         id: step_b
