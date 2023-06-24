@@ -7,7 +7,7 @@ on: [push, pull_request]
 
 jobs:
 
-  build:
+  build ubuntu-latest:
     runs-on: ubuntu-latest
 
     steps:
@@ -22,16 +22,37 @@ jobs:
       id: step_two
       shell: bash
       run: |
-        echo "State is: '${{ env.action_state }}'" # Output works
+        echo "Action State is: '${{ env.action_state }}'" # Output works
 
     - name: Use the value again 1
       id: step_two1
       run: |
-        echo "State is: '${{ env.action_state }}'" # Output works
+        echo "Action State is: '${{ env.action_state }}'" # Output works
         
     - name: Use the value again 2
       id: step_two2
       shell: cmd
       run: |
-        set action_state=${{ env.action_state }} # Setting works
-        echo State
+        set action_state=${{ env.action_state }} # Setting works (echo is broken using shell "cmd")
+
+        
+  build windows-latest:
+    runs-on: windows-latest
+
+    steps:
+    - name: Set the value
+      id: step_one
+      run: |
+        Add-Content -Path ${env:GITHUB_ENV}  -Value 'sleep_state=red' 
+        
+    - name: Use the value again 1
+      id: step_two1
+      run: |
+        echo "Sleep State is: '${{ env.sleep_state }}'" # Output works
+        
+    - name: Use the value again 2
+      id: step_two2
+      shell: cmd
+      run: |
+        set sleep_state=${{ env.sleep_state }} # Setting works
+
