@@ -11,11 +11,11 @@ jobs:
       id: step_one
       shell: cmd
       run: |
-        echo "action_state=yellow" >> variables.bat
+        echo "set action_state=yellow" >> variables.bat
 
     - name: Use the value
       id: step_two
       shell: cmd
       run: |
-        call variables.bat
+        call variables.bat 1>nul
         echo "%action_state%" # This will output 'yellow'
