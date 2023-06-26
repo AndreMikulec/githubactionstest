@@ -26,6 +26,8 @@ jobs:
         env:
           RUNNER_CONTEXT: ${{ toJson(runner) }}
 
+
+
   information_windows_latest:
     name: Windows Knowledge About everything
     runs-on: windows-latest
@@ -58,16 +60,16 @@ jobs:
         run: export
         shell: bash
 
-    steps:
       - name: MacOS Dump github context global data
         run: echo "$GITHUB_CONTEXT"
         shell: bash
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
 
-    steps:
       - name: MacOS Dump runner context global data
         run: echo "$RUNNER_CONTEXT"
         shell: bash
         env:
           RUNNER_CONTEXT: ${{ toJson(runner) }}
+
+
