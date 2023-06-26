@@ -62,7 +62,8 @@ jobs:
         echo "Sleep State 1 is ${{ env.sleep_state1 }}" # Output works
         echo "Sleep State 2 is ${{ env.sleep_state2 }}" # Output works
         echo "sleep_stateX  is ${{ env.sleep_stateX }}" # Output works
-        echo "gafile is        ${{ env.gafile }}"       # Output works
+        echo "env.           gafile is ${{ env.gafile }}"  # Output works
+        echo "OS Environment gafile is ${env:gafile }"  
 
     - name: Use the value again 2
       id: step_two2
