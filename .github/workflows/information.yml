@@ -1,0 +1,73 @@
+
+name: Information
+
+on: [push, pull_request]
+
+jobs:
+
+  information_ubuntu_latest:
+    name: Ubuntu Knowledge About everything
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Ubuntu Dump github env global data
+        run: export
+        shell: bash
+
+      - name: Ubuntu Dump github context global data
+        run: echo "$GITHUB_CONTEXT"
+        shell: bash
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+
+      - name: Ubuntu Dump runner context global data
+        run: echo "$RUNNER_CONTEXT"
+        shell: bash
+        env:
+          RUNNER_CONTEXT: ${{ toJson(runner) }}
+
+  information_windows_latest:
+    name: Windows Knowledge About everything
+    runs-on: windows-latest
+
+    steps:
+      - name: Windows Dump github env global data
+        shell: cmd
+        run: set
+
+      - name: Windows Dump github context global data
+        run: echo %GITHUB_CONTEXT%
+        shell: cmd
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+
+      - name: Windows Dump runner context global data
+        run: echo %RUNNER_CONTEXT%
+        shell: cmd
+        env:
+          RUNNER_CONTEXT: ${{ toJson(runner) }}
+
+
+
+  information_macos_latest:
+    name: MacOS Knowledge About everything
+    runs-on: macos-latest
+
+    steps:
+      - name: MacOS Dump github env global data
+        run: export
+        shell: bash
+
+    steps:
+      - name: MacOS Dump github context global data
+        run: echo "$GITHUB_CONTEXT"
+        shell: bash
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+
+    steps:
+      - name: MacOS Dump runner context global data
+        run: echo "$RUNNER_CONTEXT"
+        shell: bash
+        env:
+          RUNNER_CONTEXT: ${{ toJson(runner) }}
