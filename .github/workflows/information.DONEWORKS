@@ -26,6 +26,17 @@ jobs:
         env:
           RUNNER_CONTEXT: ${{ toJson(runner) }}
 
+      - name: Ubuntu Dump secrets
+        run: echo "$SECRETS"
+        shell: bash
+        env:
+          SECRETS: ${{ toJSON(secrets) }}
+
+      - name: Ubuntu Dump .Env vars
+        run: echo "$VARS"
+        shell: bash
+        env:
+          VARS: ${{ toJSON(vars) }}
 
 
   information_windows_latest:
@@ -49,6 +60,17 @@ jobs:
         env:
           RUNNER_CONTEXT: ${{ toJson(runner) }}
 
+      - name: Windows Dump secrets
+        run: echo %SECRETS%
+        shell: cmd
+        env:
+          SECRETS: ${{ toJSON(secrets) }}
+
+      - name: Windows Dump env. vars
+        run: echo %VARS%
+        shell: cmd
+        env:
+          VARS: ${{ toJSON(vars) }}
 
 
   information_macos_latest:
@@ -72,4 +94,14 @@ jobs:
         env:
           RUNNER_CONTEXT: ${{ toJson(runner) }}
 
+      - name: MacOS Dump secrets
+        run: echo "$SECRETS"
+        shell: bash
+        env:
+          SECRETS: ${{ toJSON(secrets) }}
 
+      - name: MacOS Dump .Env vars
+        run: echo "$VARS"
+        shell: bash
+        env:
+          VARS: ${{ toJSON(vars) }}
