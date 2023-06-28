@@ -1,6 +1,6 @@
 
 name: Information
-env:
+# env:
 #   # Enabling runner diagnostic logging
 #   ACTIONS_RUNNER_DEBUG: true
 #   # Enabling step debug logging
@@ -79,8 +79,14 @@ jobs:
       - name: Windows Poweshell echo test
         shell: cmd
         run: |
+          Start-Transcript -Path ran.txt -IncludeInvocationHeader
           Set-PSDebug -Trace 2
+
           pwd
+
+          Set-PSDebug -Trace 0
+          Stop-Transcript
+          Get-Content -Path ran.txt
 
       - name: Windows Dump runner context global data
         shell: cmd
