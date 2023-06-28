@@ -22,6 +22,7 @@ jobs:
         run:
           set -x -v -e;
           pwd;
+          echo ${GITHUB_WORKSPACE}
           echo Hello > Hello.txt
           ls -alrt;
           cat Hello.txt;
@@ -72,6 +73,7 @@ jobs:
 
           dir
           pwd
+          echo "${env:GITHUB_WORKSPACE}"
           dir
           pwd
           dir
@@ -83,7 +85,7 @@ jobs:
           echo "$(pwd)"
           echo "$(dir)"
 
-          Get-Content -Path ran.txt
+          Get-Content -Path "${env:GITHUB_WORKSPACE}\ran.txt"
           Stop-Transcript
           Set-PSDebug -Trace 0
 
