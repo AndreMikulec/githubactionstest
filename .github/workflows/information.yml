@@ -1,8 +1,8 @@
 
 name: Information
-# env:
-#   # Enabling runner diagnostic logging
-#   ACTIONS_RUNNER_DEBUG: true
+env:
+  # Enabling runner diagnostic logging
+  ACTIONS_RUNNER_DEBUG: true
 #   # Enabling step debug logging
 #   ACTIONS_STEP_DEBUG: true
 
@@ -22,8 +22,8 @@ jobs:
         run:
           set -x -v -e;
           pwd;
-          echo ${GITHUB_WORKSPACE}
-          echo Hello > Hello.txt
+          echo ${GITHUB_WORKSPACE};
+          echo Hello > Hello.txt;
           ls -alrt;
           cat Hello.txt;
           export;
