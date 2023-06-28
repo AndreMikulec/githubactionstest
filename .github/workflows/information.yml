@@ -20,6 +20,7 @@ jobs:
         shell: bash
         run:
           set -x -v -e
+          echo DONE
 
       - name: Ubuntu Dump github env global data
         shell: bash
@@ -85,6 +86,8 @@ jobs:
           Start-Transcript -Path ran.txt -IncludeInvocationHeader
           Set-PSDebug -Trace 2
 
+          dir
+          
           dir
 
           Stop-Transcript
