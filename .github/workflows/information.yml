@@ -58,7 +58,7 @@ jobs:
 
 
   debug_powershell:
-    name: Windows Knowledge About everything
+    name: Debugging Powershell
     runs-on: windows-latest
     steps:
       - name: Windows Poweshell echo test
@@ -71,6 +71,7 @@ jobs:
           dir
           pwd
           dir
+          echo "$(pwd)"
 
           Get-Content -Path ran.txt
           Stop-Transcript
