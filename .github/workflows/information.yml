@@ -35,7 +35,7 @@ jobs:
         run: |
           set -x -v -e
           pwd
-          echo "$GITHUB_CONTEXT"
+          # echo "$GITHUB_CONTEXT"
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
 
