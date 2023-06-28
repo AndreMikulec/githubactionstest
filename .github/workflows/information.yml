@@ -16,6 +16,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Ubuntu Debugging Dummy
+        shell: bash
+        run:
+          set -x -v -e
+
       - name: Ubuntu Dump github env global data
         shell: bash
         run:
@@ -23,8 +28,6 @@ jobs:
           pwd
           export
           cd /
-        env:
-          DUMMY: dummy
 
       - name: Ubuntu Dump github context global data
         shell: bash
@@ -82,13 +85,11 @@ jobs:
           Start-Transcript -Path ran.txt -IncludeInvocationHeader
           Set-PSDebug -Trace 2
 
-          pwd
           dir
-          ERROR
 
-          Set-PSDebug -Trace 0
           Stop-Transcript
           Get-Content -Path ran.txt
+          Set-PSDebug -Trace 0
 
       - name: Windows Dump runner context global data
         shell: cmd
