@@ -23,6 +23,8 @@ jobs:
           pwd
           export
           cd /
+        env:
+          DUMMY: dummy
 
       - name: Ubuntu Dump github context global data
         shell: bash
@@ -81,6 +83,8 @@ jobs:
           Set-PSDebug -Trace 2
 
           pwd
+          dir
+          ERROR
 
           Set-PSDebug -Trace 0
           Stop-Transcript
