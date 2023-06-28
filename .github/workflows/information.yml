@@ -1,10 +1,10 @@
 
 name: Information
-env:
-  # Enabling runner diagnostic logging
-  ACTIONS_RUNNER_DEBUG: true
-  # Enabling step debug logging
-  ACTIONS_STEP_DEBUG: true
+# env:
+#   # Enabling runner diagnostic logging
+#   ACTIONS_RUNNER_DEBUG: true
+#   # Enabling step debug logging
+#   ACTIONS_STEP_DEBUG: true
 
 
 on: [push, pull_request]
@@ -98,6 +98,9 @@ jobs:
         shell: cmd
         run: |
           echo on
+          echo Hi
+          echo Hello > Hello.txt
+          type Hello.txt
           echo %CD%
           cd "C:\"
           echo %CD%
