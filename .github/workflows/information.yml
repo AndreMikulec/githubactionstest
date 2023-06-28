@@ -22,9 +22,13 @@ jobs:
         run:
           set -x -v -e;
           pwd;
+          echo Hello > Hello.txt
           ls -alrt;
+          cat Hello.txt;
           export;
           cd /;
+          pwd;
+          ls -alrt;
 
       - name: Ubuntu Dump github context global data
         shell: bash
@@ -73,11 +77,15 @@ jobs:
           dir
           echo "$(pwd)"
           echo "$(dir)"
+          cd "C:\"
+          pwd
+          dir
+          echo "$(pwd)"
+          echo "$(dir)"
 
           Get-Content -Path ran.txt
           Stop-Transcript
           Set-PSDebug -Trace 0
-
 
   information_windows_latest:
     name: Windows Knowledge About everything
@@ -90,6 +98,7 @@ jobs:
           echo on
           echo %CD%
           cd "C:\"
+          echo %CD%
 
       - name: Windows Dump github context global data
         shell: cmd
@@ -131,6 +140,7 @@ jobs:
           pwd
           export
           cd /
+          pwd
 
       - name: MacOS Dump github context global data
         shell: bash
