@@ -1,5 +1,11 @@
 
 name: Information
+env:
+#   # Enabling runner diagnostic logging
+#   ACTIONS_RUNNER_DEBUG: true
+  # Enabling step debug logging
+  ACTIONS_STEP_DEBUG: true
+
 
 on: [push, pull_request]
 
@@ -11,30 +17,38 @@ jobs:
 
     steps:
       - name: Ubuntu Dump github env global data
-        run: export
         shell: bash
+        run: 
+          pwd
+          export
+          cd /
 
       - name: Ubuntu Dump github context global data
-        run: echo "$GITHUB_CONTEXT"
         shell: bash
+        run: |
+          pwd
+          echo "$GITHUB_CONTEXT"
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
 
       - name: Ubuntu Dump runner context global data
-        run: echo "$RUNNER_CONTEXT"
+
         shell: bash
+        run: echo "$RUNNER_CONTEXT"
         env:
           RUNNER_CONTEXT: ${{ toJson(runner) }}
 
       - name: Ubuntu Dump secrets
-        run: echo "$SECRETS"
         shell: bash
+        run: |
+          echo "$SECRETS"
         env:
           SECRETS: ${{ toJSON(secrets) }}
 
       - name: Ubuntu Dump .Env vars
-        run: echo "$VARS"
         shell: bash
+        run: |
+          echo "$VARS"
         env:
           VARS: ${{ toJSON(vars) }}
 
@@ -46,29 +60,34 @@ jobs:
     steps:
       - name: Windows Dump github env global data
         shell: cmd
-        run: set
-
+        run: |
+          echo %CD%
+          cd "C:\"
+          
       - name: Windows Dump github context global data
-        run: echo %GITHUB_CONTEXT%
         shell: cmd
+        run: |
+          echo %CD%
+          echo %GITHUB_CONTEXT%
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
 
       - name: Windows Dump runner context global data
-        run: echo %RUNNER_CONTEXT%
         shell: cmd
+        run: echo %RUNNER_CONTEXT%
+
         env:
           RUNNER_CONTEXT: ${{ toJson(runner) }}
 
       - name: Windows Dump secrets
-        run: echo %SECRETS%
         shell: cmd
+        run: echo %SECRETS%
         env:
           SECRETS: ${{ toJSON(secrets) }}
 
       - name: Windows Dump env. vars
-        run: echo %VARS%
         shell: cmd
+        run: echo %VARS%
         env:
           VARS: ${{ toJSON(vars) }}
 
@@ -79,29 +98,38 @@ jobs:
 
     steps:
       - name: MacOS Dump github env global data
-        run: export
         shell: bash
+        run: |
+          pwd
+          export
+          cd /
 
       - name: MacOS Dump github context global data
-        run: echo "$GITHUB_CONTEXT"
         shell: bash
+        run: |
+          pwd
+          echo "$GITHUB_CONTEXT"
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
 
       - name: MacOS Dump runner context global data
-        run: echo "$RUNNER_CONTEXT"
         shell: bash
+        run: |
+          echo "$RUNNER_CONTEXT"
         env:
           RUNNER_CONTEXT: ${{ toJson(runner) }}
 
       - name: MacOS Dump secrets
-        run: echo "$SECRETS"
         shell: bash
+        run: |
+          echo "$SECRETS"
+
         env:
           SECRETS: ${{ toJSON(secrets) }}
 
       - name: MacOS Dump .Env vars
-        run: echo "$VARS"
         shell: bash
+        run: | 
+          echo "$VARS"
         env:
           VARS: ${{ toJSON(vars) }}
