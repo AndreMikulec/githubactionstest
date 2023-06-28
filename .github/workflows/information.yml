@@ -20,20 +20,18 @@ jobs:
       - name: Ubuntu Debugging Force
         shell: bash
         run:
-          set -x -v -e
+          set -x -v -e;
           pwd
           export
           cd /
-          # below FORCES output
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
 
       - name: Ubuntu Dump github context global data
         shell: bash
         run: |
           set -x -v -e
           pwd
-          echo "$GITHUB_CONTEXT"
+          ls -alrt
+          echo "$GITHUB_CONTEXT" 
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
 
@@ -82,16 +80,17 @@ jobs:
       - name: Windows Poweshell echo test
         run: |
           Start-Transcript -Path ran.txt -IncludeInvocationHeader
-          # Set-PSDebug -Trace 2
-          echo on
+          Set-PSDebug -Trace 2
 
           dir
           pwd
           dir
+          pwd
+          dir
 
-          Stop-Transcript
           Get-Content -Path ran.txt
-          # Set-PSDebug -Trace 0
+          Stop-Transcript
+          Set-PSDebug -Trace 0
 
       - name: Windows Dump runner context global data
         shell: cmd
