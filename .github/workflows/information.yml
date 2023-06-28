@@ -72,6 +72,7 @@ jobs:
           pwd
           dir
           echo "$(pwd)"
+          echo "$(dir)"
 
           Get-Content -Path ran.txt
           Stop-Transcript
