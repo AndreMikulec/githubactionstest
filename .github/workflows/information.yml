@@ -3,8 +3,8 @@ name: Information
 env:
   # Enabling runner diagnostic logging
   ACTIONS_RUNNER_DEBUG: true
-#   # Enabling step debug logging
-#   ACTIONS_STEP_DEBUG: true
+  # Enabling step debug logging
+  ACTIONS_STEP_DEBUG: true
 
 
 on: [push, pull_request]
