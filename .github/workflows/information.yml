@@ -100,6 +100,7 @@ jobs:
           echo on
           echo Hi
           echo Hello > Hello.txt
+          setx GREETING Hello /m
           type Hello.txt
           echo %CD%
           cd "C:\"
@@ -110,6 +111,7 @@ jobs:
         run: |
           echo on
           echo %CD%
+          echo GREETING %GREETING%
           echo %GITHUB_CONTEXT%
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
