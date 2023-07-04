@@ -92,7 +92,8 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Windows Poweshell echo test
-        shell: pwsh
+        # shell: pwsh
+        shell: powershell.exe -Sta -File {0} *>&1; exit $LASTEXITCODE
         run: |
           Start-Transcript -Path ran.txt -IncludeInvocationHeader
           Set-PSDebug -Trace 2
@@ -111,9 +112,9 @@ jobs:
           echo "$(pwd)"
           echo "$(dir)"
 
-          Get-Content -Path "${env:GITHUB_WORKSPACE}\ran.txt"
-          Stop-Transcript
-          Set-PSDebug -Trace 0
+          # Get-Content -Path "${env:GITHUB_WORKSPACE}\ran.txt"
+          # Stop-Transcript
+          # Set-PSDebug -Trace 0
 
   information_windows_latest:
     name: Windows Knowledge About everything
