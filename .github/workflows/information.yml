@@ -252,4 +252,4 @@ jobs:
           echo "$MATRIX"
         env:
           VARS: ${{ toJSON(vars) }}
-          MATRIX: (matrix)
+          MATRIX: ${{ fromJSON(toJSON(matrix)) }}
