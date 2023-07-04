@@ -14,7 +14,9 @@ jobs:
   information_ubuntu_latest:
     name: Ubuntu Knowledge About everything
     runs-on: ubuntu-latest
-
+    strategy:
+      # Disable fail-fast as we want results from all even if one fails.
+      fail-fast: false
       matrix:
         include:
 
@@ -57,7 +59,7 @@ jobs:
           set -x -v -e
           pwd
           ls -alrt
-          echo "$GITHUB_CONTEXT" 
+          echo "$GITHUB_CONTEXT"
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
 
