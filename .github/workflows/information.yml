@@ -97,8 +97,8 @@ jobs:
         # shell: pwsh -Sta -File {0} *>&1; exit $LASTEXITCODE
         shell: pwsh -Sta -File {0} *>&1
         run: |
-          $DebugPreference   = "Continue"
-          $VerbosePreference = "Continue"
+          # $DebugPreference   = "Continue"
+          # $VerbosePreference = "Continue"
           Start-Transcript -Path ran.txt -IncludeInvocationHeader
           Set-PSDebug -Trace 2
           dir
