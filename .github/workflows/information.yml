@@ -243,18 +243,17 @@ jobs:
         shell: bash
         run: |
           echo "$SECRETS"
-
         env:
           SECRETS: ${{ toJSON(secrets) }}
 
       - name: MacOS Dump .Env vars
         shell: bash
         run: |
-          echo "$VARS"
-          echo VARA value is ${VARA}
-          echo VARB value is ${VARB}
+          echo "$VARS" # prints null
+          echo VARA value is ${VARA} # VARA value is vara
+          echo VARB value is ${VARB} # VARB value is varb
           echo "$MATRIX_JSON"
-          echo Configuration value is ${Configuration}
+          echo Configuration value is ${Configuration} # is NOTHING 
         env:
           VARS: ${{ toJSON(vars) }}
           MATRIX_JSON: ${{ toJSON(matrix)}}
