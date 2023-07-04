@@ -96,6 +96,13 @@ jobs:
     runs-on: windows-latest
 
     steps:
+
+      - name: Windows Powershell add Functions
+        if: matrix.os == 'windows-latest'
+        run: |
+          Add-Content -Path $profile -Value "function Set-EnvVar {param(`$X)     Add-Content -Path `${env:GITHUB_ENV} -Value `"`$X`"}"
+          Add-Content -Path $profile -Value "function Start-App  {param(`$X,`$Y) Start-Process -NoNewWindow -FilePath `"`$X`" -ArgumentList `$Y }"
+
       - name: Windows Dump github env global data
         shell: cmd
         run: |
@@ -110,6 +117,11 @@ jobs:
           echo %CD%
           printf "VARA=vara" >> %GITHUB_ENV%
           printf "VARB=varb" >> %GITHUB_ENV%
+
+      - name: Windows Powershell Dump github env global data
+        run: |
+          Set-EnvVar "VARAPOWERA=varapowera"
+          Set-EnvVar "VARAPOWERB=varapowerb"
 
       - name: Windows Dump github context global data
         shell: cmd
@@ -136,7 +148,12 @@ jobs:
 
       - name: Windows Dump env. vars
         shell: cmd
-        run: echo %VARS%
+        run: |
+          echo %VARS%
+          echo VARA value is %VARA%
+          echo VARB value is %VARB%
+          echo VARAPOWERA value is %VARAPOWERA%
+          echo VARAPOWERB value is %VARAPOWERA%
         env:
           VARS: ${{ toJSON(vars) }}
 
