@@ -52,6 +52,9 @@ jobs:
           ls -alrt;
           echo "VARA=vara" >> $GITHUB_ENV;
           echo "VARB=varb" >> $GITHUB_ENV;
+          echo "$MATRIX"
+        env:
+          MATRIX: ${{ toJSON(matrix) }}
 
       - name: Ubuntu Dump github context global data
         shell: bash
