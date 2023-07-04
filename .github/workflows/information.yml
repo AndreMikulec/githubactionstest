@@ -99,7 +99,7 @@ jobs:
         run: |
           $DebugPreference   = "Continue"
           $VerbosePreference = "Continue"
-          Start-Transcript -Path ran.txt -IncludeInvocationHeader -Debug
+          Start-Transcript -Path ran.txt -IncludeInvocationHeader
           Set-PSDebug -Trace 2
           dir
           # ___
