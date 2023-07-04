@@ -116,7 +116,7 @@ jobs:
           echo "$(pwd)"
           echo "$(dir)"
 
-          Get-Content -Path "${env:GITHUB_WORKSPACE}\ran.txt"
+          # Get-Content -Path "${env:GITHUB_WORKSPACE}\ran.txt"
           # Stop-Transcript
           # Set-PSDebug -Trace 0
 
