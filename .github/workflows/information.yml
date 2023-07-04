@@ -15,8 +15,26 @@ jobs:
     name: Ubuntu Knowledge About everything
     runs-on: ubuntu-latest
 
-    steps:
+      matrix:
+        include:
 
+          - pg: REL_16_BETA2
+            Configuration: Debug
+            Platform: x64
+            os: windows-latest
+            rversion: 4.3.1
+            compiler: mingw64
+            builder: make
+
+          - pg: REL_16_BETA2
+            Configuration: Debug
+            Platform: x64
+            os: windows-latest
+            rversion: 4.3.1
+            compiler: mingw64
+            builder: meson
+
+    steps:
       - name: Ubuntu Debugging Force
         shell: bash
         run:
