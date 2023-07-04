@@ -30,6 +30,8 @@ jobs:
           cd /;
           pwd;
           ls -alrt;
+          echo "VARA=vara" >> $GITHUB_ENV;
+          echo "VARB=varb" >> $GITHUB_ENV;
 
       - name: Ubuntu Dump github context global data
         shell: bash
@@ -100,17 +102,21 @@ jobs:
           echo on
           echo Hi
           echo Hello > Hello.txt
-          setx GREETING Hello /m
+          rem does not work
+          rem setx GREETING Hello /m
           type Hello.txt
           echo %CD%
           cd "C:\"
           echo %CD%
+          printf "VARA=vara" >> %GITHUB_ENV%
+          printf "VARB=varb" >> %GITHUB_ENV%
 
       - name: Windows Dump github context global data
         shell: cmd
         run: |
           echo on
           echo %CD%
+          rem does not work
           echo GREETING %GREETING%
           echo %GITHUB_CONTEXT%
         env:
@@ -148,6 +154,8 @@ jobs:
           export
           cd /
           pwd
+          echo "VARA=vara" >> $GITHUB_ENV
+          echo "VARB=varb" >> $GITHUB_ENV
 
       - name: MacOS Dump github context global data
         shell: bash
