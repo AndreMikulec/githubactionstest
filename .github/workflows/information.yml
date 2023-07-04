@@ -249,7 +249,7 @@ jobs:
           echo "$VARS"
           echo VARA value is ${VARA}
           echo VARB value is ${VARB}
-          echo "${MATRIX}
+          echo "$MATRIX"
         env:
           VARS: ${{ toJSON(vars) }}
           MATRIX: matrix
