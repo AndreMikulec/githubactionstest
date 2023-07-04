@@ -93,15 +93,12 @@ jobs:
     steps:
       - name: Windows Poweshell echo test
         # shell: pwsh
-
         # shell: C:\Program Files\PowerShell\7\pwsh.EXE -Sta -File {0} *>&1; exit $LASTEXITCODE
-        # shell: pwsh -Sta -File {0} *>&1 ; exit $LASTEXITCODE
-
-        shell: pwsh -Sta -File {0} *>&1
+        # shell: pwsh -Sta -File {0} *>&1; exit $LASTEXITCODE
+        # shell: pwsh -Sta -File {0} *>&1
         run: |
-          # Start-Transcript -Path ran.txt -IncludeInvocationHeader
+          Start-Transcript -Path ran.txt -IncludeInvocationHeader
           Set-PSDebug -Trace 2
-
           dir
           pwd
           echo "${env:GITHUB_WORKSPACE}"
@@ -115,9 +112,8 @@ jobs:
           dir
           echo "$(pwd)"
           echo "$(dir)"
-
-          # Get-Content -Path "${env:GITHUB_WORKSPACE}\ran.txt"
-          # Stop-Transcript
+          Stop-Transcript
+          Get-Content -Path "${env:GITHUB_WORKSPACE}\ran.txt"
           # Set-PSDebug -Trace 0
 
   information_windows_latest:
