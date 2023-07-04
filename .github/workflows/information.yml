@@ -185,6 +185,27 @@ jobs:
   information_macos_latest:
     name: MacOS Knowledge About everything
     runs-on: macos-latest
+    strategy:
+      # Disable fail-fast as we want results from all even if one fails.
+      fail-fast: false
+      matrix:
+        include:
+
+          - pg: REL_16_BETA2
+            Configuration: Debug
+            Platform: x64
+            os: windows-latest
+            rversion: 4.3.1
+            compiler: mingw64
+            builder: make
+
+          - pg: REL_16_BETA2
+            Configuration: Debug
+            Platform: x64
+            os: windows-latest
+            rversion: 4.3.1
+            compiler: mingw64
+            builder: meson
 
     steps:
       - name: MacOS Dump github env global data
@@ -228,5 +249,7 @@ jobs:
           echo "$VARS"
           echo VARA value is ${VARA}
           echo VARB value is ${VARB}
+          echo "${MATRIX}
         env:
           VARS: ${{ toJSON(vars) }}
+          MATRIX: matrix
