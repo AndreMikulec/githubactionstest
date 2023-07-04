@@ -94,7 +94,9 @@ jobs:
       - name: Windows Poweshell echo test
         # shell: pwsh
         # shell: powershell.exe -Sta -File {0} *>&1; exit $LASTEXITCODE
-        shell: pwsh -Sta -File {0} *>&1; exit $LASTEXITCODE
+        #
+        # shell: C:\Program Files\PowerShell\7\pwsh.EXE -Sta -File {0} *>&1; exit $LASTEXITCODE
+        shell: pwsh -Sta -File {0} *>&1 | Tee-Object ran.txt; exit $LASTEXITCODE
         run: |
           # Start-Transcript -Path ran.txt -IncludeInvocationHeader
           Set-PSDebug -Trace 2
@@ -113,7 +115,7 @@ jobs:
           echo "$(pwd)"
           echo "$(dir)"
 
-          # Get-Content -Path "${env:GITHUB_WORKSPACE}\ran.txt"
+          Get-Content -Path "${env:GITHUB_WORKSPACE}\ran.txt"
           # Stop-Transcript
           # Set-PSDebug -Trace 0
 
