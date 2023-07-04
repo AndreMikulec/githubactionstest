@@ -102,7 +102,7 @@ jobs:
           Start-Transcript -Path ran.txt -IncludeInvocationHeader
           Set-PSDebug -Trace 2
           dir
-          # ___
+          ___
           pwd
           echo "${env:GITHUB_WORKSPACE}"
           dir
