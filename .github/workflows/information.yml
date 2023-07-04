@@ -52,9 +52,9 @@ jobs:
           ls -alrt;
           echo "VARA=vara" >> $GITHUB_ENV;
           echo "VARB=varb" >> $GITHUB_ENV;
-          echo "$MATRIX"
+          echo "$MATRIX_JSON"
         env:
-          MATRIX: ${{ toJSON(matrix) }}
+          MATRIX_JSON: ${{ toJSON(matrix) }}
 
       - name: Ubuntu Dump github context global data
         shell: bash
@@ -97,10 +97,10 @@ jobs:
         # shell: pwsh -Sta -File {0} *>&1; exit $LASTEXITCODE
         # shell: pwsh -Sta -File {0} *>&1
         run: |
-          Start-Transcript -Path ran.txt -IncludeInvocationHeader
+          # Start-Transcript -Path ran.txt -IncludeInvocationHeader
           Set-PSDebug -Trace 2
           dir
-          ___
+          # ___
           pwd
           echo "${env:GITHUB_WORKSPACE}"
           dir
@@ -113,8 +113,8 @@ jobs:
           dir
           echo "$(pwd)"
           echo "$(dir)"
-          Stop-Transcript
-          Get-Content -Path "${env:GITHUB_WORKSPACE}\ran.txt"
+          # Stop-Transcript
+          # Get-Content -Path "${env:GITHUB_WORKSPACE}\ran.txt"
           # Set-PSDebug -Trace 0
 
   information_windows_latest:
@@ -126,6 +126,7 @@ jobs:
       - name: Windows Powershell add Functions
         if: matrix.os == 'windows-latest'
         run: |
+          # WRONG - each STEP is its OWN MACHINE
           Add-Content -Path $profile -Value "function Set-EnvVar {param(`$X)     Add-Content -Path `${env:GITHUB_ENV} -Value `"`$X`"}"
           Add-Content -Path $profile -Value "function Start-App  {param(`$X,`$Y) Start-Process -NoNewWindow -FilePath `"`$X`" -ArgumentList `$Y }"
 
@@ -252,7 +253,7 @@ jobs:
           echo "$VARS"
           echo VARA value is ${VARA}
           echo VARB value is ${VARB}
-          echo "$MATRIX"
+          echo "$MATRIX_JSON"
         env:
           VARS: ${{ toJSON(vars) }}
-          MATRIX: ${{ fromJSON(toJSON(matrix)) }}
+          MATRIX_JSONE: ${{ toJSON(matrix) }}
