@@ -120,6 +120,10 @@ jobs:
 
       - name: Windows Powershell Dump github env global data
         run: |
+          # If I do not put this here
+          # The term 'Set-EnvVar' is not recognized as a name of a cmdlet, function, script file, or executable program.
+          Add-Content -Path $profile -Value "function Set-EnvVar {param(`$X)     Add-Content -Path `${env:GITHUB_ENV} -Value `"`$X`"}"
+          Add-Content -Path $profile -Value "function Start-App  {param(`$X,`$Y) Start-Process -NoNewWindow -FilePath `"`$X`" -ArgumentList `$Y }"
           Set-EnvVar "VARAPOWERA=varapowera"
           Set-EnvVar "VARAPOWERB=varapowerb"
 
