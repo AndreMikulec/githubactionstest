@@ -93,7 +93,8 @@ jobs:
     steps:
       - name: Windows Poweshell echo test
         # shell: pwsh
-        shell: powershell.exe -Sta -File {0} *>&1; exit $LASTEXITCODE
+        # shell: powershell.exe -Sta -File {0} *>&1; exit $LASTEXITCODE
+        shell: pwsh -Sta -File {0} *>&1; exit $LASTEXITCODE
         run: |
           Start-Transcript -Path ran.txt -IncludeInvocationHeader
           Set-PSDebug -Trace 2
