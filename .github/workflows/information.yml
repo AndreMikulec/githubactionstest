@@ -185,5 +185,7 @@ jobs:
         shell: bash
         run: |
           echo "$VARS"
+          echo VARA ${VARA}
+          echo VARB ${VARB}
         env:
           VARS: ${{ toJSON(vars) }}
