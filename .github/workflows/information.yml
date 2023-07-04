@@ -185,7 +185,7 @@ jobs:
         shell: bash
         run: |
           echo "$VARS"
-          echo VARA ${VARA}
-          echo VARB ${VARB}
+          echo VARA value is ${VARA}
+          echo VARB value is ${VARB}
         env:
           VARS: ${{ toJSON(vars) }}
