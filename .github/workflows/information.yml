@@ -89,10 +89,10 @@ jobs:
 
   debug_powershell:
     name: Debugging Powershell
-    shell: pwsh
     runs-on: windows-latest
     steps:
       - name: Windows Poweshell echo test
+        shell: pwsh
         run: |
           Start-Transcript -Path ran.txt -IncludeInvocationHeader
           Set-PSDebug -Trace 2
