@@ -254,6 +254,7 @@ jobs:
           echo VARA value is ${VARA}
           echo VARB value is ${VARB}
           echo "$MATRIX_JSON"
+          echo Configuration value is ${Configuration}
         env:
           VARS: ${{ toJSON(vars) }}
-          MATRIX_JSONE: ${{ toJSON(matrix) }}
+          MATRIX_JSON: ${{ toJSON(matrix)}}
