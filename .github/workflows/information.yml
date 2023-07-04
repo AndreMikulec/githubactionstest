@@ -97,7 +97,7 @@ jobs:
         # shell: C:\Program Files\PowerShell\7\pwsh.EXE -Sta -File {0} *>&1; exit $LASTEXITCODE
         # shell: pwsh -Sta -File {0} *>&1 ; exit $LASTEXITCODE
 
-        shell: pwsh -Sta -File {0} *>&1 | Tee-Object ran.txt
+        shell: pwsh -Sta -File {0} *>&1
         run: |
           # Start-Transcript -Path ran.txt -IncludeInvocationHeader
           Set-PSDebug -Trace 2
