@@ -97,10 +97,12 @@ jobs:
         # shell: pwsh -Sta -File {0} *>&1; exit $LASTEXITCODE
         shell: pwsh -Sta -File {0} *>&1
         run: |
+          $DebugPreference   = "Continue"
+          $VerbosePreference = "Continue"
           Start-Transcript -Path ran.txt -IncludeInvocationHeader -Debug
           Set-PSDebug -Trace 2
           dir
-          ___
+          # ___
           pwd
           echo "${env:GITHUB_WORKSPACE}"
           dir
