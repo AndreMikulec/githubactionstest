@@ -36,6 +36,6 @@ jobs:
         run: |
           echo "env.FAKE ${{ env.FAKE }}"
       - name: env.FAKE is something
-        run: |
         if: ${{ env.FAKE != '' }}"
+        run: |
           echo "env.FAKE ${{ env.FAKE }}"
