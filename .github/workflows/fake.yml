@@ -1,6 +1,7 @@
 name: test MATRIX.FAKE env.FAKE
 run-name: Testing FAKE.matrix
 on: [push]
+
 jobs:
   testing_FAKE_matrix:
     name: NAME_${{ matrix.FAKE }}
@@ -19,7 +20,8 @@ jobs:
           echo "MATRIX.FAKE ${{ matrix.FAKE }}"
 
   testing_FAKE_env:
-    name: ${{ matrix.os }} ${{ env.FAKE }}
+  # name: ${{ matrix.os }} ${{ env.FAKE }} - unrecognized named-value: 'env'
+    name: ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       # Disable fail-fast as we want results from all even if one fails.
