@@ -1,0 +1,38 @@
+name: test MATRIX.FAKE env.FAKE
+run-name: Testing FAKE.matrix
+on: [push]
+jobs:
+  testing_FAKE_matrix:
+    name: NAME_${{ matrix.FAKE }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      # Disable fail-fast as we want results from all even if one fails.
+      fail-fast: false
+      matrix:
+        include:
+          - real1: real1value
+            os: windows-latest
+    steps:
+      - name: matrix.FAKE is nothing
+        if: ${{ matrix.FAKE == '' }}"
+          echo "MATRIX.FAKE ${{ matrix.FAKE }}"
+
+  testing_FAKE_env:
+    name: ${{ matrix.os }} ${{ env.FAKE }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      # Disable fail-fast as we want results from all even if one fails.
+      fail-fast: false
+      matrix:
+        include:
+          - real1: real1value
+            os: windows-latest
+    steps:
+      - name: env.FAKE is nothing
+        if: ${{ env.FAKE == '' }}"
+        run: |
+          echo "env.FAKE ${{ env.FAKE }}"
+      - name: env.FAKE is something
+        run: |
+        if: ${{ env.FAKE != '' }}"
+          echo "env.FAKE ${{ env.FAKE }}"
