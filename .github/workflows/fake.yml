@@ -43,11 +43,11 @@ jobs:
         if: env.FAKE == ''
         run: |
           echo "env.FAKE ${{ env.FAKE }}" 
-      - name: env.FAKE is nothing - != STRING
+      - name: env.FAKE is nothing - != STRING (THIS STEP IS CORRECTLY IGNORED)
         if: env.FAKE != ''
         run: |
           echo "env.FAKE ${{ env.FAKE }}" 
-      - name: env.FAKE is something (WILL RUN ANYWAYS - BAD COMPARISON "!=")
+      - name: env.FAKE is something (WILL RUN INCORRECLTY ANYWAYS RUN- BAD COMPARISON "!= ''")
         # ${{ }} expression syntax turns the contents into a string, and strings are truthy. 
         # https://docs.github.com/en/actions/learn-github-actions/expressions
         if: ${{ env.FAKE != '' }}"
@@ -61,7 +61,7 @@ jobs:
           Set-EnvVar "FAKE=${env:FAKE}"
       # PROPER WAY TO TEST env. IS SOMETHING/NOTHING
       - name: env.FAKE is something  COMPARISON 
-        if: ${{ env.FAKE == 'something' }}"
+        if: ${{ env.FAKE == 'something' }}" # 'none' FUTURE COMPARISONS - NEVER COMPARE TO ''
         run: |
           echo "env.FAKE is ${{ env.FAKE }}"
-
+      
