@@ -4,7 +4,7 @@ on: [push]
 
 jobs:
   testing_FAKE_matrix:
-    name: NAME_${{ matrix.FAKE }}
+    name: NAME_${{ matrix.FAKE }}_${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       # Disable fail-fast as we want results from all even if one fails.
@@ -24,8 +24,8 @@ jobs:
           echo "MATRIX.FAKE ${{ matrix.FAKE }}"
 
   testing_FAKE_env:
-  # name: ${{ matrix.os }} ${{ env.FAKE }} - unrecognized named-value: 'env'
-    name: ${{ matrix.os }}
+  # name: ${{ env.FAKE }}_${{ matrix.os }} - unrecognized named-value: 'env'
+    name: _${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       # Disable fail-fast as we want results from all even if one fails.
@@ -39,7 +39,17 @@ jobs:
         if: ${{ env.FAKE == '' }}"
         run: |
           echo "env.FAKE ${{ env.FAKE }}"
+      - name: env.FAKE is nothing - == STRING
+        if: env.FAKE == ''
+        run: |
+          echo "env.FAKE ${{ env.FAKE }}" 
+      - name: env.FAKE is nothing - != STRING
+        if: env.FAKE != ''
+        run: |
+          echo "env.FAKE ${{ env.FAKE }}" 
       - name: env.FAKE is something (WILL RUN ANYWAYS - BAD COMPARISON "!=")
+        # ${{ }} expression syntax turns the contents into a string, and strings are truthy. 
+        # https://docs.github.com/en/actions/learn-github-actions/expressions
         if: ${{ env.FAKE != '' }}"
         run: |
           echo "env.FAKE ${{ env.FAKE }}" # PROPER PLACE TO TEST
@@ -49,4 +59,9 @@ jobs:
           if( "${{ env.FAKE }}" -eq "" ) { ${env:FAKE} = "something" }
           function Set-EnvVar {param($X)   Add-Content -Path ${env:GITHUB_ENV} -Value "$X"}
           Set-EnvVar "FAKE=${env:FAKE}"
-           
+      # PROPER WAY TO TEST env. IS SOMETHING/NOTHING
+      - name: env.FAKE is something  COMPARISON 
+        if: ${{ env.FAKE == 'something' }}"
+        run: |
+          echo "env.FAKE is ${{ env.FAKE }}"
+
