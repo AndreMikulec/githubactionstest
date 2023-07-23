@@ -14,7 +14,8 @@ jobs:
             os: windows-latest
     steps:
       - name: matrix.FAKE is nothing
-        if: ${{ matrix.FAKE == '' }}"
+        if: ${{ matrix.FAKE == '' }}
+        run: |
           echo "MATRIX.FAKE ${{ matrix.FAKE }}"
 
   testing_FAKE_env:
