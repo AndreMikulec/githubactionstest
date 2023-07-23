@@ -18,6 +18,10 @@ jobs:
         if: ${{ matrix.FAKE == '' }}
         run: |
           echo "MATRIX.FAKE ${{ matrix.FAKE }}"
+      - name: matrix.FAKE is something
+        if: ${{ matrix.FAKE != '' }}
+        run: |
+          echo "MATRIX.FAKE ${{ matrix.FAKE }}"
 
   testing_FAKE_env:
   # name: ${{ matrix.os }} ${{ env.FAKE }} - unrecognized named-value: 'env'
@@ -35,7 +39,14 @@ jobs:
         if: ${{ env.FAKE == '' }}"
         run: |
           echo "env.FAKE ${{ env.FAKE }}"
-      - name: env.FAKE is something
+      - name: env.FAKE is something (WILL RUN ANYWAYS - BAD COMPARISON "!=")
         if: ${{ env.FAKE != '' }}"
         run: |
-          echo "env.FAKE ${{ env.FAKE }}"
+          echo "env.FAKE ${{ env.FAKE }}" # PROPER PLACE TO TEST
+          # PROPER WAY TO TEST
+          if( "${{ env.FAKE }}" -eq "" ) { echo "env.FAKE is nothing" }
+          #  Change from "nothing" to "something"
+          if( "${{ env.FAKE }}" -eq "" ) { ${env:FAKE} = "something" }
+          function Set-EnvVar {param($X)   Add-Content -Path ${env:GITHUB_ENV} -Value "$X"}
+          Set-EnvVar "FAKE=${env:FAKE}"
+           
