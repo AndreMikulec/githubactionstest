@@ -1,7 +1,13 @@
 name: test MATRIX.FAKE env.FAKE
 run-name: Testing FAKE.matrix
 on: [push]
-
+#
+# gist - get everything into .env variables FAST 
+#        and 
+#        zero or unitialized .env variables become the value of 'none'
+#
+#        env. empty or null comparisons are done against 'none' !! IMPORTANTENT
+#
 jobs:
   testing_FAKE_matrix:
     name: NAME_${{ matrix.FAKE }}_${{ matrix.os }}
@@ -14,17 +20,18 @@ jobs:
           - real1: real1value
             os: windows-latest
     steps:
-      - name: matrix.FAKE is nothing
+      - name: matrix.FAKE is nothing (CORRECT)
         if: ${{ matrix.FAKE == '' }}
         run: |
           echo "MATRIX.FAKE ${{ matrix.FAKE }}"
-      - name: matrix.FAKE is something
+      # CORRECTLY IGNORED
+      - name: matrix.FAKE is something (CORRECTLY IGNORED)
         if: ${{ matrix.FAKE != '' }}
         run: |
           echo "MATRIX.FAKE ${{ matrix.FAKE }}"
 
   testing_FAKE_env:
-  # name: ${{ env.FAKE }}_${{ matrix.os }} - unrecognized named-value: 'env'
+  # name: ${{ env.FAKE }}_${{ matrix.os }} - ERROR - unrecognized named-value: 'env'
     name: _${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
