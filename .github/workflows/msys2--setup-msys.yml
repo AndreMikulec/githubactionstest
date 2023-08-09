@@ -57,7 +57,7 @@ jobs:
         echo "matrix shell: ${{ matrix.shell }}"
         Get-CIMInstance -Class Win32_Processor | Select-Object -Property Name
         ${env:MSYSTEM} = "UCRT64"
-        msys2 -c 'set -x -v -e;uname -a;export | grep MINGW;export | grep MSYSTEM' 
+        msys2 -c 'set -x -v -e;uname -a;export | grep MINGW;export | grep MSYSTEM; echo "Present Working Directory $(pwd)"' 
         #
         # unexected token - ${env:GITHUB_WORKSPACE}\msys2--setup-msys.sh
 
@@ -86,7 +86,7 @@ jobs:
         echo "MSYSTEM ${MSYSTEM}"
         # CAN NOT DO PIPING
         #
-        ${GITHUB_WORKSPACE}\\msys2--setup-msys.sh
+        ./msys2--setup-msys.sh
 
     - name: DO msys2 {0} version MINGW64
       continue-on-error: true
@@ -103,7 +103,7 @@ jobs:
         export | grep MSYSTEM
         #
         echo "pwd: $(pwd)"
-        ${GITHUB_WORKSPACE}\\msys2--setup-msys.sh
+        .\\msys2--setup-msys.sh
 
     - name: DO msys2 {0} verson ''
       continue-on-error: true
@@ -121,7 +121,7 @@ jobs:
         # CAN NOT DO PIPING
         #
         echo "pwd: $(pwd)"
-        ${GITHUB_WORKSPACE}\\msys2--setup-msys.sh
+        ${GITHUB_WORKSPACE}//msys2--setup-msys.sh
 
     - name: DO msys2 {0} verson OSYSTEM
       if: ${{  matrix.shell != 'msys2 {0}' }}
