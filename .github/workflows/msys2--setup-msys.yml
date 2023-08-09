@@ -17,11 +17,11 @@ jobs:
         include:
 
         - os: windows-latest
-          msystem: ucrt64
+          MSYSTEM: UCRT
           shell: msys2 {0}
 
         - os: windows-latest
-          msystem: mingw32
+          MSYSTEM: MINGW32
           shell: msys2 {0}
 
         - os: windows-latest
