@@ -40,6 +40,8 @@ jobs:
         Set-EnvVar "do=${env:do}"
         Import-Module .\powershell.ps1
         echo "OUTSIDE me ${env:me}"
+        FancyColorMessages
+        echo DONE
 
     - name: DO powershell version
       continue-on-error: true
