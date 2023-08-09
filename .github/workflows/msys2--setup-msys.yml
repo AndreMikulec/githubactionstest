@@ -35,26 +35,16 @@ jobs:
         echo "matrix shell: ${{ matrix.shell }}"
         uname -a
 
-    - name: DO powershell
+    - name: DO powershell version
       shell: powershell
       run: |
         echo "matrix shell: ${{ matrix.shell }}"
-        msys2 -c 'uname -a'
+        Get-CIMInstance -Class Win32_Processor | Select-Object -Property Name
 
-    - name: DO cmd
+    - name: DO cmd verson
       shell: cmd
       run: |
         echo "matrix shell: ${{ matrix.shell }}"
-        msys2 -c 'uname -a'
-
-    - name: DO powershell ver
-      shell: powershell
-      run: |
-         Get-CIMInstance -Class Win32_Processor | Select-Object -Property Name
-
-    - name: DO cmd ver
-      shell: cmd
-      run: |
         systeminfo | findstr /B "/C:OS Name" /B "/C:OS Version"
-
+        msys2 -c 'uname -a; echo MSYSTEM ${MSYSTEM}'
 
