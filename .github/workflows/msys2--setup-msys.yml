@@ -7,7 +7,7 @@ on: [push, pull_request]
 
 jobs:
   build: 
-    name: ${MSYSTEM} ${shell}
+    name: ${{ matrix.MSYSTEM }} ${{ matrix.shell }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
