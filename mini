@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+mirrordir="`echo "HELLO" | sed -e "s:E:U:g" | grep U  `"
+echo $mirrordir
+
+cat ./out.txt | awk '{print $1}'
+
+if [ "1" == "1" ]
+then
+  echo ONE
+fi
+
+export | grep TEMP
+
+exit
+
