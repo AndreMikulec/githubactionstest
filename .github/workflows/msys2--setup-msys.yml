@@ -46,6 +46,7 @@ jobs:
       run: |
         function Set-EnvVar {param($X)     Add-Content -Path ${env:GITHUB_ENV} -Value "$X"}
         ${env:do} = "true"
+        Set-EnvVar "do=${env:do}"
 
     - name: DO powershell version
       continue-on-error: true
@@ -65,8 +66,9 @@ jobs:
         echo "matrix shell: ${{ matrix.shell }}"
         systeminfo | findstr /B "/C:OS Name" /B "/C:OS Version"
         set MSYSTEM=MINGW32
-        msys2 -c 'set -x -v -e;uname -a' # CAN NOT DO PIPING
-        #
+        msys2 -c 'set -x -v -e;uname -a'
+        rem INGORES EVERYTHING BELOW THIS LINE 
+        rem CAN NOT DO PIPING
         %GITHUB_WORKSPACE%\msys2--setup-msys.sh
 
     - name: DO msys2 {0} version 
@@ -79,7 +81,7 @@ jobs:
         echo "MSYSTEM ${MSYSTEM}"
         # CAN NOT DO PIPING
         #
-        ${GITHUB_WORKSPACE}\msys2--setup-msys.sh
+        ${GITHUB_WORKSPACE}/msys2--setup-msys.sh
 
     - name: DO msys2 {0} version MINGW64
       continue-on-error: true
@@ -94,7 +96,7 @@ jobs:
         export | grep MINGW
         export | grep MSYSTEM
         #
-        ${GITHUB_WORKSPACE}\msys2--setup-msys.sh
+        ${GITHUB_WORKSPACE}/msys2--setup-msys.sh
 
     - name: DO msys2 {0} verson ''
       continue-on-error: true
@@ -110,7 +112,7 @@ jobs:
         echo "MSYSTEM ${MSYSTEM}"
         # CAN NOT DO PIPING
         #
-        ${GITHUB_WORKSPACE}\msys2--setup-msys.sh
+        ${GITHUB_WORKSPACE}/msys2--setup-msys.sh
 
     - name: DO msys2 {0} verson OSYSTEM
       if: ${{  matrix.shell != 'msys2 {0}' }}
@@ -128,7 +130,14 @@ jobs:
         export | grep MINGW
         export | grep MSYSTEM
         #
-        ${GITHUB_WORKSPACE}\msys2--setup-msys.sh
+        ${GITHUB_WORKSPACE}/msys2--setup-msys.sh
 
-
+    - name: DO msys2 {0} verson OSYSTEM env.do IGNORE ME
+      if: ${{  env.do != 'true' }}
+      continue-on-error: true
+      shell: msys2 {0}
+      env:
+        MSYSTEM: ${{ matrix.OSYSTEM }}
+      run: |
+        echo I SHOULD HAVE BEEN IGNORED
 
