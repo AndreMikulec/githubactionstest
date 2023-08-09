@@ -56,18 +56,20 @@ jobs:
         #
         # unexpected token - ${env:GITHUB_WORKSPACE}\msys2--setup-msys.sh
 
-    - name: DO msys2 {0} version MINGW64
+    - name: DO msys2 {0} verson OSYSTEM
+      if: ${{  matrix.shell != 'msys2 {0}' }}
       continue-on-error: true
       shell: msys2 {0}
       env:
-        MSYSTEM: MINGW64
+        MSYSTEM: ${{ matrix.OSYSTEM }}
       run: |
         set -x -v -e
         echo "Present Working Directory: $(pwd)"
         echo "matrix shell: ${{ matrix.shell }}"
         uname -a
         echo "MSYSTEM ${MSYSTEM}"
+        # powershell - CAN DO PIPING
+        # UCRT msys2 {0} and MINGW32 msys2 {0} CAN NOT DO PIPING
         export | grep MINGW
         export | grep MSYSTEM
-        ls -alrt
         bash msys2--setup-msys.sh
