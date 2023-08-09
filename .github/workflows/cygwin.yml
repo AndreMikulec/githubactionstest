@@ -94,28 +94,38 @@ jobs:
         platform: x86
         packages: git
 
-    - name: DO cygwin
-      continue-on-error: true
-      # OTHER GITHUB ACTION ADVICE
-      # https://github.com/cygwin/cygwin-install-action/tree/v4 (CAN NOT DO PIPING)
-      #
-      # (https://github.com/marketplace/actions/install-cygwin)
-      # OLDER VERSION that SUPPORTS x86
-      # https://github.com/egor-tensin/setup-cygwin/tree/v3
-      shell: C:\tools\cygwin\bin\bash.exe --login --norc -eo pipefail -o igncr '{0}'
-      env:
-        CHERE_INVOKING: 1
-        PATH: ''
-        SHELLOPTS: igncr
-      run: |
-        git config --global --add safe.directory $(cygpath "${GITHUB_WORKSPACE}")
-        set -x -v -e
-        uname -a
-        echo "PSVAR: ${{ env.PSVAR }}"
-        echo "PATH: ${PATH}"
-        # export | grep MINGW
-        # export | grep MSYSTEM
-        # Present Working Directory: /etc/skel
-        echo "Present Working Directory: $(pwd)"
-        $(cygpath "C:\tools\cygwin\bin\bash") --login --norc -leo igncr $(cygpath "${GITHUB_WORKSPACE}")/msys2--setup-msys.sh
+#   - name: DO cygwin
+#     continue-on-error: true
+#     # OTHER GITHUB ACTION ADVICE
+#     # https://github.com/cygwin/cygwin-install-action/tree/v4 (CAN NOT DO PIPING)
+#     #
+#     # (https://github.com/marketplace/actions/install-cygwin)
+#     # OLDER VERSION that SUPPORTS x86
+#     # https://github.com/egor-tensin/setup-cygwin/tree/v3
+#     shell: C:\tools\cygwin\bin\bash.exe --login --norc -eo pipefail -o igncr '{0}'
+#     env:
+#       CHERE_INVOKING: 1
+#       PATH: ''
+#       SHELLOPTS: igncr
+#     run: |
+#       git config --global --add safe.directory $(cygpath "${GITHUB_WORKSPACE}")
+#       set -x -v -e
+#       uname -a
+#       echo "PSVAR: ${{ env.PSVAR }}"
+#       echo "PATH: ${PATH}"
+#       # export | grep MINGW
+#       # export | grep MSYSTEM
+#       # Present Working Directory: /etc/skel
+#       echo "Present Working Directory: $(pwd)"
+#       $(cygpath "C:\tools\cygwin\bin\bash") --login --norc -leo igncr $(cygpath "${GITHUB_WORKSPACE}")/msys2--setup-msys.sh
 
+    - name: FROM powershell DO cygwin
+      continue-on-error: true
+      shell: powershell
+      run: |
+        ${env:Location} = Get-Location
+        echo "Location: ${env:Location}"
+        ${env:CHERE_INVOKING} = "1"
+        ${env:PATH} = ""
+        ${env:SHELLOPTS} = "igncr"
+        &{"C:\tools\cygwin\bin\bash" msys2--setup-msys.sh}
