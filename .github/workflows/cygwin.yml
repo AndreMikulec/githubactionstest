@@ -123,9 +123,11 @@ jobs:
       continue-on-error: true
       shell: powershell
       run: |
+        function Start-App  {param($X,$Y) Start-Process -NoNewWindow -FilePath "$X" -ArgumentList $Y }
         ${env:Location} = Get-Location
         echo "Location: ${env:Location}"
-        ${env:CHERE_INVOKING} = "1"
-        ${env:PATH} = ""
-        ${env:SHELLOPTS} = "igncr"
-        &{"C:\tools\cygwin\bin\bash" msys2--setup-msys.sh}
+        # ${env:CHERE_INVOKING} = "1"
+        # ${env:PATH} = ""
+        # ${env:SHELLOPTS} = "igncr"
+        # &{"C:\tools\cygwin\bin\bash.exe" "msys2--setup-msys.sh"}
+        Start-App "C:\tools\cygwin\bin\bash.exe" "msys2--setup-msys.sh"
