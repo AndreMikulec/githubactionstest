@@ -45,7 +45,6 @@ jobs:
         function Set-EnvVar {param($X)     Add-Content -Path ${env:GITHUB_ENV} -Value "$X"}
         ${env:do} = "true"
 
-
     - name: DO powershell version
       continue-on-error: true
       shell: powershell
@@ -53,7 +52,7 @@ jobs:
         echo "matrix shell: ${{ matrix.shell }}"
         Get-CIMInstance -Class Win32_Processor | Select-Object -Property Name
         ${env:MSYSTEM} = "UCRT64"
-        msys2 -c 'uname -a; echo MSYSTEM ${MSYSTEM}'
+        msys2 -c 'set -x -v -e;uname -a; echo MSYSTEM ${MSYSTEM};export | grep MINGW;export | grep MSYSTEM'
 
     - name: DO cmd verson
       continue-on-error: true
@@ -62,15 +61,18 @@ jobs:
         echo "matrix shell: ${{ matrix.shell }}"
         systeminfo | findstr /B "/C:OS Name" /B "/C:OS Version"
         set MSYSTEM=MINGW32
-        msys2 -c 'uname -a; echo MSYSTEM ${MSYSTEM}'
+        msys2 -c 'set -x -v -e;uname -a; echo MSYSTEM ${MSYSTEM};export | grep MINGW;export | grep MSYSTEM'
 
     - name: DO msys2 {0} version 
       continue-on-error: true
       shell: msys2 {0}
       run: |
+        set -x -v -e
         echo "matrix shell: ${{ matrix.shell }}"
         uname -a
         echo "MSYSTEM ${MSYSTEM}"
+        export | grep MINGW
+        export | grep MSYSTEM
 
     - name: DO msys2 {0} version MINGW64
       continue-on-error: true
@@ -78,9 +80,12 @@ jobs:
       env:
         MSYSTEM: MINGW64
       run: |
+        set -x -v -e
         echo "matrix shell: ${{ matrix.shell }}"
         uname -a
         echo "MSYSTEM ${MSYSTEM}"
+        export | grep MINGW
+        export | grep MSYSTEM
 
     - name: DO msys2 {0} verson OSYSTEM
       continue-on-error: true
@@ -88,8 +93,11 @@ jobs:
       env:
         MSYSTEM: ${{ matrix.OSYSTEM || '' }}
       run: |
+        set -x -v -e
         echo "matrix shell: ${{ matrix.shell }}"
         uname -a
         echo "MSYSTEM ${MSYSTEM}"
+        export | grep MINGW
+        export | grep MSYSTEM
 
 
