@@ -45,4 +45,9 @@ jobs:
         systeminfo | findstr /B "/C:OS Name" /B "/C:OS Version"
         msys2 -c 'uname -a; echo MSYSTEM ${MSYSTEM}'
 
-
+    - name: DO msys2 {0} verson
+      shell: msys2 {0}
+      run: |
+        echo "matrix shell: ${{ matrix.shell }}"
+        uname -a
+        echo "MSYSTEM ${MSYSTEM}"
