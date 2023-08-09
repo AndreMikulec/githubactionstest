@@ -130,4 +130,4 @@ jobs:
         # ${env:PATH} = ""
         # ${env:SHELLOPTS} = "igncr"
         # &{"C:\tools\cygwin\bin\bash.exe" "msys2--setup-msys.sh"}
-        Start-App "C:\tools\cygwin\bin\bash.exe" "--norc" "-leo igncr" "msys2--setup-msys.sh"
+        Start-App "C:\tools\cygwin\bin\bash.exe" "--norc" "-o igncr" "msys2--setup-msys.sh"
