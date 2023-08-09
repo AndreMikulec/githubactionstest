@@ -100,7 +100,7 @@ jobs:
         # CAN NOT DO PIPING
 
     - name: DO msys2 {0} verson OSYSTEM
-      if {{  matrix.shell != 'msys2 {0}' }}
+      if: {{  matrix.shell != 'msys2 {0}' }}
       continue-on-error: true
       shell: msys2 {0}
       env:
