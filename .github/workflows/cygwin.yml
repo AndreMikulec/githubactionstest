@@ -90,6 +90,9 @@ jobs:
       continue-on-error: true
       # OTHER ACTION ADVICE - https://github.com/marketplace/actions/install-cygwin
       shell: C:\cygwin\bin\bash.exe --login --norc -eo pipefail -o igncr '{0}'
+      env:
+        CHERE_INVOKING: 1
+        PATH: ''
       run: |
         uname -a
         echo "PSVAR: ${{ env.PSVAR }}"
