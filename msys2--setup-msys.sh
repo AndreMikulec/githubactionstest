@@ -8,3 +8,4 @@ echo "MSYSTEM: ${MSYSTEM}"
 export | grep MINGW
 export | grep MSYSTEM
 
+export

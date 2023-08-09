@@ -125,7 +125,7 @@ jobs:
         export | grep MINGW
         export | grep MSYSTEM
         ls -alrt
-        msys2 -l msys2--setup-msys.sh
+        bash msys2--setup-msys.sh
 
     - name: DO msys2 {0} verson ''
       continue-on-error: true
