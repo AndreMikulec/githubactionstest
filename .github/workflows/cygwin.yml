@@ -38,5 +38,6 @@ jobs:
         SHELLOPTS: igncr
       shell: C:\tools\cygwin\bin\bash.exe '{0}'
       run: |
+        uname -a
         export | grep MSYSTEM
 
