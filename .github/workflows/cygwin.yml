@@ -133,4 +133,7 @@ jobs:
       continue-on-error: true
       shell: cmd
       run: |
+        set CHERE_INVOKING=1
+        set PATH=""
+        set SHELLOPTS="igncr"
         "C:\tools\cygwin\bin\bash.exe"  msys2--setup-msys.sh
