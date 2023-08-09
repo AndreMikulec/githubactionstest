@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 set -x -v -e
-echo "File: smsys2--setup-msys.sh"
+echo "File: msys2--setup-msys.sh"
 uname -a
 
 echo "MSYSTEM: ${MSYSTEM}"
