@@ -53,12 +53,14 @@ jobs:
       run: |
         echo "matrix shell: ${{ matrix.shell }}"
         systeminfo | findstr /B "/C:OS Name" /B "/C:OS Version"
-        set MSYSTEM=UCRT64
+        set MSYSTEM=MINGW32
         msys2 -c 'uname -a; echo MSYSTEM ${MSYSTEM}'
 
     - name: DO msys2 {0} verson
       continue-on-error: true
       shell: msys2 {0}
+      env:
+        MSYSTEM: MINGW64
       run: |
         echo "matrix shell: ${{ matrix.shell }}"
         uname -a
