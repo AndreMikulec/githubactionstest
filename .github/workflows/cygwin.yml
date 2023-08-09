@@ -33,11 +33,14 @@ jobs:
         platform: x64
         packages: wget
 
-    - name: Run Cygwin egor-tensin/setup-cygwin@v3 x64
+    - name: Run Cygwin egor-tensin/setup-cygwin@v3 x64 2
+      continue-on-error: true
       env:
         SHELLOPTS: igncr
-      shell: C:\tools\cygwin\bin\bash.exe '{0}'
+      shell: cmd
       run: |
-        uname -a
-        export | grep MSYSTEM
+        set SHELLOPTS=igncr
+        set PATH=C:\tools\cygwin\bin
+        bash mini
+
 
