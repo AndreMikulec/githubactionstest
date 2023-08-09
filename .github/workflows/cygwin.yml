@@ -93,10 +93,13 @@ jobs:
         packages: wget
 
     - name: Run Cygwin egor-tensin/setup-cygwin@v3 x64
+      env:
+        SHELLOPTS: igncr
       shell: C:\tools\cygwin\bin\bash.exe --login --norc -eo pipefail -o igncr '{0}'
       run: |
         set -x -v -e
         ls -alrt
-        export | grep MINGW
-        export | grep MSYSTEM
+        # export | grep MINGW
+        # export | grep MSYSTEM
         ls -alrt
+        bash $(cygpath "${GITHUB_WORKSPACE})"/msys2--setup-msys.sh
