@@ -33,6 +33,10 @@ jobs:
         shell: ${{ matrix.shell }}
 
     steps:
+
+    - name: Checkout code
+      uses: actions/checkout@v2
+
     - name: MSYS2
       # continue-on-error: true
       uses: msys2/setup-msys2@v2
