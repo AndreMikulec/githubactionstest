@@ -38,6 +38,14 @@ jobs:
         msystem: MSYS
         update: false
 
+    - name: Set Variables
+      continue-on-error: true
+      shell: powershell
+      run: |
+        function Set-EnvVar {param($X)     Add-Content -Path ${env:GITHUB_ENV} -Value "$X"}
+        ${env:do} = "true"
+
+
     - name: DO powershell version
       continue-on-error: true
       shell: powershell
@@ -56,7 +64,15 @@ jobs:
         set MSYSTEM=MINGW32
         msys2 -c 'uname -a; echo MSYSTEM ${MSYSTEM}'
 
-    - name: DO msys2 {0} verson
+    - name: DO msys2 {0} version 
+      continue-on-error: true
+      shell: msys2 {0}
+      run: |
+        echo "matrix shell: ${{ matrix.shell }}"
+        uname -a
+        echo "MSYSTEM ${MSYSTEM}"
+
+    - name: DO msys2 {0} version MINGW64
       continue-on-error: true
       shell: msys2 {0}
       env:
@@ -65,3 +81,15 @@ jobs:
         echo "matrix shell: ${{ matrix.shell }}"
         uname -a
         echo "MSYSTEM ${MSYSTEM}"
+
+    - name: DO msys2 {0} verson OSYSTEM
+      continue-on-error: true
+      shell: msys2 {0}
+      env:
+        MSYSTEM: ${{ matrix.OSYSTEM || '' }}
+      run: |
+        echo "matrix shell: ${{ matrix.shell }}"
+        uname -a
+        echo "MSYSTEM ${MSYSTEM}"
+
+
