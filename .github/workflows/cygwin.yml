@@ -25,7 +25,6 @@ jobs:
       run: |
         git config --global core.autocrlf input
         git config --global advice.detachedHead false
-        git config --global --add safe.directory 
 
     - name: Help Cygwin
       shell: cmd
