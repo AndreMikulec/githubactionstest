@@ -25,6 +25,7 @@ jobs:
         - os: windows-latest
           shell: powershell
           MSYSTEM: ''
+          OSYSTEM: CLANG32
 
     defaults:
       run:
@@ -86,16 +87,28 @@ jobs:
         export | grep MINGW
         export | grep MSYSTEM
 
-    - name: DO msys2 {0} verson OSYSTEM
+    - name: DO msys2 {0} verson ''
       continue-on-error: true
       shell: msys2 {0}
       env:
-        MSYSTEM: ''
+        MSYSTEM: '' 
       run: |
         set -x -v -e
         echo "matrix shell: ${{ matrix.shell }}"
         uname -a
         echo "MSYSTEM ${MSYSTEM}"
         # CAN NOT DO PIPING
+
+    - name: DO msys2 {0} verson OSYSTEM
+      continue-on-error: true
+      shell: msys2 {0}
+      env:
+        MSYSTEM: ${{ matrix.OSYSTEM }}
+      run: |
+        set -x -v -e
+        echo "matrix shell: ${{ matrix.shell }}"
+        uname -a
+        echo "MSYSTEM ${MSYSTEM}"
+        # ??? PIPING ???
 
 
