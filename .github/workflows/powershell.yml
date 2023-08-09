@@ -39,6 +39,7 @@ jobs:
         ${env:do} = "true"
         Set-EnvVar "do=${env:do}"
         Import-Module .\powershell.ps1
+        echo "me ${env:me}"
 
     - name: DO powershell version
       continue-on-error: true
