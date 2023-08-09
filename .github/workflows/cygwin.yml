@@ -126,8 +126,11 @@ jobs:
         function Start-App  {param($X,$Y) Start-Process -NoNewWindow -FilePath "$X" -ArgumentList $Y }
         ${env:Location} = Get-Location
         echo "Location: ${env:Location}"
-        # ${env:CHERE_INVOKING} = "1"
-        # ${env:PATH} = ""
-        # ${env:SHELLOPTS} = "igncr"
-        # &{"C:\tools\cygwin\bin\bash.exe" "msys2--setup-msys.sh"}
+        # NO VISIBLE OUTPUT
         Start-App "C:\tools\cygwin\bin\bash.exe" "--norc" "-o igncr" "msys2--setup-msys.sh"
+
+    - name: FROM cmd DO cygwin
+      continue-on-error: true
+      shell: cmd
+      run: |
+        "C:\tools\cygwin\bin\bash.exe"  msys2--setup-msys.sh
