@@ -26,13 +26,6 @@ jobs:
         git config --global core.autocrlf input
         git config --global advice.detachedHead false
 
-    - name: Help Cygwin
-      shell: cmd
-      run: |
-        # help cygwin
-        # git config --global --add safe.directory /cygdrive/d/a/githubactionstest/githubactionstest
-        git config --global --add safe.directory %GITHUB_WORKSPACE%
-
     - name: Checkout code
       uses: actions/checkout@v2
 
@@ -108,8 +101,12 @@ jobs:
         PATH: ''
         SHELLOPTS: igncr
       run: |
+        git config --global --add safe.directory $(cygpath "${GITHUB_WORKSPACE})
+        set -x -v -e
         uname -a
         echo "PSVAR: ${{ env.PSVAR }}"
         echo "PATH: ${PATH}"
-        bash msys2--setup-msys.sh
+        export | grep MINGW
+        export | grep MSYSTEM
+        $(cygpath "C:\cygwin\bin\bash") -o igncr msys2--setup-msys.sh
 
