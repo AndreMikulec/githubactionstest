@@ -1,4 +1,5 @@
 ﻿# Set-PSDebug -Trace 2
+Remove-Variable * -ErrorAction SilentlyContinue
 
 $a = 1
 $b = 2
@@ -16,8 +17,8 @@ Function FancyColorMessages {
 	Write-Host "I am Green - windir - ${env:windir}" -ForegroundColor Green
 }
 
-# Inside
-# FancyColorMessagess
+echo INSIDE
+FancyColorMessages
 $e = 5
 $f = 6
 

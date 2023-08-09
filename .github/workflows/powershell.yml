@@ -40,6 +40,7 @@ jobs:
         Set-EnvVar "do=${env:do}"
         Import-Module .\powershell.ps1
         echo "OUTSIDE me ${env:me}"
+        echo OUTSIDE
         FancyColorMessages
         echo DONE
 
