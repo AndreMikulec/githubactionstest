@@ -50,11 +50,11 @@ jobs:
     - name: DO powershell ver
       shell: powershell
       run: |
-        ver
+         Get-CIMInstance -Class Win32_Processor | Select-Object -Property Name
 
     - name: DO cmd ver
       shell: cmd
       run: |
-        ver
+        systeminfo | findstr /B "/C:OS Name" /B "/C:OS Version"
 
 
