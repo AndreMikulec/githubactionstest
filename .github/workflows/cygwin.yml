@@ -19,6 +19,8 @@ jobs:
           MSYSTEM: ''
           OSYSTEM: CLANG32
 
+        - os: windows-latest
+
     steps:
 
     - name: Prepare to Download Files from Github
