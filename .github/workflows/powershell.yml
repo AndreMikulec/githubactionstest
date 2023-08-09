@@ -38,6 +38,7 @@ jobs:
         function Set-EnvVar {param($X)     Add-Content -Path ${env:GITHUB_ENV} -Value "$X"}
         ${env:do} = "true"
         Set-EnvVar "do=${env:do}"
+        Import-Module .\powershell.ps1
 
     - name: DO powershell version
       continue-on-error: true
@@ -50,8 +51,6 @@ jobs:
         ${env:MSYSTEM} = "UCRT64"
         msys2 -c 'set -x -v -e;uname -a;export | grep MINGW;export | grep MSYSTEM; echo "Present Working Directory $(pwd)"' 
 
-        ${env:Children} = Get-ChildItem
-        echo "Children: ${env:Children}"
         &{msys2 msys2--setup-msys.sh}
         #
         # unexpected token - ${env:GITHUB_WORKSPACE}\msys2--setup-msys.sh
