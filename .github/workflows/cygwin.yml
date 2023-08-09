@@ -88,7 +88,8 @@ jobs:
 
     - name: DO cygwin
       continue-on-error: true
-      # OTHER ACTION ADVICE - https://github.com/marketplace/actions/install-cygwin
+      # OTHER GITHUB ACTION ADVICE
+      # https://github.com/marketplace/actions/install-cygwin
       shell: C:\cygwin\bin\bash.exe --login --norc -eo pipefail -o igncr '{0}'
       env:
         CHERE_INVOKING: 1
@@ -96,6 +97,6 @@ jobs:
       run: |
         uname -a
         echo "PSVAR: ${{ env.PSVAR }}"
-        echo ${PATH}
-
+        echo "PATH: ${PATH}"
+        bash msys2--setup-msys.sh
         
