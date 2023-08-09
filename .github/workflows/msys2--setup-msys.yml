@@ -16,25 +16,20 @@ jobs:
       matrix:
         include:
         - os: windows-latest
-          feature: a
           shell: msys2 {0}
         - os: windows-latest
+          shell: powershell
 
     defaults:
       run:
-        shell: ${{ matrix.shell || 'powershell' }}
+        shell: ${{ matrix.shell }}
+
     steps:
     - name: MSYS2
       uses: msys2/setup-msys2@v2
       with:
         msystem: MINGW64
         update: false
-
-    - name: DO default
-      run: |
-        echo "matrix shell: ${{ matrix.shell }}"
-        uname -a
-        msys2 -c 'uname -a; echo MSYSTEM ${MSYSTEM}'
 
     - name: DO powershell version
       shell: powershell
@@ -49,4 +44,5 @@ jobs:
         echo "matrix shell: ${{ matrix.shell }}"
         systeminfo | findstr /B "/C:OS Name" /B "/C:OS Version"
         msys2 -c 'uname -a; echo MSYSTEM ${MSYSTEM}'
+
 
