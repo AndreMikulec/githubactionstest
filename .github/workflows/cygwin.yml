@@ -117,5 +117,5 @@ jobs:
         # export | grep MSYSTEM
         # Present Working Directory: /etc/skel
         echo "Present Working Directory: $(pwd)"
-        $(cygpath "C:\tools\cygwin\bin\bash") --login --norc -o igncr $(cygpath "${GITHUB_WORKSPACE}")/msys2--setup-msys.sh
+        $(cygpath "C:\tools\cygwin\bin\bash") --login --norc -leo igncr $(cygpath "${GITHUB_WORKSPACE}")/msys2--setup-msys.sh
 
