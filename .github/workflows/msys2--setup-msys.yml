@@ -100,6 +100,7 @@ jobs:
         # CAN NOT DO PIPING
 
     - name: DO msys2 {0} verson OSYSTEM
+      if {{  matrix.shell != 'msys2 {0}' }}
       continue-on-error: true
       shell: msys2 {0}
       env:
@@ -109,8 +110,10 @@ jobs:
         echo "matrix shell: ${{ matrix.shell }}"
         uname -a
         echo "MSYSTEM ${MSYSTEM}"
+        # powershell - CAN DO PIPING
+        # UCRT msys2 {0} and MINGW32 msys2 {0} CAN NOT DO PIPING
         export | grep MINGW
         export | grep MSYSTEM
-        # ??? PIPING ???
+
 
 
