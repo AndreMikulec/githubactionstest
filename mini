@@ -12,5 +12,4 @@ fi
 
 export | grep TEMP
 
-exit
 

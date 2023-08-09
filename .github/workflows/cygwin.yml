@@ -33,10 +33,7 @@ jobs:
         platform: x64
         packages: wget
 
-    - name: Run Cygwin egor-tensin/setup-cygwin@v3 x64 2
-      continue-on-error: true
-      env:
-        SHELLOPTS: igncr
+    - name: Run Cygwin egor-tensin/setup-cygwin@v3 x64
       shell: cmd
       run: |
         set SHELLOPTS=igncr

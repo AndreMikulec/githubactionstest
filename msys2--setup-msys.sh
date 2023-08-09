@@ -15,5 +15,3 @@ fi
 
 export | grep MINGW
 export | grep MSYSTEM
-
-exit
