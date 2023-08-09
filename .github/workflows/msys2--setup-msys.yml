@@ -109,6 +109,8 @@ jobs:
         echo "matrix shell: ${{ matrix.shell }}"
         uname -a
         echo "MSYSTEM ${MSYSTEM}"
+        export | grep MINGW
+        export | grep MSYSTEM
         # ??? PIPING ???
 
 
