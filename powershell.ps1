@@ -1,4 +1,4 @@
-﻿Set-PSDebug -Trace 2
+﻿# Set-PSDebug -Trace 2
 
 $a = 1
 $b = 2
