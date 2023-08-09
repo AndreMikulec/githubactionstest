@@ -1,0 +1,41 @@
+name: CI
+
+on: [push, pull_request]
+
+# THIS IS BASED OFF OF
+# https://github.com/grimme-lab/blas-interface/blob/f31a8b67fcd36771ee3ee04f63b7ff38e81e17f9/.github/workflows/build.yml
+
+env:
+  BUILD_DIR: _build
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+        - os: windows-latest
+          feature: a
+          shell: msys2 {0}
+        - os: windows-latest
+
+    defaults:
+        shell: ${{ matrix.shell || 'powershell' }}
+
+    steps:
+    - name: MSYS2
+      uses: msys2/setup-msys2@v2
+      with:
+        msystem: MINGW64
+        update: false
+
+    - name: DO default
+      run: |
+        uname -a
+
+    - name: DO powershell
+      shell: powershell
+      run: |
+        ver
+
