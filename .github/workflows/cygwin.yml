@@ -137,3 +137,20 @@ jobs:
         set PATH=""
         set SHELLOPTS="igncr"
         "C:\tools\cygwin\bin\bash.exe"  msys2--setup-msys.sh
+
+      # https://github.com/java-native-access/jna/blob/6c0fb985284982d2a2f70c07877f3baf16bc5421/native/libffi/.github/workflows/build.yml#L217
+      - name: Set up Cygwin egor-tensin/setup-cygwin@v3 x64
+        uses: egor-tensin/setup-cygwin@v3
+        with:
+          platform: x64
+          packages: wget
+
+      - name: Run Cygwin egor-tensin/setup-cygwin@v3 x64
+        shell: C:\tools\cygwin\bin\bash.exe --login --norc -eo pipefail -o igncr '{0}'
+        run: |
+          set -x -v -e
+          ls -alrt
+          export | grep MINGW
+          export | grep MSYSTEM
+          ls -alrt
+
