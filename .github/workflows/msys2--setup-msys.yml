@@ -5,7 +5,7 @@ on: [push, pull_request]
 # THIS IS BASED OFF OF
 # https://github.com/grimme-lab/blas-interface/blob/f31a8b67fcd36771ee3ee04f63b7ff38e81e17f9/.github/workflows/build.yml
 
-jobs: ${MSYSTEM} ${shell}
+jobs:
   build: 
     name: ${MSYSTEM} ${shell}
     runs-on: ${{ matrix.os }}
