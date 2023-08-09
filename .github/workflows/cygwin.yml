@@ -1,0 +1,96 @@
+name: CI
+
+on: [push, pull_request]
+
+# THIS IS BASED OFF OF
+# https://github.com/grimme-lab/blas-interface/blob/f31a8b67fcd36771ee3ee04f63b7ff38e81e17f9/.github/workflows/build.yml
+
+jobs:
+  build: 
+    name: ${{ matrix.MSYSTEM }} ${{ matrix.shell }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+
+        - os: windows-latest
+          shell: powershell
+          MSYSTEM: ''
+          OSYSTEM: CLANG32
+
+    steps:
+
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: MSYS2
+      # continue-on-error: true
+      uses: msys2/setup-msys2@v2
+      with:
+        msystem: MSYS
+        update: false
+
+    - name: Set Variables
+      continue-on-error: true
+      shell: powershell
+      run: |
+        function Set-EnvVar {param($X)     Add-Content -Path ${env:GITHUB_ENV} -Value "$X"}
+        ${env:do} = "true"
+        Set-EnvVar "do=${env:do}"
+        Import-Module .\powershell.ps1
+        echo "OUTSIDE me ${env:me}"
+        echo OUTSIDE
+        FancyColorMessages
+        echo DONE
+
+    - name: DO powershell version
+      continue-on-error: true
+      shell: powershell
+      run: |
+        ${env:Location} = Get-Location
+        echo "Location: ${env:Location}"
+        echo "matrix shell: ${{ matrix.shell }}"
+        echo "PSVAR: ${{ env.PSVAR }}"
+        Get-CIMInstance -Class Win32_Processor | Select-Object -Property Name
+        ${env:MSYSTEM} = "UCRT64"
+        msys2 -c 'set -x -v -e;uname -a;export | grep MINGW;export | grep MSYSTEM; echo "Present Working Directory $(pwd)"' 
+
+        &{msys2 msys2--setup-msys.sh}
+        #
+        # unexpected token - ${env:GITHUB_WORKSPACE}\msys2--setup-msys.sh
+
+    - name: DO msys2 {0} verson OSYSTEM
+      if: ${{  matrix.shell != 'msys2 {0}' }}
+      continue-on-error: true
+      shell: msys2 {0}
+      env:
+        MSYSTEM: ${{ matrix.OSYSTEM }}
+      run: |
+        set -x -v -e
+        echo "Present Working Directory: $(pwd)"
+        echo "matrix shell: ${{ matrix.shell }}"
+        uname -a
+        echo "MSYSTEM ${MSYSTEM}"
+        # powershell - CAN DO PIPING
+        # UCRT msys2 {0} and MINGW32 msys2 {0} CAN NOT DO PIPING
+        export | grep MINGW
+        export | grep MSYSTEM
+        bash msys2--setup-msys.sh
+
+    - name: Cygwin Install
+    # OTHER ACTION - https://github.com/marketplace/actions/install-cygwin
+      uses: cygwin/cygwin-install-action@v4
+      env:
+        CHERE_INVOKING: 1
+        PATH: ''
+      with:
+        packages: git
+
+    - name: DO cygwin
+      continue-on-error: true
+      shell: C:\cygwin\bin\bash.exe --login --norc -eo pipefail -o igncr '{0}'
+      run: |
+        uname -a
+
+        
