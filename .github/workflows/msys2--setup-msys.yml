@@ -32,16 +32,29 @@ jobs:
 
     - name: DO default
       run: |
-        echo DO
+        echo "matrix shell: ${{ matrix.shell }}"
+        uname -a
 
     - name: DO powershell
       shell: powershell
       run: |
-        ver
+        echo "matrix shell: ${{ matrix.shell }}"
         msys2 -c 'uname -a'
 
     - name: DO cmd
       shell: cmd
       run: |
-        ver
+        echo "matrix shell: ${{ matrix.shell }}"
         msys2 -c 'uname -a'
+
+    - name: DO powershell ver
+      shell: powershell
+      run: |
+        ver
+
+    - name: DO cmd ver
+      shell: cmd
+      run: |
+        ver
+
+
