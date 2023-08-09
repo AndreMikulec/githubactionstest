@@ -72,8 +72,11 @@ jobs:
 
         # /usr/bin/bash: D:\a\githubactionstest\githubactionstest\msys2--setup-msys.sh: No such file or directory
         #msys2 -l ${env:GITHUB_WORKSPACE}\msys2--setup-msys.sh
-        bash -l ${env:GITHUB_WORKSPACE}\msys2--setup-msys.sh
-        #
+
+        # /usr/bin/bash: D:\a\githubactionstest\githubactionstest\msys2--setup-msys.sh: No such file or directory
+        # bash -l ${env:GITHUB_WORKSPACE}\msys2--setup-msys.sh
+        ls -alrt
+
         # unexected token - ${env:GITHUB_WORKSPACE}\msys2--setup-msys.sh
 
     - name: DO cmd verson
