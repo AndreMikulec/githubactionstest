@@ -27,6 +27,7 @@ jobs:
           MSYSTEM: ''
           OSYSTEM: CLANG32
 
+    # possible STYLE - I am better off naming my shells explicitly
     defaults:
       run:
         shell: ${{ matrix.shell }}
@@ -92,6 +93,8 @@ jobs:
       shell: msys2 {0}
       env:
         MSYSTEM: '' 
+        #         IS AVAILABLE - but '' will FAIL the PIPES
+        #         ${{ matrix.OSYSTEM || '' }}
       run: |
         set -x -v -e
         echo "matrix shell: ${{ matrix.shell }}"
@@ -100,7 +103,7 @@ jobs:
         # CAN NOT DO PIPING
 
     - name: DO msys2 {0} verson OSYSTEM
-      if: {{  matrix.shell != 'msys2 {0}' }}
+      if: ${{  matrix.shell != 'msys2 {0}' }}
       continue-on-error: true
       shell: msys2 {0}
       env:
