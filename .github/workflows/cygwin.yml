@@ -115,5 +115,6 @@ jobs:
         echo "PATH: ${PATH}"
         # export | grep MINGW
         # export | grep MSYSTEM
+        echo "Present Working Directory: $(pwd)"
         $(cygpath "C:\tools\cygwin\bin\bash") --login --norc -o igncr msys2--setup-msys.sh
 
