@@ -61,8 +61,6 @@ jobs:
         echo "matrix shell: ${{ matrix.shell }}"
         Get-CIMInstance -Class Win32_Processor | Select-Object -Property Name
         ${env:MSYSTEM} = "UCRT64"
-        # DOES NOT COMPLAINT THAT CAN NOT FIND THE FILE.  NO OUTPUT IS PRODUCED
-        # ${env:GITHUB_WORKSPACE}/msys2--setup-msys.sh
         msys2 -c 'set -x -v -e;uname -a;export | grep MINGW;export | grep MSYSTEM; echo "Present Working Directory $(pwd)"' 
 
         ${env:Children} = Get-ChildItem
@@ -81,8 +79,11 @@ jobs:
         systeminfo | findstr /B "/C:OS Name" /B "/C:OS Version"
         set MSYSTEM=MINGW32
         dir
+        rem Silently ignored
         %GITHUB_WORKSPACE%\msys2--setup-msys.sh
+        rem NOT IGNORED - THIS RUNS
         bash msys2--setup-msys.sh
+        REM Silently ignored
         msys2 -c 'set -x -v -e;uname -a'
         rem INGORES EVERYTHING BELOW THIS LINE 
         rem CAN NOT DO PIPING
