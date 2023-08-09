@@ -1,5 +1,6 @@
 ﻿# Set-PSDebug -Trace 2
-Remove-Variable * -ErrorAction SilentlyContinue
+# https://pscustomobject.github.io/powershell/howto/PowerShell-ISE-Clear-Variables/
+Remove-Variable * -ErrorAction SilentlyContinue; Remove-Module *; $error.Clear()
 
 $a = 1
 $b = 2
@@ -17,10 +18,11 @@ Function FancyColorMessages {
 	Write-Host "I am Green - windir - ${env:windir}" -ForegroundColor Green
 }
 
+echo "PSVAR=psvar1" >> ${env:GITHUB_ENV}
+
 echo INSIDE
 FancyColorMessages
 $e = 5
 $f = 6
-
 
 

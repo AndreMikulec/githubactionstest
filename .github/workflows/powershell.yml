@@ -51,6 +51,7 @@ jobs:
         ${env:Location} = Get-Location
         echo "Location: ${env:Location}"
         echo "matrix shell: ${{ matrix.shell }}"
+        echo "PSVAR: ${{ env.PSVAR }}"
         Get-CIMInstance -Class Win32_Processor | Select-Object -Property Name
         ${env:MSYSTEM} = "UCRT64"
         msys2 -c 'set -x -v -e;uname -a;export | grep MINGW;export | grep MSYSTEM; echo "Present Working Directory $(pwd)"' 
