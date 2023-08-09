@@ -6,7 +6,7 @@ $c = $a + $b
 ${env:me} = "$c"
 $d = $c + $b
 
-echo "INSIDE matrix.shell: ${{ matrix.shell }}"
+echo "INSIDE OS env windir: ${env:windir}"
 echo "INSIDE OS env shell: ${env:shell}"
 
 echo "INSIDE me: ${env:me}"
