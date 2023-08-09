@@ -64,26 +64,12 @@ jobs:
         # DOES NOT COMPLAINT THAT CAN NOT FIND THE FILE.  NO OUTPUT IS PRODUCED
         # ${env:GITHUB_WORKSPACE}/msys2--setup-msys.sh
         msys2 -c 'set -x -v -e;uname -a;export | grep MINGW;export | grep MSYSTEM; echo "Present Working Directory $(pwd)"' 
-        #
-        # /usr/bin/bash: line 1: /msys2--setup-msys.sh: No such file or directory
-        # msys2 -c 'set -x -v -e;${env:GITHUB_WORKSPACE}/msys2--setup-msys.sh >> $GITHUB_OUTPUT'
-        #
-        # /usr/bin/bash: msys2--setup-msys.sh: No such file or directory
-        # msys2 -l msys2--setup-msys.sh
 
-        # /usr/bin/bash: D:\a\githubactionstest\githubactionstest/msys2--setup-msys.sh: No such file or directory
-        # msys2 -l ${env:GITHUB_WORKSPACE}/msys2--setup-msys.sh
-
-        # /usr/bin/bash: D:\a\githubactionstest\githubactionstest\msys2--setup-msys.sh: No such file or directory
-        #msys2 -l ${env:GITHUB_WORKSPACE}\msys2--setup-msys.sh
-
-        # /usr/bin/bash: D:\a\githubactionstest\githubactionstest\msys2--setup-msys.sh: No such file or directory
-        # bash -l ${env:GITHUB_WORKSPACE}\msys2--setup-msys.sh
         ${env:Children} = Get-ChildItem
         echo "Children: ${env:Children}"
         &{msys2 msys2--setup-msys.sh}
         #
-        # unexected token - ${env:GITHUB_WORKSPACE}\msys2--setup-msys.sh
+        # unexpected token - ${env:GITHUB_WORKSPACE}\msys2--setup-msys.sh
 
     - name: DO cmd verson
       continue-on-error: true
@@ -95,6 +81,7 @@ jobs:
         systeminfo | findstr /B "/C:OS Name" /B "/C:OS Version"
         set MSYSTEM=MINGW32
         dir
+        bash msys2--setup-msys.sh
         msys2 -c 'set -x -v -e;uname -a'
         rem INGORES EVERYTHING BELOW THIS LINE 
         rem CAN NOT DO PIPING
@@ -110,6 +97,7 @@ jobs:
         uname -a
         echo "MSYSTEM ${MSYSTEM}"
         # CAN NOT DO PIPING
+        bash msys2--setup-msys.sh
 
     - name: DO msys2 {0} version MINGW64
       continue-on-error: true
@@ -141,6 +129,7 @@ jobs:
         uname -a
         echo "MSYSTEM ${MSYSTEM}"
         # CAN NOT DO PIPING
+        bash msys2--setup-msys.sh
 
     - name: DO msys2 {0} verson OSYSTEM
       if: ${{  matrix.shell != 'msys2 {0}' }}
@@ -158,6 +147,7 @@ jobs:
         # UCRT msys2 {0} and MINGW32 msys2 {0} CAN NOT DO PIPING
         export | grep MINGW
         export | grep MSYSTEM
+        bash msys2--setup-msys.sh
 
 
     - name: DO msys2 {0} verson OSYSTEM env.do IGNORE ME
