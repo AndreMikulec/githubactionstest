@@ -32,7 +32,7 @@ jobs:
 
     steps:
     - name: MSYS2
-      continue-on-error: true
+      # continue-on-error: true
       uses: msys2/setup-msys2@v2
       with:
         msystem: MSYS
@@ -52,7 +52,7 @@ jobs:
         echo "matrix shell: ${{ matrix.shell }}"
         Get-CIMInstance -Class Win32_Processor | Select-Object -Property Name
         ${env:MSYSTEM} = "UCRT64"
-        msys2 -c 'set -x -v -e;uname -a; echo MSYSTEM ${MSYSTEM};export | grep MINGW;export | grep MSYSTEM'
+        msys2 -c 'set -x -v -e;uname -a;export | grep MINGW;export | grep MSYSTEM' 
 
     - name: DO cmd verson
       continue-on-error: true
@@ -61,7 +61,7 @@ jobs:
         echo "matrix shell: ${{ matrix.shell }}"
         systeminfo | findstr /B "/C:OS Name" /B "/C:OS Version"
         set MSYSTEM=MINGW32
-        msys2 -c 'set -x -v -e;uname -a; echo MSYSTEM ${MSYSTEM};export | grep MINGW;export | grep MSYSTEM'
+        msys2 -c 'set -x -v -e;uname -a' # CAN NOT DO PIPING
 
     - name: DO msys2 {0} version 
       continue-on-error: true
@@ -71,8 +71,7 @@ jobs:
         echo "matrix shell: ${{ matrix.shell }}"
         uname -a
         echo "MSYSTEM ${MSYSTEM}"
-        export | grep MINGW
-        export | grep MSYSTEM
+        # CAN NOT DO PIPING
 
     - name: DO msys2 {0} version MINGW64
       continue-on-error: true
@@ -91,13 +90,12 @@ jobs:
       continue-on-error: true
       shell: msys2 {0}
       env:
-        MSYSTEM: ${{ matrix.OSYSTEM || '' }}
+        MSYSTEM: ''
       run: |
         set -x -v -e
         echo "matrix shell: ${{ matrix.shell }}"
         uname -a
         echo "MSYSTEM ${MSYSTEM}"
-        export | grep MINGW
-        export | grep MSYSTEM
+        # CAN NOT DO PIPING
 
 
