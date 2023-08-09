@@ -86,18 +86,23 @@ jobs:
         bash msys2--setup-msys.sh
 
     - name: Cygwin Install
-      uses: cygwin/cygwin-install-action@v4
+      uses: egor-tensin/setup-cygwin@v3
       env:
         CHERE_INVOKING: 1
         PATH: ''
       with:
+        platform: x86
         packages: git
 
     - name: DO cygwin
       continue-on-error: true
       # OTHER GITHUB ACTION ADVICE
-      # https://github.com/marketplace/actions/install-cygwin
-      shell: C:\cygwin\bin\bash.exe --login --norc -eo pipefail -o igncr '{0}'
+      # https://github.com/cygwin/cygwin-install-action/tree/v4 (CAN NOT DO PIPING)
+      #
+      # (https://github.com/marketplace/actions/install-cygwin)
+      # OLDER VERSION that SUPPORTS x86
+      # https://github.com/egor-tensin/setup-cygwin/tree/v3
+      shell: C:\tools\cygwin\bin\bash.exe --login --norc -eo pipefail -o igncr '{0}'
       env:
         CHERE_INVOKING: 1
         PATH: ''
@@ -110,5 +115,5 @@ jobs:
         echo "PATH: ${PATH}"
         export | grep MINGW
         export | grep MSYSTEM
-        $(cygpath "C:\cygwin\bin\bash") -o igncr msys2--setup-msys.sh
+        $(cygpath "C:\tools\cygwin\bin\bash") -o igncr msys2--setup-msys.sh
 
