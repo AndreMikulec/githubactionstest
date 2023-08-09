@@ -34,12 +34,14 @@ jobs:
       run: |
         echo "matrix shell: ${{ matrix.shell }}"
         uname -a
+        msys2 -c 'uname -a; echo MSYSTEM ${MSYSTEM}'
 
     - name: DO powershell version
       shell: powershell
       run: |
         echo "matrix shell: ${{ matrix.shell }}"
         Get-CIMInstance -Class Win32_Processor | Select-Object -Property Name
+        msys2 -c 'uname -a; echo MSYSTEM ${MSYSTEM}'
 
     - name: DO cmd verson
       shell: cmd
