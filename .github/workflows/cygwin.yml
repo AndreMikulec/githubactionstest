@@ -101,7 +101,7 @@ jobs:
         PATH: ''
         SHELLOPTS: igncr
       run: |
-        git config --global --add safe.directory $(cygpath "${GITHUB_WORKSPACE})
+        git config --global --add safe.directory $(cygpath "${GITHUB_WORKSPACE}")
         set -x -v -e
         uname -a
         echo "PSVAR: ${{ env.PSVAR }}"
