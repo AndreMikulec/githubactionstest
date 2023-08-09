@@ -102,4 +102,4 @@ jobs:
         # export | grep MINGW
         # export | grep MSYSTEM
         ls -alrt
-        $(cygpath "C:\tools\cygwin\bin\bash") bash $(cygpath "${GITHUB_WORKSPACE})"/msys2--setup-msys.sh
+        $(cygpath "C:\tools\cygwin\bin\bash") bash $(cygpath "${GITHUB_WORKSPACE}")/msys2--setup-msys.sh
