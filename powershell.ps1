@@ -18,7 +18,7 @@ Function FancyColorMessages {
 	Write-Host "I am Green - windir - ${env:windir}" -ForegroundColor Green
 }
 
-echo "PSVAR=psvar1" >> ${env:GITHUB_ENV}
+Set-EnvVar "PSVAR=psvar1"
 
 echo INSIDE
 FancyColorMessages
