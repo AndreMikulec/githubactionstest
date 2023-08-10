@@ -13,5 +13,8 @@ then
   echo ONE
 fi
 
-export | grep MINGW
-export | grep MSYSTEM
+# if does not exist, it will produce and error code 1
+# export | grep MINGW
+# export | grep MSYSTEM
+
+export | grep TEMP
