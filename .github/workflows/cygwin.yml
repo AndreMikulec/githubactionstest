@@ -39,6 +39,6 @@ jobs:
         set SHELLOPTS=igncr
         set CHERE_INVOKING=1
         set PATH=C:\tools\cygwin\bin
-        bash mini
+        bash msys2--setup-msys.sh
 
 
