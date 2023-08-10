@@ -35,8 +35,8 @@ jobs:
     - name: Run Cygwin cygwin/cygwin-install-action@v4 x86 VER cmd
       env:
         SHELLOPTS: igncr
+        CHERE_INVOKING: 1
       shell: cmd
-      CHERE_INVOKING: 1
       run: |
         set PATH=C:\cygwin\bin
         bash mini
