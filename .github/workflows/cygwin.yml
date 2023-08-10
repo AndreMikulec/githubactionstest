@@ -30,10 +30,10 @@ jobs:
     - name: Set up Cygwin egor-tensin/setup-cygwin@v3 x64
       uses: egor-tensin/setup-cygwin@v3
       with:
-        platform: x64
+        platform: x86
         packages: wget
 
-    - name: Run Cygwin egor-tensin/setup-cygwin@v3 x64
+    - name: Run Cygwin egor-tensin/setup-cygwin@v3 x86
       shell: cmd
       run: |
         set SHELLOPTS=igncr
