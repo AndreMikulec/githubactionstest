@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+set -x -v -e
+
+uname -a
 
 mirrordir="`echo "HELLO" | sed -e "s:E:U:g" | grep U  `"
 echo $mirrordir
@@ -11,5 +14,3 @@ then
 fi
 
 export | grep TEMP
-
-

@@ -2,9 +2,6 @@ name: CI
 
 on: [push, pull_request]
 
-# THIS IS BASED OFF OF
-# https://github.com/grimme-lab/blas-interface/blob/f31a8b67fcd36771ee3ee04f63b7ff38e81e17f9/.github/workflows/build.yml
-
 jobs:
   build:
     name: ${{ matrix.MSYSTEM }} ${{ matrix.shell }}
@@ -26,20 +23,22 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    # https://github.com/java-native-access/jna/blob/6c0fb985284982d2a2f70c07877f3baf16bc5421/native/libffi/.github/workflows/build.yml#L217
-    - name: Set up Cygwin egor-tensin/setup-cygwin@v3 x86
-      uses: egor-tensin/setup-cygwin@v3
+    # https://github.com/cygwin/cygwin-install-action/tree/006ad0b0946ca6d0a3ea2d4437677fa767392401
+    - name: Set up Cygwin cygwin/cygwin-install-action@v4 x86
+      uses: cygwin/cygwin-install-action@v4
       with:
+        # x86 or x86_64
         platform: x86
         packages: wget
+        add-to-path: false
 
-    # CYGWIN_NT-10.0-20348 fv-az479-191 3.4.7-1.x86_64 2023-06-16 14:04 UTC x86_64 Cygwin
-    - name: Run Cygwin egor-tensin/setup-cygwin@v3 x86
+    - name: Run Cygwin cygwin/cygwin-install-action@v4 x86 VER cmd
+      env:
+        SHELLOPTS: igncr
       shell: cmd
+      CHERE_INVOKING: 1
       run: |
-        set SHELLOPTS=igncr
-        set CHERE_INVOKING=1
-        set PATH=C:\tools\cygwin\bin
-        bash msys2--setup-msys.sh
+        set PATH=C:\cygwin\bin
+        bash mini
 
 
