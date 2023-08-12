@@ -5,11 +5,12 @@ on: [push, pull_request, workflow_dispatch]
 jobs:
   install:
     name: Needs Tests
+    runs-on: ubuntu-latest
 
     steps:
-    - name: Install
+    - name: Install Step
       run: |
-        date > date.txt
+        date > install_date.txt
 
   build_remus:
     name: Build Remus 
@@ -18,17 +19,18 @@ jobs:
     steps:
     - name: See install artifacts
       run: |
-        cat date.txt
+        cat install_date.txt || true
         date > build_remus.txt
-        cat build_romulus.txt
+        cat build_romulus.txt || true
 
   build_romulus:
     name: Build Romulus 
     needs: install
+    runs-on: ubuntu-latest
 
     steps:
     - name: See install artifiacts
       run: |
-        cat date.txt
+        cat install_date.txt || true
         date > build_romulus.txt
-        cat build_remus.txt
+        cat build_remus.txt  || true
