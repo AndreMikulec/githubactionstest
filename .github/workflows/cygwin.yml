@@ -61,6 +61,7 @@ jobs:
       shell:  C:\Cygwin\bin\bash.exe --login '{0}'
       run: |
         export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+        echo "SHELL: ${SHELL}"
         set -x -v -e
         uname -a
         echo "Present Working Directory: $(pwd)"
@@ -75,6 +76,7 @@ jobs:
       shell: bash
       run: |
         export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+        echo "SHELL: ${SHELL}"
         set -x -v -e
         uname -a
         echo "Present Working Directory: $(pwd)"
