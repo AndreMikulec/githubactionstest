@@ -12,7 +12,7 @@ jobs:
         include:
 
         - os: windows-latest
-          shellEnv: 'C:\Cygwin\bin\bash.exe --login ''{0}'''
+          shellEnv: "C:\Cygwin\bin\bash.exe --login '{0}'"
 
     defaults:
       run:
