@@ -19,6 +19,9 @@ jobs:
           shellEnv: 'bash.exe --login ''{0}'''
           Platform: x86
 
+    # Setting default shell (or other step metadata) conditionally in workflows #27143
+    # JAN 2021
+    # https://github.com/orgs/community/discussions/27143
     defaults:
       run:
         shell: ${{ matrix.shellEnv || 'bash' }}
@@ -105,7 +108,12 @@ jobs:
         export | grep TEMP
         bash mini
 
-     # Note, Github Actions installed MINGW (shell: bash) is also on the PATH and in front
+
+    # Setting default shell (or other step metadata) conditionally in workflows #27143
+    # JAN 2021
+    # https://github.com/orgs/community/discussions/27143
+    #
+    # Note, Github Actions installed MINGW (shell: bash) is also on the PATH and in front
     - name: Run Cygwin cygwin/cygwin-install-action@v4 Platform shellEnv
       env:
         SHELLOPTS: igncr
