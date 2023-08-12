@@ -14,6 +14,10 @@ jobs:
         - os: windows-latest
           shellEnv: 'C:\Cygwin\bin\bash.exe --login ''{0}'''
 
+    defaults:
+      run:
+        shell: ${{ matrix.shellEnv || 'bash' }}
+
     steps:
 
     - name: Prepare to Download Files from Github
@@ -57,8 +61,7 @@ jobs:
         export | grep TEMP
         bash mini
 
-
-    - name: Run Cygwin cygwin/cygwin-install-action@v4 x86 VER shellEnv
+    - name: Run Cygwin cygwin/cygwin-install-action@v4 x86 bash
       env:
         SHELLOPTS: igncr
         CHERE_INVOKING: 1
@@ -70,3 +73,17 @@ jobs:
         echo "Present Working Directory: $(pwd)"
         export | grep TEMP
         bash mini
+
+    - name: Run Cygwin cygwin/cygwin-install-action@v4 x86 bash
+      env:
+        SHELLOPTS: igncr
+        CHERE_INVOKING: 1
+      run: |
+        export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+        set -x -v -e
+        uname -a
+        echo "Present Working Directory: $(pwd)"
+        export | grep TEMP
+        bash mini
+
+
