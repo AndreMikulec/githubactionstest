@@ -30,19 +30,19 @@ jobs:
       uses: actions/checkout@v2
 
     # https://github.com/cygwin/cygwin-install-action/tree/006ad0b0946ca6d0a3ea2d4437677fa767392401
-    - name: Set up Cygwin cygwin/cygwin-install-action@v4 x86
+    - name: Set up Cygwin cygwin/cygwin-install-action@v4 Platform
       uses: cygwin/cygwin-install-action@v4
       with:
         # x86 or x86_64
         platform: ${{ matrix.Platform  == 'x64' && 'x86_64' || 'x86' }}
         packages: mksh
         # Note, Github Actions installed MINGW (shell: bash) is also on the PATH and in front
-        # default
+        # default (and IS logically REQUIRED)
         # Whether to add Cygwin's /bin directory to the system PATH
-        # Note, also exists is the minipulaable: GITHUB_PATH
+        # Note, also exists is the minipulable: GITHUB_PATH
         # add-to-path: true
 
-    - name: Run Cygwin cygwin/cygwin-install-action@v4 x86 VER cmd
+    - name: Run Cygwin cygwin/cygwin-install-action@v4 Platform VER cmd
       env:
         SHELLOPTS: igncr
         CHERE_INVOKING: 1
@@ -53,7 +53,7 @@ jobs:
 
     # help from
     # https://github.com/egor-tensin/setup-cygwin/tree/v3.0.1
-    - name: Run Cygwin cygwin/cygwin-install-action@v4 x86 VER call
+    - name: Run Cygwin cygwin/cygwin-install-action@v4 Platform VER call
       env:
         SHELLOPTS: igncr
         CHERE_INVOKING: 1
@@ -67,7 +67,7 @@ jobs:
         bash mini
 
     # Note, Github Actions installed MINGW (shell: bash) is also on the PATH and in front
-    - name: Run Cygwin cygwin/cygwin-install-action@v4 x86 bash
+    - name: Run Cygwin cygwin/cygwin-install-action@v4 Platform bash
       env:
         SHELLOPTS: igncr
         CHERE_INVOKING: 1
@@ -81,7 +81,7 @@ jobs:
         bash mini
 
      # Note, Github Actions installed MINGW (shell: bash) is also on the PATH and in front
-    - name: Run Cygwin cygwin/cygwin-install-action@v4 x86 shellEnv
+    - name: Run Cygwin cygwin/cygwin-install-action@v4 Platform shellEnv
       env:
         SHELLOPTS: igncr
         CHERE_INVOKING: 1
