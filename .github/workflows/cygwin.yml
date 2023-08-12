@@ -30,7 +30,7 @@ jobs:
       uses: actions/checkout@v2
 
     # https://github.com/cygwin/cygwin-install-action/tree/006ad0b0946ca6d0a3ea2d4437677fa767392401
-    - name: Set up Cygwin cygwin/cygwin-install-action@v4 x86
+    - name: Set up Cygwin cygwin/cygwin-install-action@v4 x64
       uses: cygwin/cygwin-install-action@v4
       with:
         # x86 or x86_64
