@@ -4,7 +4,7 @@ on: [push, pull_request]
 
 jobs:
   build:
-    name: ${{ matrix.MSYSTEM }} ${{ matrix.shell }}
+    name: ${{ matrix.MSYSTEM }} ${{ matrix.shellEnv }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -12,6 +12,7 @@ jobs:
         include:
 
         - os: windows-latest
+          shellEnv: 'C:\Cygwin\bin\bash.exe --login ''{0}'''
 
     steps:
 
@@ -48,6 +49,20 @@ jobs:
         SHELLOPTS: igncr
         CHERE_INVOKING: 1
       shell:  C:\Cygwin\bin\bash.exe --login '{0}'
+      run: |
+        export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+        set -x -v -e
+        uname -a
+        echo "Present Working Directory: $(pwd)"
+        export | grep TEMP
+        bash mini
+
+
+    - name: Run Cygwin cygwin/cygwin-install-action@v4 x86 VER call
+      env:
+        SHELLOPTS: igncr
+        CHERE_INVOKING: 1
+      shell: ${{ matrix.shellEnv }}
       run: |
         export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
         set -x -v -e
