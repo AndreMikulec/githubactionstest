@@ -34,7 +34,7 @@ jobs:
       uses: cygwin/cygwin-install-action@v4
       with:
         # x86 or x86_64
-        platform: ${{ matrix.Plaform  == 'x64' && 'x86_64' || 'x86' }}
+        platform: ${{ matrix.Platform  == 'x64' && 'x86_64' || 'x86' }}
         packages: wget
         add-to-path: false
 
