@@ -15,6 +15,7 @@ jobs:
   build_remus:
     name: Build Remus 
     needs: install
+    runs-on: ubuntu-latest
 
     steps:
     - name: See install artifacts
