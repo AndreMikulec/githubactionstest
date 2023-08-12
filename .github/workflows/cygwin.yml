@@ -43,7 +43,7 @@ jobs:
         Set-EnvPATH "C:\cygwin\bin"
 
   build:
-  - name: ${{ matrix.Platform }} {{ matrix.shellEnv }}
+    name: ${{ matrix.Platform }} {{ matrix.shellEnv }}
     needs: pre
     runs-on: ${{ matrix.os }}
     strategy:
