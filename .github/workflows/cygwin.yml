@@ -36,7 +36,11 @@ jobs:
         # x86 or x86_64
         platform: ${{ matrix.Platform  == 'x64' && 'x86_64' || 'x86' }}
         packages: mksh
-        add-to-path: false
+        # Note, Github Actions installed MINGW (shell: bash) is also on the PATH and in front
+        # default
+        # Whether to add Cygwin's /bin directory to the system PATH
+        # Note, also exists is the minipulaable: GITHUB_PATH
+        # add-to-path: true
 
     - name: Run Cygwin cygwin/cygwin-install-action@v4 x86 VER cmd
       env:
@@ -62,6 +66,7 @@ jobs:
         export | grep TEMP
         bash mini
 
+    # Note, Github Actions installed MINGW (shell: bash) is also on the PATH and in front
     - name: Run Cygwin cygwin/cygwin-install-action@v4 x86 bash
       env:
         SHELLOPTS: igncr
@@ -75,6 +80,7 @@ jobs:
         export | grep TEMP
         bash mini
 
+     # Note, Github Actions installed MINGW (shell: bash) is also on the PATH and in front
     - name: Run Cygwin cygwin/cygwin-install-action@v4 x86 shellEnv
       env:
         SHELLOPTS: igncr
