@@ -16,6 +16,13 @@ jobs:
 
     steps:
 
+    - name: Put "C:\cygwin\bin" in the PATH 1
+      shell: powershell
+      run: |
+        function Set-EnvPATH {param($X) Add-Content -Path ${env:GITHUB_PATH} -Value "$X"}
+        Set-EnvPATH "C:\cygwin\bin"
+
+
     # https://github.com/cygwin/cygwin-install-action/tree/006ad0b0946ca6d0a3ea2d4437677fa767392401
     - name: Set up Cygwin cygwin/cygwin-install-action@v4 Platform
       uses: cygwin/cygwin-install-action@v4
@@ -29,8 +36,14 @@ jobs:
         # Note, also exists is the minipulatable: GITHUB_PATH
         # add-to-path: true
 
+    - name: Put "C:\cygwin\bin" in the PATH 2
+      shell: powershell
+      run: |
+        function Set-EnvPATH {param($X) Add-Content -Path ${env:GITHUB_PATH} -Value "$X"}
+        Set-EnvPATH "C:\cygwin\bin"
+
   build:
-    name: ${{ matrix.Platform }} {{ matrix.shellEnv }}
+  - name: ${{ matrix.Platform }} {{ matrix.shellEnv }}
     needs: pre
     runs-on: ${{ matrix.os }}
     strategy:
@@ -64,6 +77,12 @@ jobs:
         shell: ${{ matrix.shellEnv }}
     steps:
 
+    - name: Put "C:\cygwin\bin" in the PATH 3
+      shell: powershell
+      run: |
+        function Set-EnvPATH {param($X) Add-Content -Path ${env:GITHUB_PATH} -Value "$X"}
+        Set-EnvPATH "C:\cygwin\bin"
+
     - name: Prepare to Download Files from Github
       shell: powershell
       run: |
@@ -90,18 +109,30 @@ jobs:
 #       bash --version
 
     - name: Run Cygwin cygwin/cygwin-install-action@v4 VER cmd
+      if: ${{ always() }}
       env:
         SHELLOPTS: igncr
         CHERE_INVOKING: 1
       shell: cmd
       run: |
         set PATH=C:\cygwin\bin
+        echo "SHELL: %SHELL%"
+        echo "matrix.shellEnv: ${{ matrix.shellEnv }}"
+        echo "matrix.Platform: ${{ matrix.Platform }}"
         bash mini
 
-    - name: Run Cygwin cygwin/cygwin-install-action@v4 VER bash
+    - name: Put "C:\cygwin\bin" in the PATH 4
+      shell: powershell
+      run: |
+        function Set-EnvPATH {param($X) Add-Content -Path ${env:GITHUB_PATH} -Value "$X"}
+        Set-EnvPATH "C:\cygwin\bin"
+
+    - name: Run bash
       shell: bash
       run: |
-        export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+        echo "SHELL: ${SHELL}"
+        echo "matrix.shellEnv: ${{ matrix.shellEnv }}"
+        echo "matrix.Platform: ${{ matrix.Platform }}"
 
     # help from
     # https://github.com/egor-tensin/setup-cygwin/tree/v3.0.1
@@ -112,8 +143,9 @@ jobs:
         CHERE_INVOKING: 1
       shell:  C:\cygwin\bin\bash.exe --login '{0}'
       run: |
-        export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
         echo "SHELL: ${SHELL}"
+        echo "matrix.shellEnv: ${{ matrix.shellEnv }}"
+        echo "matrix.Platform: ${{ matrix.Platform }}"
         set -x -v -e
         uname -a
         bash --version
@@ -124,7 +156,6 @@ jobs:
         export | grep TEMP
         bash mini
 
-
     # NOT THE PROPER WAY - NOT ANY WAY TO INVOKE?
     - name: Run Cygwin cygwin/cygwin-install-action@v4 ksh VER call
       if: ${{ always() }}
@@ -134,7 +165,8 @@ jobs:
 #     shell:  C:\cygwin\bin\ksh.exe '{0}'
       shell: ksh
       run: |
-        export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+        echo "matrix.shellEnv: ${{ matrix.shellEnv }}"
+        echo "matrix.Platform: ${{ matrix.Platform }}"
 
     # NOT THE PROPER WAY - NOT ANY WAY TO INVOKE?
     - name: Run Cygwin cygwin/cygwin-install-action@v4 ksh.exe '{0}'  VER call
@@ -145,18 +177,20 @@ jobs:
 #     shell:  C:\cygwin\bin\ksh.exe '{0}'
       shell:  ksh.exe '{0}'
       run: |
-        export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
-
+        echo "matrix.shellEnv: ${{ matrix.shellEnv }}"
+        echo "matrix.Platform: ${{ matrix.Platform }}"
 
     # Note, Github Actions installed MINGW (shell: bash) is also on the PATH and in front
     - name: Run Cygwin cygwin/cygwin-install-action@v4 bash VER call
+      if: ${{ always() }}
       env:
         SHELLOPTS: igncr
         CHERE_INVOKING: 1
       shell: bash
       run: |
-        export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
         echo "SHELL: ${SHELL}"
+        echo "matrix.shellEnv: ${{ matrix.shellEnv }}"
+        echo "matrix.Platform: ${{ matrix.Platform }}"
         set -x -v -e
         uname -a
         bash --version
@@ -174,8 +208,9 @@ jobs:
         SHELLOPTS: igncr
         CHERE_INVOKING: 1
       run: |
-        export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
         # echo "SHELL: ${SHELL}"
+        echo "matrix.shellEnv: ${{ matrix.shellEnv }}"
+        echo "matrix.Platform: ${{ matrix.Platform }}"
         # set -x -v -e
         # bash --version
         # uname -a
