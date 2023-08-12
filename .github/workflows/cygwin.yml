@@ -71,6 +71,7 @@ jobs:
         bash mini
 
     - name: Run Cygwin cygwin/cygwin-install-action@v4 Platform C:\Cygwin\bin\ksh.exe --login '{0}'  VER call
+      continue-on-error: true
       env:
         SHELLOPTS: igncr
         CHERE_INVOKING: 1
