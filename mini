@@ -15,4 +15,4 @@ then
   echo ONE
 fi
 
-export | grep TEMP
+export | grep TEMP || true
