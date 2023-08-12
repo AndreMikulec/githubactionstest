@@ -54,6 +54,7 @@ jobs:
       shell: cmd
       run: |
         set PATH=C:\cygwin\bin
+        echo "matrix.shellEnv: ${{ matrix.shellEnv }}"
         bash mini
 
     # help from
@@ -65,8 +66,9 @@ jobs:
       shell:  C:\Cygwin\bin\bash.exe --login '{0}'
       run: |
         export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
-        echo "shellEnv: ${shellEnv}"
+        echo "matrix.shellEnv: ${{ matrix.shellEnv }}"
         set -x -v -e
+        echo "bash: $(which bash)"
         uname -a
         echo "Present Working Directory: $(pwd)"
         export | grep TEMP
@@ -79,8 +81,9 @@ jobs:
       shell:  bash.exe --login '{0}'
       run: |
         export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
-        echo "shellEnv: ${shellEnv}"
+        echo "matrix.shellEnv: ${{ matrix.shellEnv }}"
         set -x -v -e
+        echo "bash: $(which bash)"
         uname -a
         echo "Present Working Directory: $(pwd)"
         export | grep TEMP
@@ -94,8 +97,9 @@ jobs:
       shell: bash
       run: |
         export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
-        echo "shellEnv: ${shellEnv}"
+        echo "matrix.shellEnv: ${{ matrix.shellEnv }}"
         set -x -v -e
+        echo "bash: $(which bash)"
         uname -a
         echo "Present Working Directory: $(pwd)"
         export | grep TEMP
@@ -109,10 +113,10 @@ jobs:
       run: |
         export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
         echo "SHELL: ${SHELL}"
-        echo "shellEnv: ${shellEnv}"
+        echo "matrix.shellEnv: ${{ matrix.shellEnv }}"
         set -x -v -e
+        echo "bash: $(which bash)"
         uname -a
-        which bash
         which ksh || true
         echo "Present Working Directory: $(pwd)"
         export | grep TEMP
