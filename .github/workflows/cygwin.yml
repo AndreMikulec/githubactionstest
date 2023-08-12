@@ -1,53 +1,10 @@
 name: CI
 
-on: [push, pull_request, workflow_dispatch, repository_dispatch]
+on: [push, pull_request, workflow_dispatch]
 
 jobs:
-  pre:
-    name: pre
-    runs-on: windows-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-
-        - os: windows-latest
-          Platform: x86
-
-    steps:
-
-    - name: Put "C:\cygwin\bin" in the PATH 1
-      if: ${{ always() }}
-      shell: powershell
-      run: |
-        function Set-EnvPATH {param($X) Add-Content -Path ${env:GITHUB_PATH} -Value "$X"}
-        Set-EnvPATH "C:\cygwin\bin"
-
-
-    # https://github.com/cygwin/cygwin-install-action/tree/006ad0b0946ca6d0a3ea2d4437677fa767392401
-    - name: Set up Cygwin cygwin/cygwin-install-action@v4 Platform
-      if: ${{ always() }}
-      uses: cygwin/cygwin-install-action@v4
-      with:
-        # x86 or x86_64
-        platform: ${{ matrix.Platform  == 'x64' && 'x86_64' || 'x86' }}
-        packages: mksh
-        # Note, Github Actions installed MINGW (shell: bash) is also on the PATH and in front
-        # default (and IS logically REQUIRED) = uname -a -> CYGWIN (and not MINGW)
-        # Whether to add Cygwin's /bin directory to the system PATH
-        # Note, also exists is the minipulatable: GITHUB_PATH
-        # add-to-path: true
-
-    - name: Put "C:\cygwin\bin" in the PATH 2
-      if: ${{ always() }}
-      shell: powershell
-      run: |
-        function Set-EnvPATH {param($X) Add-Content -Path ${env:GITHUB_PATH} -Value "$X"}
-        Set-EnvPATH "C:\cygwin\bin"
-
   build:
-    name: ${{ matrix.Platform }} {{ matrix.shellEnv }}
-    needs: pre
+    name: ${{ matrix.MSYSTEM }} ${{ matrix.shellEnv }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -59,181 +16,107 @@ jobs:
           Platform: x86
 
         - os: windows-latest
-          shellEnv: C:\cygwin\bin\bash.exe --login '{0}'
+          shellEnv: 'bash.exe --login ''{0}'''
           Platform: x86
-
-        - os: windows-latest
-          shellEnv: 'C:\cygwin\bin\bash.exe --login ''{0}'''
-          Platform: x86
-
-        - os: windows-latest
-          shellEnv: ksh
-          Platform: x86
-
-#       - os: windows-latest
-#         shellEnv: msys2 {0}
-#
-#         msystemEnv: UCRT64
 
     defaults:
       run:
-        shell: ${{ matrix.shellEnv }}
+        shell: ${{ matrix.shellEnv || 'bash' }}
+
     steps:
 
-    - name: Put "C:\cygwin\bin" in the PATH 3
-      if: ${{ always() }}
-      shell: powershell
-      run: |
-        function Set-EnvPATH {param($X) Add-Content -Path ${env:GITHUB_PATH} -Value "$X"}
-        Set-EnvPATH "C:\cygwin\bin"
-
     - name: Prepare to Download Files from Github
-      if: ${{ always() }}
       shell: powershell
       run: |
         git config --global core.autocrlf input
         git config --global advice.detachedHead false
 
     - name: Checkout code
-      if: ${{ always() }}
       uses: actions/checkout@v2
 
-#   - name: Install MSYS2 UCRT
-#     if: ${{ always() }}
-#     uses: msys2/setup-msys2@v2
-#     with:
-#       msystem: UCRT
-#       update: false
-#       install: >-
-#         mksh
+    # https://github.com/cygwin/cygwin-install-action/tree/006ad0b0946ca6d0a3ea2d4437677fa767392401
+    - name: Set up Cygwin cygwin/cygwin-install-action@v4 Platform
+      uses: cygwin/cygwin-install-action@v4
+      with:
+        # x86 or x86_64
+        platform: ${{ matrix.Platform  == 'x64' && 'x86_64' || 'x86' }}
+        packages: mksh
+        # Note, Github Actions installed MINGW (shell: bash) is also on the PATH and in front
+        # default (and IS logically REQUIRED)
+        # Whether to add Cygwin's /bin directory to the system PATH
+        # Note, also exists is the minipulable: GITHUB_PATH
+        # add-to-path: true
 
-#   - name: Run MSYS2 UCRT
-#     if: ${{ always() }}
-#     env:
-#       msystem: ${{ matrix.msystemEnv }}
-#     shell: ${{ matrix.shellEnv }}
-#     run: |
-#       uname -a
-#       bash --version
-
-    - name: Run Cygwin cygwin/cygwin-install-action@v4 VER cmd
-      if: ${{ always() }}
+    - name: Run Cygwin cygwin/cygwin-install-action@v4 Platform VER cmd
       env:
         SHELLOPTS: igncr
         CHERE_INVOKING: 1
       shell: cmd
       run: |
         set PATH=C:\cygwin\bin
-        echo "SHELL: %SHELL%"
-        echo "matrix.shellEnv: ${{ matrix.shellEnv }}"
-        echo "matrix.Platform: ${{ matrix.Platform }}"
         bash mini
-
-    - name: Put "C:\cygwin\bin" in the PATH 4
-      if: ${{ always() }}
-      shell: powershell
-      run: |
-        function Set-EnvPATH {param($X) Add-Content -Path ${env:GITHUB_PATH} -Value "$X"}
-        Set-EnvPATH "C:\cygwin\bin"
-
-    - name: Run bash
-      if: ${{ always() }}
-      shell: bash
-      run: |
-        echo "SHELL: ${SHELL}"
-        echo "matrix.shellEnv: ${{ matrix.shellEnv }}"
-        echo "matrix.Platform: ${{ matrix.Platform }}"
-        uname -a
 
     # help from
     # https://github.com/egor-tensin/setup-cygwin/tree/v3.0.1
-    - name: Run Cygwin cygwin/cygwin-install-action@v4 Platform C:\cygwin\bin\bash.exe --login '{0}'  VER call
-      if: ${{ always() }}
+    - name: Run Cygwin cygwin/cygwin-install-action@v4 Platform VER call C:\Cygwin\bin\bash.exe --login '{0}'
       env:
         SHELLOPTS: igncr
         CHERE_INVOKING: 1
-      shell:  C:\cygwin\bin\bash.exe --login '{0}'
+      shell:  C:\Cygwin\bin\bash.exe --login '{0}'
       run: |
-        echo "SHELL: ${SHELL}"
-        echo "matrix.shellEnv: ${{ matrix.shellEnv }}"
-        echo "matrix.Platform: ${{ matrix.Platform }}"
-        uname -a
+        export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+        echo "shellEnv: ${shellEnv}"
         set -x -v -e
         uname -a
-        bash --version
-        uname -a
-        which bash
-        which ksh || true
         echo "Present Working Directory: $(pwd)"
         export | grep TEMP
         bash mini
 
-    # NOT THE PROPER WAY - NOT ANY WAY TO INVOKE?
-    - name: Run Cygwin cygwin/cygwin-install-action@v4 ksh VER call
-      if: ${{ always() }}
+    - name: Run Cygwin cygwin/cygwin-install-action@v4 Platform VER call bash.exe --login '{0}'
       env:
         SHELLOPTS: igncr
         CHERE_INVOKING: 1
-#     shell:  C:\cygwin\bin\ksh.exe '{0}'
-      shell: ksh
+      shell:  bash.exe --login '{0}'
       run: |
-        echo "matrix.shellEnv: ${{ matrix.shellEnv }}"
-        echo "matrix.Platform: ${{ matrix.Platform }}"
+        export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+        echo "shellEnv: ${shellEnv}"
+        set -x -v -e
         uname -a
-
-    # NOT THE PROPER WAY - NOT ANY WAY TO INVOKE?
-    - name: Run Cygwin cygwin/cygwin-install-action@v4 ksh.exe '{0}'  VER call
-      if: ${{ always() }}
-      env:
-        SHELLOPTS: igncr
-        CHERE_INVOKING: 1
-#     shell:  C:\cygwin\bin\ksh.exe '{0}'
-      shell:  ksh.exe '{0}'
-      run: |
-        echo "matrix.shellEnv: ${{ matrix.shellEnv }}"
-        echo "matrix.Platform: ${{ matrix.Platform }}"
-        uname -a
+        echo "Present Working Directory: $(pwd)"
+        export | grep TEMP
+        bash mini
 
     # Note, Github Actions installed MINGW (shell: bash) is also on the PATH and in front
-    - name: Run Cygwin cygwin/cygwin-install-action@v4 bash VER call
-      if: ${{ always() }}
+    - name: Run Cygwin cygwin/cygwin-install-action@v4 Platform bash
       env:
         SHELLOPTS: igncr
         CHERE_INVOKING: 1
       shell: bash
       run: |
-        echo "SHELL: ${SHELL}"
-        echo "matrix.shellEnv: ${{ matrix.shellEnv }}"
-        echo "matrix.Platform: ${{ matrix.Platform }}"
-        uname -a
+        export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+        echo "shellEnv: ${shellEnv}"
         set -x -v -e
         uname -a
-        bash --version
-        uname -a
-        which bash
-        which ksh || true
         echo "Present Working Directory: $(pwd)"
         export | grep TEMP
         bash mini
 
      # Note, Github Actions installed MINGW (shell: bash) is also on the PATH and in front
-    - name: Run Cygwin cygwin/cygwin-install-action@v4 shellEnv ver call
-      if: ${{ always() }}
+    - name: Run Cygwin cygwin/cygwin-install-action@v4 Platform shellEnv
       env:
         SHELLOPTS: igncr
         CHERE_INVOKING: 1
       run: |
-        # echo "SHELL: ${SHELL}"
-        echo "matrix.shellEnv: ${{ matrix.shellEnv }}"
-        echo "matrix.Platform: ${{ matrix.Platform }}"
+        export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+        echo "SHELL: ${SHELL}"
+        echo "shellEnv: ${shellEnv}"
+        set -x -v -e
         uname -a
-        # set -x -v -e
-        # bash --version
-        # uname -a
-        # which bash
-        # which ksh || true
-        # echo "Present Working Directory: $(pwd)"
-        # export | grep TEMP
-        # bash mini
+        which bash
+        which ksh || true
+        echo "Present Working Directory: $(pwd)"
+        export | grep TEMP
+        bash mini
+
 
 
