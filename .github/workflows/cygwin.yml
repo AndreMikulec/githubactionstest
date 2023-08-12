@@ -63,6 +63,7 @@ jobs:
         export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
         echo "SHELL: ${SHELL}"
         set -x -v -e
+        bash --version
         uname -a
         which bash
         which ksh || true
@@ -80,6 +81,7 @@ jobs:
         export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
         echo "SHELL: ${SHELL}"
         set -x -v -e
+        bash --version
         uname -a
         which bash
         which ksh || true
@@ -97,6 +99,7 @@ jobs:
         export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
         echo "SHELL: ${SHELL}"
         set -x -v -e
+        bash --version
         uname -a
         which bash
         which ksh || true
@@ -113,6 +116,7 @@ jobs:
         export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
         echo "SHELL: ${SHELL}"
         set -x -v -e
+        bash --version
         uname -a
         which bash
         which ksh || true
