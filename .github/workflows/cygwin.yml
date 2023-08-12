@@ -52,6 +52,15 @@ jobs:
         set PATH=C:\cygwin\bin
         bash mini
 
+    - name: Run Cygwin cygwin/cygwin-install-action@v4 Platform VER cmd
+      env:
+        SHELLOPTS: igncr
+        CHERE_INVOKING: 1
+      shell: cmd
+      run: |
+        set PATH=C:\cygwin\bin
+        bash mini
+
     # help from
     # https://github.com/egor-tensin/setup-cygwin/tree/v3.0.1
     - name: Run Cygwin cygwin/cygwin-install-action@v4 Platform C:\cygwin\bin\bash.exe --login '{0}'  VER call
@@ -71,15 +80,16 @@ jobs:
         export | grep TEMP
         bash mini
 
-    - name: Run Cygwin cygwin/cygwin-install-action@v4 Platform C:\Cygwin\bin\ksh.exe --login '{0}'  VER call
-      continue-on-error: true
+    # NOT THE PROPER WAY - NOT ANY WAY TO INVOKE?
+    - name: Run Cygwin cygwin/cygwin-install-action@v4 Platform C:\Cygwin\bin\ksh.exe '{0}'  VER call
+      if: ${{ always() }}
       env:
         SHELLOPTS: igncr
         CHERE_INVOKING: 1
-      shell:  C:\cygwin\bin\ksh.exe --login '{0}'
+      shell:  C:\cygwin\bin\ksh.exe '{0}'
       run: |
         export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
-        echo "SHELL: ${SHELL}"
+        # echo "SHELL: ${SHELL}"
         set -x -v -e
         bash --version
         uname -a
@@ -109,6 +119,7 @@ jobs:
 
      # Note, Github Actions installed MINGW (shell: bash) is also on the PATH and in front
     - name: Run Cygwin cygwin/cygwin-install-action@v4 Platform shellEnv
+      if: ${{ always() }}
       env:
         SHELLOPTS: igncr
         CHERE_INVOKING: 1
