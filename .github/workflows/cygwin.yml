@@ -17,6 +17,7 @@ jobs:
     steps:
 
     - name: Put "C:\cygwin\bin" in the PATH 1
+      if: ${{ always() }}
       shell: powershell
       run: |
         function Set-EnvPATH {param($X) Add-Content -Path ${env:GITHUB_PATH} -Value "$X"}
@@ -25,6 +26,7 @@ jobs:
 
     # https://github.com/cygwin/cygwin-install-action/tree/006ad0b0946ca6d0a3ea2d4437677fa767392401
     - name: Set up Cygwin cygwin/cygwin-install-action@v4 Platform
+      if: ${{ always() }}
       uses: cygwin/cygwin-install-action@v4
       with:
         # x86 or x86_64
@@ -37,6 +39,7 @@ jobs:
         # add-to-path: true
 
     - name: Put "C:\cygwin\bin" in the PATH 2
+      if: ${{ always() }}
       shell: powershell
       run: |
         function Set-EnvPATH {param($X) Add-Content -Path ${env:GITHUB_PATH} -Value "$X"}
@@ -78,21 +81,25 @@ jobs:
     steps:
 
     - name: Put "C:\cygwin\bin" in the PATH 3
+      if: ${{ always() }}
       shell: powershell
       run: |
         function Set-EnvPATH {param($X) Add-Content -Path ${env:GITHUB_PATH} -Value "$X"}
         Set-EnvPATH "C:\cygwin\bin"
 
     - name: Prepare to Download Files from Github
+      if: ${{ always() }}
       shell: powershell
       run: |
         git config --global core.autocrlf input
         git config --global advice.detachedHead false
 
     - name: Checkout code
+      if: ${{ always() }}
       uses: actions/checkout@v2
 
 #   - name: Install MSYS2 UCRT
+#     if: ${{ always() }}
 #     uses: msys2/setup-msys2@v2
 #     with:
 #       msystem: UCRT
@@ -101,6 +108,7 @@ jobs:
 #         mksh
 
 #   - name: Run MSYS2 UCRT
+#     if: ${{ always() }}
 #     env:
 #       msystem: ${{ matrix.msystemEnv }}
 #     shell: ${{ matrix.shellEnv }}
@@ -122,17 +130,20 @@ jobs:
         bash mini
 
     - name: Put "C:\cygwin\bin" in the PATH 4
+      if: ${{ always() }}
       shell: powershell
       run: |
         function Set-EnvPATH {param($X) Add-Content -Path ${env:GITHUB_PATH} -Value "$X"}
         Set-EnvPATH "C:\cygwin\bin"
 
     - name: Run bash
+      if: ${{ always() }}
       shell: bash
       run: |
         echo "SHELL: ${SHELL}"
         echo "matrix.shellEnv: ${{ matrix.shellEnv }}"
         echo "matrix.Platform: ${{ matrix.Platform }}"
+        uname -a
 
     # help from
     # https://github.com/egor-tensin/setup-cygwin/tree/v3.0.1
@@ -146,6 +157,7 @@ jobs:
         echo "SHELL: ${SHELL}"
         echo "matrix.shellEnv: ${{ matrix.shellEnv }}"
         echo "matrix.Platform: ${{ matrix.Platform }}"
+        uname -a
         set -x -v -e
         uname -a
         bash --version
@@ -167,6 +179,7 @@ jobs:
       run: |
         echo "matrix.shellEnv: ${{ matrix.shellEnv }}"
         echo "matrix.Platform: ${{ matrix.Platform }}"
+        uname -a
 
     # NOT THE PROPER WAY - NOT ANY WAY TO INVOKE?
     - name: Run Cygwin cygwin/cygwin-install-action@v4 ksh.exe '{0}'  VER call
@@ -179,6 +192,7 @@ jobs:
       run: |
         echo "matrix.shellEnv: ${{ matrix.shellEnv }}"
         echo "matrix.Platform: ${{ matrix.Platform }}"
+        uname -a
 
     # Note, Github Actions installed MINGW (shell: bash) is also on the PATH and in front
     - name: Run Cygwin cygwin/cygwin-install-action@v4 bash VER call
@@ -191,6 +205,7 @@ jobs:
         echo "SHELL: ${SHELL}"
         echo "matrix.shellEnv: ${{ matrix.shellEnv }}"
         echo "matrix.Platform: ${{ matrix.Platform }}"
+        uname -a
         set -x -v -e
         uname -a
         bash --version
@@ -211,6 +226,7 @@ jobs:
         # echo "SHELL: ${SHELL}"
         echo "matrix.shellEnv: ${{ matrix.shellEnv }}"
         echo "matrix.Platform: ${{ matrix.Platform }}"
+        uname -a
         # set -x -v -e
         # bash --version
         # uname -a
