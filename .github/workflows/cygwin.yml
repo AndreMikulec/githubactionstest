@@ -1,34 +1,20 @@
 name: CI
 
-on: [push, pull_request]
+on: [push, pull_request, workflow_dispatch, repository_dispatch]
 
 jobs:
-  build:
-    name: ${{ matrix.MSYSTEM }} ${{ matrix.shellEnv }}
-    runs-on: ${{ matrix.os }}
+  pre:
+    name: pre
+    runs-on: windows-latest
     strategy:
       fail-fast: false
       matrix:
         include:
 
         - os: windows-latest
-          shellEnv: ksh
           Platform: x86
 
-    defaults:
-      run:
-        shell: ${{ matrix.shellEnv || 'bash' }}
-
     steps:
-
-    - name: Prepare to Download Files from Github
-      shell: powershell
-      run: |
-        git config --global core.autocrlf input
-        git config --global advice.detachedHead false
-
-    - name: Checkout code
-      uses: actions/checkout@v2
 
     # https://github.com/cygwin/cygwin-install-action/tree/006ad0b0946ca6d0a3ea2d4437677fa767392401
     - name: Set up Cygwin cygwin/cygwin-install-action@v4 Platform
@@ -43,7 +29,67 @@ jobs:
         # Note, also exists is the minipulatable: GITHUB_PATH
         # add-to-path: true
 
-    - name: Run Cygwin cygwin/cygwin-install-action@v4 Platform VER cmd
+  build:
+    name: ${{ matrix.Platform }} {{ matrix.shellEnv }}
+    needs: pre
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+
+        - os: windows-latest
+          shellEnv: bash
+          Platform: x86
+
+        - os: windows-latest
+          shellEnv: C:\cygwin\bin\bash.exe --login '{0}'
+          Platform: x86
+
+        - os: windows-latest
+          shellEnv: 'C:\cygwin\bin\bash.exe --login ''{0}'''
+          Platform: x86
+
+        - os: windows-latest
+          shellEnv: ksh
+          Platform: x86
+
+#       - os: windows-latest
+#         shellEnv: msys2 {0}
+#
+#         msystemEnv: UCRT64
+
+    defaults:
+      run:
+        shell: ${{ matrix.shellEnv }}
+    steps:
+
+    - name: Prepare to Download Files from Github
+      shell: powershell
+      run: |
+        git config --global core.autocrlf input
+        git config --global advice.detachedHead false
+
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+#   - name: Install MSYS2 UCRT
+#     uses: msys2/setup-msys2@v2
+#     with:
+#       msystem: UCRT
+#       update: false
+#       install: >-
+#         mksh
+
+#   - name: Run MSYS2 UCRT
+#     env:
+#       msystem: ${{ matrix.msystemEnv }}
+#     shell: ${{ matrix.shellEnv }}
+#     run: |
+#       uname -a
+#       bash --version
+
+    - name: Run Cygwin cygwin/cygwin-install-action@v4 VER cmd
       env:
         SHELLOPTS: igncr
         CHERE_INVOKING: 1
@@ -52,18 +98,15 @@ jobs:
         set PATH=C:\cygwin\bin
         bash mini
 
-    - name: Run Cygwin cygwin/cygwin-install-action@v4 Platform VER cmd
-      env:
-        SHELLOPTS: igncr
-        CHERE_INVOKING: 1
-      shell: cmd
+    - name: Run Cygwin cygwin/cygwin-install-action@v4 VER bash
+      shell: bash
       run: |
-        set PATH=C:\cygwin\bin
-        bash mini
+        export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
 
     # help from
     # https://github.com/egor-tensin/setup-cygwin/tree/v3.0.1
     - name: Run Cygwin cygwin/cygwin-install-action@v4 Platform C:\cygwin\bin\bash.exe --login '{0}'  VER call
+      if: ${{ always() }}
       env:
         SHELLOPTS: igncr
         CHERE_INVOKING: 1
@@ -72,6 +115,7 @@ jobs:
         export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
         echo "SHELL: ${SHELL}"
         set -x -v -e
+        uname -a
         bash --version
         uname -a
         which bash
@@ -80,8 +124,20 @@ jobs:
         export | grep TEMP
         bash mini
 
+
     # NOT THE PROPER WAY - NOT ANY WAY TO INVOKE?
-    - name: Run Cygwin cygwin/cygwin-install-action@v4 Platform C:\Cygwin\bin\ksh.exe '{0}'  VER call
+    - name: Run Cygwin cygwin/cygwin-install-action@v4 ksh VER call
+      if: ${{ always() }}
+      env:
+        SHELLOPTS: igncr
+        CHERE_INVOKING: 1
+#     shell:  C:\cygwin\bin\ksh.exe '{0}'
+      shell: ksh
+      run: |
+        export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+
+    # NOT THE PROPER WAY - NOT ANY WAY TO INVOKE?
+    - name: Run Cygwin cygwin/cygwin-install-action@v4 ksh.exe '{0}'  VER call
       if: ${{ always() }}
       env:
         SHELLOPTS: igncr
@@ -90,18 +146,10 @@ jobs:
       shell:  ksh.exe '{0}'
       run: |
         export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
-        # echo "SHELL: ${SHELL}"
-        set -x -v -e
-        bash --version
-        uname -a
-        which bash
-        which ksh || true
-        echo "Present Working Directory: $(pwd)"
-        export | grep TEMP
-        bash mini
+
 
     # Note, Github Actions installed MINGW (shell: bash) is also on the PATH and in front
-    - name: Run Cygwin cygwin/cygwin-install-action@v4 Platform bash
+    - name: Run Cygwin cygwin/cygwin-install-action@v4 bash VER call
       env:
         SHELLOPTS: igncr
         CHERE_INVOKING: 1
@@ -110,6 +158,7 @@ jobs:
         export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
         echo "SHELL: ${SHELL}"
         set -x -v -e
+        uname -a
         bash --version
         uname -a
         which bash
@@ -119,7 +168,7 @@ jobs:
         bash mini
 
      # Note, Github Actions installed MINGW (shell: bash) is also on the PATH and in front
-    - name: Run Cygwin cygwin/cygwin-install-action@v4 Platform shellEnv
+    - name: Run Cygwin cygwin/cygwin-install-action@v4 shellEnv ver call
       if: ${{ always() }}
       env:
         SHELLOPTS: igncr
