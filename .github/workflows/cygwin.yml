@@ -12,8 +12,8 @@ jobs:
         include:
 
         - os: windows-latest
-          shellEnv: sh
-          Platform: x64
+          shellEnv: ksh
+          Platform: x86
 
     defaults:
       run:
@@ -39,7 +39,7 @@ jobs:
         # Note, Github Actions installed MINGW (shell: bash) is also on the PATH and in front
         # default (and IS logically REQUIRED)
         # Whether to add Cygwin's /bin directory to the system PATH
-        # Note, also exists is the minipulable: GITHUB_PATH
+        # Note, also exists is the minipulatable: GITHUB_PATH
         # add-to-path: true
 
     - name: Run Cygwin cygwin/cygwin-install-action@v4 Platform VER cmd
