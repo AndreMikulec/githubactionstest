@@ -22,6 +22,7 @@ jobs:
     steps:
 
     - name: Prepare to Download Files from Github
+      shell: powershell
       run: |
         git config --global core.autocrlf input
         git config --global advice.detachedHead false
