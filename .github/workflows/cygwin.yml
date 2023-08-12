@@ -13,6 +13,7 @@ jobs:
 
         - os: windows-latest
           shellEnv: sh
+          Platform: x64
 
     defaults:
       run:
@@ -33,7 +34,7 @@ jobs:
       uses: cygwin/cygwin-install-action@v4
       with:
         # x86 or x86_64
-        platform: x86
+        platform: ${{ matrix.Plaform  = 'x64' && 'x86_64' || 'x86' }}
         packages: wget
         add-to-path: false
 
@@ -74,7 +75,7 @@ jobs:
         export | grep TEMP
         bash mini
 
-    - name: Run Cygwin cygwin/cygwin-install-action@v4 x86 bash
+    - name: Run Cygwin cygwin/cygwin-install-action@v4 x86 shellEnv
       env:
         SHELLOPTS: igncr
         CHERE_INVOKING: 1
