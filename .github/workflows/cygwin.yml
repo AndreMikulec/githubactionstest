@@ -75,7 +75,7 @@ jobs:
         export | grep TEMP
         bash mini
 
-    - name: Run Cygwin cygwin/cygwin-install-action@v4 x86 shellEnv
+    - name: Run Cygwin cygwin/cygwin-install-action@v4 x64 shellEnv
       env:
         SHELLOPTS: igncr
         CHERE_INVOKING: 1
