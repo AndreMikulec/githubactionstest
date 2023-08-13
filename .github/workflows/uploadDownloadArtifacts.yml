@@ -1,5 +1,7 @@
 name: CI
 
+# share data between jobs and store data once a workflow is complete
+
 on: [push, pull_request, workflow_dispatch]
 
 jobs:
@@ -12,9 +14,9 @@ jobs:
 
     - name: Create "workspace" Artifact
       run: |
-         mkdir                                         PGHOME
-         echo REMUS_DATA  >                            PGHOME/remus.txt
-         7z a -t7z -mmt24 -mx7 -r /tmp/remus.7z       PGHOME/*
+        mkdir                                         PGHOME
+        echo REMUS_DATA  >                            PGHOME/remus.txt
+        7z a -t7z -mmt24 -mx7 -r /tmp/remus.7z       PGHOME/*
 
     - name: Upload "workspace" Artifact
     - uses: actions/upload-artifact@v3
@@ -28,12 +30,12 @@ jobs:
 
     steps:
 
-    - name: Create "artifact" Artifacts
+    - name: Create "artifact" Artifact
       run: |
-         mkdir                                            PGHOME
-         echo ROMULUS_DATA1 >                             PGHOME/romulus1.txt
-         echo ROMULUS_DATA2 >                             PGHOME/romulus2.txt
-         7z a -t7z -mmt24 -mx7 -r /tmp/romulus.7z        PGHOME/*
+        mkdir                                            PGHOME
+        echo ROMULUS_DATA1 >                             PGHOME/romulus1.txt
+        echo ROMULUS_DATA2 >                             PGHOME/romulus2.txt
+        7z a -t7z -mmt24 -mx7 -r /tmp/romulus.7z        PGHOME/*
 
     - name: Upload "artifact" Artifact
       uses: actions/upload-artifact@v3
