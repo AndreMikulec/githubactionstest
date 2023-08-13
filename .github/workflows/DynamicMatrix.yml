@@ -21,11 +21,13 @@ jobs:
     # I do not know the names beforehand.
     #
     steps:
-      - id: 1.7z
+      # IDs may only contain alphanumeric characters, '_', and '-'.
+      # IDs must start with a letter or '_' and and must be less than 100 characters.
+      - id: plr_1_7z
         # echo "lastasset=plr-${rversion}" >> ${GITHUB_ENV}
         # PUSH THE ARTIFACT, then do . . .
         run: echo "artifact=plr-1.7z" >> $GITHUB_OUTPUT
-      - id: 2.7z
+      - id: plr_2_7z
         # PUSH THE ARTIFACT, then do . . .
         run: echo "artifact=plr-2.7z" >> $GITHUB_OUTPUT
     outputs:
