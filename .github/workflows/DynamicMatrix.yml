@@ -1,0 +1,47 @@
+
+# GitHub Actions Dynamic Matrix
+# Alex Eagle
+# Oct 28, 2022
+# https://blog.aspect.dev/github-actions-dynamic-matrix
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+
+    # As I build a successful (or failed artifact) 
+    # collect the artifact names.
+    #
+    # Good for dynamic archive names and
+    # I do not know the names beforehand.
+    #
+    steps:
+      - id: plr-1.7z
+        # echo "lastasset=plr-${rversion}" >> ${GITHUB_ENV}
+        # PUSH THE ARTIFACT, then do . . .
+        run: echo "artifact=plr-1.7z" >> $GITHUB_OUTPUT
+      - id: plr-2.7z
+        # PUSH THE ARTIFACT, then do . . .
+        run: echo "artifact=plr-2.7z" >> $GITHUB_OUTPUT
+    outputs:
+      # Result will look like '["plr-1.7z", "plr-2.7z"]'
+      artifacts: ${{ toJSON(steps.*.outputs.artifact) }}
+
+  after:
+    runs-on: ubuntu-latest
+    needs: build
+
+    strategy:
+      matrix:
+        # Reads the value saved by "outputs" of the job above
+        # Result will look like '["plr-1.7z", "plr-2.7z"]'
+        artifact: ${{ fromJSON(needs.build.outputs.artifacts) }}
+
+    steps:
+      #
+      # Do something
+      # or download the artifact "actions/download-artifact"
+      # "actions/upload-artifact" needs the EXACT ${{ matrix.artifact }} per "name"
+      #
+      run: echo ${{ matrix.artifact }}
+
