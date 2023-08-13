@@ -1,0 +1,92 @@
+name: CI
+
+on: [push, pull_request, workflow_dispatch]
+
+jobs:
+
+  configure_remus:
+    name: Make Remus Artifacts Job
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Create "workspace" Artifact
+      run: |
+         mkdir                                         PGHOME
+         echo REMUS_DATA  >                            PGHOME/remus.txt
+         7z a -t7z -mmt24 -mx7 -r /tmp/remus.7z       PGHOME/*
+
+    - name: Upload "workspace" Artifact
+    - uses: actions/upload-artifact@v3
+      with:
+        name: workspace
+        path: /tmp/remus.7z
+
+  configure_romulus:
+    name: Make Romulus Artifacts Job
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Create "artifact" Artifacts
+      run: |
+         mkdir                                            PGHOME
+         echo ROMULUS_DATA1 >                             PGHOME/romulus1.txt
+         echo ROMULUS_DATA2 >                             PGHOME/romulus2.txt
+         7z a -t7z -mmt24 -mx7 -r /tmp/romulus.7z        PGHOME/*
+
+    - name: Upload "artifact" Artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: 
+        path: /tmp/*
+
+
+  build_remus:
+    name: Use "workspace" Artifact 
+    needs: configure_remus
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Prepare to Download "workspace" artifact
+      run: |
+        mkdir /tmp
+
+    - name: Download "workspace" artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: workspace
+        path: /tmp
+
+    - name: Extract "workspace" artifact
+      run: |
+       ls -alrt /tmp/*
+       mkdir                           PGHOME
+       7z x     /tmp/my-artifact.7z -oPGHOME
+       ls -alrt                        PGHOME
+
+  build_romulus:
+    name: Use "artifact" Artifact
+    needs: configure_romulus
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Prepare to Download "artifact" artifact
+      run: |
+        mkdir /tmp_artifact
+
+    - name: Download "artifact" artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: artifact
+        path: /tmp_artifact
+
+    - name: Extract "artifact" artifact
+    - run: |
+       ls -alrt /tmp_artifact/*
+       mkdir                                 TMP_PGHOME
+       7z x     /tmp_artifact/artifact.7z -oTMP_PGHOME
+       ls -alrt                              TMP_PGHOME
+
