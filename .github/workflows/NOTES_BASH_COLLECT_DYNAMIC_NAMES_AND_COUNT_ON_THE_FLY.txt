@@ -1,0 +1,23 @@
+
+$ echo $(expr  + 1)
+1
+$ echo ${assetplrcount}
+1
+$ export assetplrcount=$(expr ${assetplrcount} + 1)
+$ echo ${assetplrcount}
+2
+#                      #plr-${rversion}.7z
+$ export assetplrlast="plr-9.7z"
+$ export assetplrname${assetplrcount}="${assetplrlast}"
+$ echo assetplrname${assetplrcount}
+assetplrname2 # LITERAL HARDCODED IN PUSH ARTIFACT 
+$ echo ${assetplrname2}
+plr-9.7z
+# per STEP only if the previous step failed/successed
+# if: failure() / if: success() / if: always()
+
+# per JOB or per STEP, about the next, JOB or STEP
+# PUSH ARtIFICT AND THE WRONG NAME (this one)
+# assetplrname11
+# continue-on-error: true
+# https://stackoverflow.com/questions/62045967/github-actions-is-there-a-way-to-continue-on-error-while-still-getting-correct
