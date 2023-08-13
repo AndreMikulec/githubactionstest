@@ -42,6 +42,14 @@ jobs:
     - name: Upload "artifact" Artifact
       uses: actions/upload-artifact@v3
       with:
+        # NO LONGER ALLOWS default - artifact
+        # HOW IT WORKS - MULIPLE(or ONE) object(s) AND "one" ARTIFACT
+        #
+        # TO DO MULTIPLE ANONYMOUS NAMED FILES,
+        # I would have to have MULTIPLE "action/upload-artifacts WITH
+        # THE file NAMES of   _artifact1.7z, artifact2.7z and
+        # OR A "post" job with a DYNAMICALLY CREATED matrix.
+        #
         name: artifact
         path: tmp/*
 
@@ -67,7 +75,7 @@ jobs:
        ls -alrt tmp/*
        mkdir                           PGHOME
        7z x     tmp/remus.7z         -oPGHOME
-       ls -alrt                        PGHOME
+       ls -alrt                        PGHOME/*
 
   build_romulus:
     name: Use "artifact" Artifact
@@ -91,6 +99,6 @@ jobs:
        ls -alrt tmp_artifact/*
        mkdir                                 TMP_PGHOME
        7z x     tmp_artifact/romulus.7z   -oTMP_PGHOME
-       ls -alrt                              TMP_PGHOME
+       ls -alrt                              TMP_PGHOME/*
 
 
