@@ -49,6 +49,13 @@ jobs:
         # I would have to have MULTIPLE "action/upload-artifacts WITH
         # THE file NAMES of   _artifact1.7z, artifact2.7z and
         # OR A "post" job with a DYNAMICALLY CREATED matrix.
+        # See my file DynamicMatrix.yml
+
+        # Each artifact behaves as a file share. 
+        # Uploading to the same artifact multiple times 
+        # in the same workflow (PER WORKFLOW) 
+        # can overwrite and append already uploaded files:
+
         #
         name: artifact
         path: tmp/*
