@@ -16,11 +16,11 @@ jobs:
     # I do not know the names beforehand.
     #
     steps:
-      - id: plr-1.7z
+      - id: 1.7z
         # echo "lastasset=plr-${rversion}" >> ${GITHUB_ENV}
         # PUSH THE ARTIFACT, then do . . .
         run: echo "artifact=plr-1.7z" >> $GITHUB_OUTPUT
-      - id: plr-2.7z
+      - id: 2.7z
         # PUSH THE ARTIFACT, then do . . .
         run: echo "artifact=plr-2.7z" >> $GITHUB_OUTPUT
     outputs:
@@ -43,5 +43,5 @@ jobs:
       # or download the artifact "actions/download-artifact"
       # "actions/upload-artifact" needs the EXACT ${{ matrix.artifact }} per "name"
       #
-      run: echo ${{ matrix.artifact }}
+      - run: echo ${{ matrix.artifact }}
 
