@@ -17,3 +17,9 @@ jobs:
         mkdir                                         PGHOME
         echo REMUS_DATA  >                            PGHOME/remus.txt
         7z a -t7z -mmt24 -mx7 -r /tmp/remus.7z       PGHOME/*
+
+    - name: Upload "workspace" Artifact
+    - uses: actions/upload-artifact@v3
+      with:
+        name: workspace
+        path: /tmp/remus.7z
