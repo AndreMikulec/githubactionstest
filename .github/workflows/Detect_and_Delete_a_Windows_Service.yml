@@ -23,6 +23,7 @@ jobs:
       shell: powershell
       run: |
         ${env:InstalledPostgreSQL} = Get-Service | Where-Object {$_.Name -Match  "postgresql"}
+        echo "InstalledPostgreSQL: ${env:InstalledPostgreSQL}"
         # For PowerShell versions prior to v6, you can do this
         # https://stackoverflow.com/questions/4967496/check-if-a-windows-service-exists-and-delete-in-powershell
         if("${env:InstalledPostgreSQL}" -ne ""){
@@ -34,6 +35,7 @@ jobs:
           "Done."
         }
         ${env:InstalledPostgreSQL} = Get-Service | Where-Object {$_.Name -Match  "postgresql"}
+        echo "InstalledPostgreSQL: ${env:InstalledPostgreSQL}"
         if("${env:InstalledPostgreSQL}" -ne ""){
           Write-Error "Failed to uninstall the Windows Service = ${env:InstalledPostgreSQL}" -ErrorAction Stop
         }
