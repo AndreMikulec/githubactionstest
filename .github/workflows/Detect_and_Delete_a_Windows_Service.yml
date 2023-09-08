@@ -22,13 +22,16 @@ jobs:
     - name: Detect and Delete a Windows Service
       shell: powershell
       run: |
+        Get-Service | Where-Object {$_.Name -Match  "postgresql"}
         ${env:InstalledPostgreSQL} = Get-Service | Where-Object {$_.Name -Match  "postgresql"}
+      
         if("${env:InstalledPostgreSQL}" -ne ""){
           "Unistalling Windows Service = ${env:InstalledPostgreSQL}"
-          sc delete "${env:InstalledPostgreSQL}"
+          Remove-Service -Name "${env:InstalledPostgreSQL}"
           "Done."
         }
+        Get-Service | Where-Object {$_.Name -Match  "postgresql"}
         ${env:InstalledPostgreSQL} = Get-Service | Where-Object {$_.Name -Match  "postgresql"}
         if("${env:InstalledPostgreSQL}" -ne ""){
-          Write-Error 'Failed to uninstall the Windows Service = ${env:InstalledPostgreSQL}' -ErrorAction Stop
+          Write-Error "Failed to uninstall the Windows Service = ${env:InstalledPostgreSQL}" -ErrorAction Stop
         }
