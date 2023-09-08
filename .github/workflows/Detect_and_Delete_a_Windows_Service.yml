@@ -1,0 +1,33 @@
+name: CI
+
+on: [push, pull_request, workflow_dispatch]
+
+
+jobs:
+  build: 
+    name: ${{ matrix.shell }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+
+        - os: windows-latest
+          shell: powershell
+
+    steps:
+
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Detect and Delete a Windows Service
+      shell: powershell
+      run: |
+        ${env:InstalledPostgreSQL} = Get-Service | Where-Object {$_.Name -Match  "postgresql"}
+        if("${env:InstalledPostgreSQL}" -ne ""){
+          "Unistalling Windows Service = ${env:InstalledPostgreSQL}"
+          sc delete "${env:InstalledPostgreSQL}"
+          "Done."
+        }
+        if("${env:InstalledPostgreSQL}" -ne ""){
+          Write-Error 'Failed to uninstall the Windows Service = ${env:InstalledPostgreSQL}' -ErrorAction Stop
+        }
