@@ -28,6 +28,7 @@ jobs:
           sc delete "${env:InstalledPostgreSQL}"
           "Done."
         }
+        ${env:InstalledPostgreSQL} = Get-Service | Where-Object {$_.Name -Match  "postgresql"}
         if("${env:InstalledPostgreSQL}" -ne ""){
           Write-Error 'Failed to uninstall the Windows Service = ${env:InstalledPostgreSQL}' -ErrorAction Stop
         }
