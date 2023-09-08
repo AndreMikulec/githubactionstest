@@ -22,19 +22,17 @@ jobs:
     - name: Detect and Delete a Windows Service
       shell: powershell
       run: |
-        Get-Service | Where-Object {$_.Name -Match  "postgresql"}
         ${env:InstalledPostgreSQL} = Get-Service | Where-Object {$_.Name -Match  "postgresql"}
-      
         # For PowerShell versions prior to v6, you can do this
         # https://stackoverflow.com/questions/4967496/check-if-a-windows-service-exists-and-delete-in-powershell
         if("${env:InstalledPostgreSQL}" -ne ""){
           "Unistalling Windows Service = ${env:InstalledPostgreSQL}"
-          Stop-Service "${env:InstalledPostgreSQL}"; Get-CimInstance -ClassName Win32_Service -Filter "Name=${env:InstalledPostgreSQL}" | Remove-CimInstance
+          Stop-Service "${env:InstalledPostgreSQL}"
+          Get-CimInstance -ClassName Win32_Service -Filter "Name='${env:InstallPostgreSQL}'" | Remove-CimInstance
           # Powershell 6 and greater
           # Remove-Service -Name "${env:InstalledPostgreSQL}"
           "Done."
         }
-        Get-Service | Where-Object {$_.Name -Match  "postgresql"}
         ${env:InstalledPostgreSQL} = Get-Service | Where-Object {$_.Name -Match  "postgresql"}
         if("${env:InstalledPostgreSQL}" -ne ""){
           Write-Error "Failed to uninstall the Windows Service = ${env:InstalledPostgreSQL}" -ErrorAction Stop
