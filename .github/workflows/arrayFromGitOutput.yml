@@ -1,0 +1,13 @@
+name: arrayFromGitOutput
+
+on: [push, pull_request, workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+    - name: action
+      shell: powershell
+      run: |
+        ${env:RESULT}   = $(& git ls-remote --tags https://github.com/postgres/postgres.git)
+        Write-Output ${env:RESULT}
