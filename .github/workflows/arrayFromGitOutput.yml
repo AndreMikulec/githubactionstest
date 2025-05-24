@@ -9,7 +9,9 @@ jobs:
     - name: action
       shell: powershell
       run: |
-       $command = 'dir "c:\program files" '
+       # powershell /? (see the example at the bottom)
+       # $command = 'dir "c:\program files" '
+       $command = 'git ls-remote --tags "https://github.com/postgres/postgres.git"'
        $bytes = [System.Text.Encoding]::Unicode.GetBytes($command)
        $encodedCommand = [Convert]::ToBase64String($bytes)
        powershell.exe -encodedCommand $encodedCommand | Out-File -FilePath "C:\output.txt"
