@@ -16,6 +16,6 @@ jobs:
        $encodedCommand = [Convert]::ToBase64String($bytes)
        powershell.exe -encodedCommand $encodedCommand | Out-File -FilePath "C:\output.txt"
        $fileContent = Get-Content -Path "C:\output.txt"
-       foreach ($line in $fileContent) { Write-Output $line }
+       foreach ($line in $fileContent) { Write-Output $line.substring(52) }
       
    
