@@ -14,7 +14,7 @@ jobs:
        $command = 'git ls-remote --tags "https://github.com/postgres/postgres.git"'
        $bytes = [System.Text.Encoding]::Unicode.GetBytes($command)
        $encodedCommand = [Convert]::ToBase64String($bytes)
-       powershell.exe -encodedCommand $encodedCommand  | Where-Object {$_.Name -match "REL_18_"} | Out-File -FilePath "C:\output.txt"
-       Get-Content -Path "C:\output.txt"
+       powershell.exe -encodedCommand $encodedCommand | Out-File -FilePath "C:\output.txt"
+       Get-Content -Path "C:\output.txt" | Where-Object {$_.Name -match "REL_18_"}
       
    
