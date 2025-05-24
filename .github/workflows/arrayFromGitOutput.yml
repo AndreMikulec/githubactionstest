@@ -19,5 +19,6 @@ jobs:
        foreach ($line in $fileContent) { Add-Content -Path "C:\output2.txt" -Value $line.substring(51) }
        Get-Content -Path "C:\output2.txt" | Where-Object { $_ -match "^REL_17_" } |  Out-File -FilePath "C:\output3.txt"
        Get-Content -Path "C:\output3.txt"
-       ${env:GITTAG} = 
+       Get-Content -Path "C:\output3.txt" -Tail 1
+       # ${env:GITTAG} = 
        
