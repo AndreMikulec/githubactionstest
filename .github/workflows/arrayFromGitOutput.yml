@@ -9,5 +9,5 @@ jobs:
     - name: action
       shell: powershell
       run: |
-        ${env:RESULT}   = $(& "C:\Program Files\Git\bin\git.exe" ls-remote --tags https://github.com/postgres/postgres.git)
+        ${env:RESULT}   = $(Start-Process -FilePath "$env:ProgramFiles\Git\bin\git.exe" -ArgumentList "ls-remote", "--tags", "-c", '"https://github.com/postgres/postgres.git"')
         Write-Output ${env:RESULT}
