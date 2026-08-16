@@ -99,7 +99,7 @@ jobs:
 
     defaults:
       run:
-        shellEnv: ${{ matrix.shellEnv }}
+        shell: ${{ matrix.shellEnv || 'bash' }}
 
     steps:
     - name: Checkout code
