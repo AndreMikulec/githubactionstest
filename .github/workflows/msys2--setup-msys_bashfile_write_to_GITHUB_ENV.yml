@@ -47,7 +47,6 @@ jobs:
 
     - name: job1 Run MSYS2 1
       id: job1_Run_MSYS2_1
-      shellEnv: msys2 {0}
       env:
         msystem: ${{ matrix.compilerEnv }}
       run: |
@@ -68,7 +67,6 @@ jobs:
 
     - name: job1 Run MSYS2 2
       id: job1_Run_MSYS2_2
-      shellEnv: msys2 {0}
       env:
         msystem: ${{ matrix.compilerEnv }}
         GREETING: ${{ env.GREETING }}
@@ -116,7 +114,6 @@ jobs:
 
     - name: job2 Run MSYS2 1
       id: job2_Run_MSYS2_1
-      shellEnv: msys2 {0}
       env:
         msystem: ${{ env.compilerEnv }}
         compilerEnv: ${{ matrix.compilerEnv }}
@@ -126,5 +123,3 @@ jobs:
         echo "job2 Run MSYS2 1"
         echo "GREETING_OUTPUT_BETWEEN_JOBS ${GREETING_OUTPUT_BETWEEN_JOBS}"
         echo "BUILD_GREETING: ${BUILD_GREETING}"
-
-
