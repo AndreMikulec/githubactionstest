@@ -41,7 +41,7 @@ jobs:
     - name: job1 Install MSYS2
       uses: msys2/setup-msys2@v2
       with:
-        msystem: ${{ env.compilerEnv }}
+        msystem: ${{ matrix.compilerEnv }}
         path-type: strict
         update: true
 
@@ -108,15 +108,14 @@ jobs:
     - name: job2 Install MSYS2
       uses: msys2/setup-msys2@v2
       with:
-        msystem: ${{ env.compilerEnv }}
+        msystem: ${{ matrix.compilerEnv }}
         path-type: strict
         update: true
 
     - name: job2 Run MSYS2 1
       id: job2_Run_MSYS2_1
       env:
-        msystem: ${{ env.compilerEnv }}
-        compilerEnv: ${{ matrix.compilerEnv }}
+        msystem: ${{ matrix.compilerEnv }}
         GREETING_OUTPUT_BETWEEN_JOBS: ${{ needs.job1.outputs.GREETING_OUTPUT_BETWEEN_JOBS }}
       run: |
         set -x -v -e
