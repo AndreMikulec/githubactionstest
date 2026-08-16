@@ -9,7 +9,7 @@ jobs:
     - name: action
       shell: powershell
       run: |
-       # powershell /? (see the example at the bottom)
+       # powershell /? ( see the example at the bottom )
        # $command = 'dir "c:\program files" '
        $command = 'git ls-remote --tags "https://github.com/postgres/postgres.git"'
        $bytes = [System.Text.Encoding]::Unicode.GetBytes($command)
