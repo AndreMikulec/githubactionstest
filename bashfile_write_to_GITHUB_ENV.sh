@@ -3,7 +3,7 @@ set -x -v -e
 # if line above NOT THERE then the REST below is not seen
 
 echo "GITHUB_WORKSPACE: ${GITHUB_WORKSPACE}"
-echo "GITHUB_WORKSPACE_POSIX: "$(cygpath "${GITHUB_WORKSPACE})""
+echo "GITHUB_WORKSPACE_POSIX: "$(cygpath "${GITHUB_WORKSPACE})"""
 
 echo "GREETING_FROM_CALLING_SHELL: ${GREETING_FROM_CALLING_SHELL}"
 
