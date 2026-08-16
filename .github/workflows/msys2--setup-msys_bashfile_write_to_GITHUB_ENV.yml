@@ -43,7 +43,6 @@ jobs:
       with:
         msystem: ${{ matrix.compilerEnv }}
         path-type: strict
-        update: true
 
     - name: job1 Run Step 1 ${{ matrix.os }} ${{ matrix.compilerEnv }}
       id: job1_Run_Step_1
@@ -110,7 +109,6 @@ jobs:
       with:
         msystem: ${{ matrix.compilerEnv }}
         path-type: strict
-        update: true
 
     - name: job2 Run Step 1 ${{ matrix.os }} ${{ matrix.compilerEnv }}
       id: job2_Run_MSYS2_1
