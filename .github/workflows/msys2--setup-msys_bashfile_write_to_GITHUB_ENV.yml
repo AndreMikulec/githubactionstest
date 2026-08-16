@@ -26,9 +26,9 @@ jobs:
           compilerEnv: UCRT64
           shellEnv: msys2 {0}
 
-        - os: windows-2022
-          compilerEnv: UCRT64
-          shellEnv: msys2 {0}
+#       - os: windows-2022
+#         compilerEnv: UCRT64
+#         shellEnv: msys2 {0}
 
     defaults:
       run:
@@ -38,15 +38,15 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v6
 
-    - name: job1 Install MSYS2
+    - name: job1 Install ${{ matrix.os }} ${{ matrix.compilerEnv }}
       uses: msys2/setup-msys2@v2
       with:
         msystem: ${{ matrix.compilerEnv }}
         path-type: strict
         update: true
 
-    - name: job1 Run MSYS2 1
-      id: job1_Run_MSYS2_1
+    - name: job1 Run Step 1 ${{ matrix.os }} ${{ matrix.compilerEnv }}
+      id: job1_Run_Step_1
       env:
         msystem: ${{ matrix.compilerEnv }}
       run: |
@@ -65,19 +65,19 @@ jobs:
         export JOB_GREETING="${JOB_GREETING} from previous step"
         export BUILD_GREETING="${BUILD_GREETING} from previous step"
 
-    - name: job1 Run MSYS2 2
+    - name: job1 Run Step 2 ${{ matrix.os }} ${{ matrix.compilerEnv }}
       id: job1_Run_MSYS2_2
       env:
         msystem: ${{ matrix.compilerEnv }}
         GREETING: ${{ env.GREETING }}
-        GREETING_OUTPUT: ${{ steps.job1_Run_MSYS2_1.outputs.GREETING_OUTPUT }}
+        GREETING_OUTPUT: ${{ steps.job1_Run_Step_1.outputs.GREETING_OUTPUT }}
       run: |
         set -x -v -e
         echo "job1 Run MSYS2 2"
         echo "GREETING: ${GREETING}"
-        echo "GREETING_OUTPUT ${GREETING_OUTPUT}"
-        echo "JOB_GREETING: ${JOB_GREETING}"
-        echo "BUILD_GREETING: ${BUILD_GREETING}"
+        echo "GREETING_OUTPUT: ${GREETING_OUTPUT}"
+        echo "JOB_GREETING: ${JOB_GREETING}"                         # no change from "changed export" of previous step"
+        echo "BUILD_GREETING: ${BUILD_GREETING}"                     # no change from "changed export" of previous step"
         export BUILD_GREETING="${BUILD_GREETING} from previous job"
 
   job2:
@@ -93,9 +93,9 @@ jobs:
           compilerEnv: UCRT64
           shellEnv: msys2 {0}
 
-        - os: windows-2022
-          compilerEnv: UCRT64
-          shellEnv: msys2 {0}
+#       - os: windows-2022
+#         compilerEnv: UCRT64
+#         shellEnv: msys2 {0}
 
     defaults:
       run:
@@ -105,14 +105,14 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v6
 
-    - name: job2 Install MSYS2
+    - name: job2 Install ${{ matrix.os }} ${{ matrix.compilerEnv }}
       uses: msys2/setup-msys2@v2
       with:
         msystem: ${{ matrix.compilerEnv }}
         path-type: strict
         update: true
 
-    - name: job2 Run MSYS2 1
+    - name: job2 Run Step 1 ${{ matrix.os }} ${{ matrix.compilerEnv }}
       id: job2_Run_MSYS2_1
       env:
         msystem: ${{ matrix.compilerEnv }}
