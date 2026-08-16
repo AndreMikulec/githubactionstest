@@ -1,4 +1,6 @@
 #!/bin/bash
+set -x -v -e
+# if line above NOT THERE then the REST below is not seen
 
 echo "GITHUB_WORKSPACE: ${GITHUB_WORKSPACE}"
 
