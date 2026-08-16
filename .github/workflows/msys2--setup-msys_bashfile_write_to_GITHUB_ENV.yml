@@ -16,7 +16,7 @@ jobs:
       JOB_GREETING: "JOB_GREETING Hello"
     runs-on: ${{ matrix.os }}
     outputs:
-      GREETING_OUTPUT_BETWEEN_JOBS: ${{ steps.job1_Run_MSYS2_1.outputs.GREETING_OUTPUT_BETWEEN_JOBS }}
+      GREETING_OUTPUT_BETWEEN_JOBS: ${{ steps.job1_Run_Step_1.outputs.GREETING_OUTPUT_BETWEEN_JOBS }}
     strategy:
       fail-fast: false
       matrix:
@@ -119,4 +119,4 @@ jobs:
         set -x -v -e
         echo "job2 Run MSYS2 1"
         echo "GREETING_OUTPUT_BETWEEN_JOBS ${GREETING_OUTPUT_BETWEEN_JOBS}"
-        echo "BUILD_GREETING: ${BUILD_GREETING}"
+        echo "BUILD_GREETING: ${BUILD_GREETING}"                    # no change from "changed export" of previous job"
