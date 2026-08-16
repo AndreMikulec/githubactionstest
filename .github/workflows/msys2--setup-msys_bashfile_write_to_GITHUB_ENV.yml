@@ -23,11 +23,11 @@ jobs:
         include:
 
         - os: windows-2025-vs2026
-          compilerEnv: UCRT
+          compilerEnv: UCRT64
           shellEnv: msys2 {0}
 
         - os: windows-2022
-          compilerEnv: UCRT
+          compilerEnv: UCRT64
           shellEnv: msys2 {0}
 
     defaults:
@@ -90,11 +90,11 @@ jobs:
         include:
 
         - os: windows-2025-vs2026
-          compilerEnv: UCRT
+          compilerEnv: UCRT64
           shellEnv: msys2 {0}
 
         - os: windows-2022
-          compilerEnv: UCRT
+          compilerEnv: UCRT64
           shellEnv: msys2 {0}
 
     defaults:
