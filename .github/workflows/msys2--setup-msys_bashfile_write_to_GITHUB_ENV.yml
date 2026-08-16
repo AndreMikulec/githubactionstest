@@ -50,29 +50,41 @@ jobs:
         msystem: ${{ matrix.compilerEnv }}
       run: |
         set -x -v -e
-        echo "job1 Run MSYS2 1"
+        echo "job1 Run Step 1 ${{ matrix.os }} ${{ matrix.compilerEnv }}"
         
         echo "BUILD_GREETING: ${BUILD_GREETING}"
         echo "JOB_GREETING: ${JOB_GREETING}"
-        # set it
+        # sent it down
         export GREETING_FROM_CALLING_SHELL="GREETING_FROM_CALLING_SHELL Hello"
         $(cygpath ${GITHUB_WORKSPACE})/bashfile_write_to_GITHUB_ENV.sh
-        # receive it
+        # receive it up
         echo "GREETING_FROM_CHILD_SHELL: ${GREETING_FROM_CHILD_SHELL}" # no value returned
+        #
         echo "env GREETING: ${{ env.GREETING }}"                       # no value returned
         echo "GREETING: ${GREETING}"                                   # no value returned
+        #
         export JOB_GREETING="${JOB_GREETING} from previous step"
         export BUILD_GREETING="${BUILD_GREETING} from previous step"
 
     - name: job1 Run Step 2 ${{ matrix.os }} ${{ matrix.compilerEnv }}
-      id: job1_Run_MSYS2_2
+      id: job1_Run_Step_2
+      env:
+        msystem: ${{ matrix.compilerEnv }}
+      run: |
+        set -x -v -e
+        echo "job1 Run Step 2 ${{ matrix.os }} ${{ matrix.compilerEnv }}"
+        echo "GREETING: ${GREETING}"
+        echo "GREETING_OUTPUT: ${GREETING_OUTPUT}"
+
+    - name: job1 Run Step 3 ${{ matrix.os }} ${{ matrix.compilerEnv }}
+      id: job1_Run_Step_3
       env:
         msystem: ${{ matrix.compilerEnv }}
         GREETING: ${{ env.GREETING }}
         GREETING_OUTPUT: ${{ steps.job1_Run_Step_1.outputs.GREETING_OUTPUT }}
       run: |
         set -x -v -e
-        echo "job1 Run MSYS2 2"
+        echo "job1 Run Step 3 ${{ matrix.os }} ${{ matrix.compilerEnv }}"
         echo "GREETING: ${GREETING}"
         echo "GREETING_OUTPUT: ${GREETING_OUTPUT}"
         echo "JOB_GREETING: ${JOB_GREETING}"                         # no change from "changed export" of previous step"
@@ -111,12 +123,12 @@ jobs:
         path-type: strict
 
     - name: job2 Run Step 1 ${{ matrix.os }} ${{ matrix.compilerEnv }}
-      id: job2_Run_MSYS2_1
+      id: job2_Run_Step_1
       env:
         msystem: ${{ matrix.compilerEnv }}
         GREETING_OUTPUT_BETWEEN_JOBS: ${{ needs.job1.outputs.GREETING_OUTPUT_BETWEEN_JOBS }}
       run: |
         set -x -v -e
-        echo "job2 Run MSYS2 1"
-        echo "GREETING_OUTPUT_BETWEEN_JOBS ${GREETING_OUTPUT_BETWEEN_JOBS}"
+        echo "job2 Run Step 1 ${{ matrix.os }} ${{ matrix.compilerEnv }}"
+        echo "GREETING_OUTPUT_BETWEEN_JOBS: ${GREETING_OUTPUT_BETWEEN_JOBS}"
         echo "BUILD_GREETING: ${BUILD_GREETING}"                    # no change from "changed export" of previous job"
