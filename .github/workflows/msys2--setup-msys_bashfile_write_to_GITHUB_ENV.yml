@@ -74,7 +74,7 @@ jobs:
         set -x -v -e
         echo "job1 Run Step 2 ${{ matrix.os }} ${{ matrix.compilerEnv }}"
         echo "GREETING: ${GREETING}"
-        echo "GREETING_OUTPUT: ${GREETING_OUTPUT}"
+        echo "GREETING_OUTPUT: ${GREETING_OUTPUT}"                  # no value returned
 
     - name: job1 Run Step 3 ${{ matrix.os }} ${{ matrix.compilerEnv }}
       id: job1_Run_Step_3
