@@ -57,12 +57,13 @@ jobs:
         ${env:pgwinmajor} = "notset"
         if("${env:pgWINServiceExists}" -eq "true") {
           echo "pgWINServiceNameHostDefault: ${env:pgWINServiceNameHostDefault}"
+          # 30 seconds - can not do after a Start-Service
           Stop-Service  -Name "${env:pgWINServiceNameHostDefault}"
           # Start-Service -Name "${env:pgWINServiceNameHostDefault}"
           # Stop-Service  -Name "${env:pgWINServiceNameHostDefault}"
           $matches = @()
           "${env:pgWINServiceNameHostDefault}" -match "(\d+[.]{0,1}\d+$)"
-          ${env:pgwinmajor} = $matches[1]
+          ${env:pgwinmajor} = $matches[1] > $null
           $matches = @()
         } else {
           ${env:pgwinmajor} = "none"
