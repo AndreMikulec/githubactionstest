@@ -43,12 +43,11 @@ jobs:
         } else {
           ${env:pgwinmajor} = "none"
         }
-
         if("${env:pgWINServiceExists}) {
           # remove the service name only
-          sc.exe delete "postgresql${env:PlatformSVCAdj}-${env:pgwinmajor}"
-          & "C:\Program Files${env:PlatformPGAdj}\PostgreSQL\{env:pgwinmajor}\uninstall-postgresql.exe" "--mode unattended "
-          Remove-Item "C:\Program Files${env:PlatformPGAdj}\PostgreSQL" -Recurse -Force
-          Remove-Item -Path "HKLM:\SOFTWARE\PostgreSQL" -Recurse -Force
+          & "sc.exe delete postgresql${env:PlatformSVCAdj}-${env:pgwinmajor}"
+          # & "C:\Program Files${env:PlatformPGAdj}\PostgreSQL\{env:pgwinmajor}\uninstall-postgresql.exe --mode unattended"
+          # Remove-Item "C:\Program Files${env:PlatformPGAdj}\PostgreSQL" -Recurse -Force
+          # Remove-Item -Path "HKLM:\SOFTWARE\PostgreSQL" -Recurse -Force
         }
 
