@@ -25,13 +25,13 @@ jobs:
 
         # inheriting
         ${env:Platform} = "x64"
-        Set-EnvVar "Platform=${Platform}"
-        echo "Platform: ${Platform}"
+        Set-EnvVar "Platform=${env:Platform}"
+        echo "Platform: ${env:Platform}"
         
         ${env:PlatformPGAdj} = "notset"
         ${env:PlatformSVCAdj} = "notset"
-        if ("${Platform}" -eq "x86") { ${env:PlatformPGAdj} = " (x86)" } # "C:\Program Files (x86)"
-        if ("${Platform}" -eq "x64") { ${env:PlatformSVCAdj} = "-x64"  } #  x64 PostgreSQL service names on windows
+        if ("${env:Platform}" -eq "x86") { ${env:PlatformPGAdj} = " (x86)" } # "C:\Program Files (x86)"
+        if ("${env:Platform}" -eq "x64") { ${env:PlatformSVCAdj} = "-x64"  } #  x64 PostgreSQL service names on windows
 
         Set-EnvVar "PlatformPGAdj=${env:PlatformPGAdj}"
         echo "PlatformPGAdj: ${env:PlatformPGAdj}"
@@ -40,8 +40,8 @@ jobs:
         echo "PlatformSVCAdj: ${env:PlatformSVCAdj}"
 
         ${env:pgWINServiceNameHostDefault} = "notset"
-        ${env:pgWINServiceNameHostDefault} = (Get-Service -ErrorAction SilentlyContinue | where-object {$_.name -like "*postgres*"})
-        if ("${pgWINServiceNameHostDefault}" -eq "") { ${env:pgWINServiceNameHostDefault} = "none" }
+        ${env:pgWINServiceNameHostDefault} = (Get-Service -ErrorAction SilentlyContinue | where-object {$_.name -like "*postgres*"}).Name
+        if ("${env:pgWINServiceNameHostDefault}" -eq "") { ${env:pgWINServiceNameHostDefault} = "none" }
         Set-EnvVar "pgWINServiceNameHostDefault=${env:pgWINServiceNameHostDefault}"
         
         echo "pgWINServiceNameHostDefault: ${env:pgWINServiceNameHostDefault}"
