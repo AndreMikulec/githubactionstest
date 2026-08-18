@@ -7,15 +7,48 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - name: Action
+    - name: Action 1
       shell: cmd
       run: |
         echo on
-        echo  list of the human-readable names
+        rem list of the human-readable names
         sc query state= all | find "DISPLAY_NAME"
         rem DISPLAY_NAME: postgresql-x64-17 - PostgreSQL Server 17
-        rem
-        rem only removes the Windows service registration. 
-        rem (It does not delete your database files, application binaries, or registry entries)
-        sc delete "postgresql-x64-17"
-        sc query state= all | find "DISPLAY_NAME"
+
+    steps:
+    - name: Action 2
+      shell: powershell
+      run: |
+        function Set-EnvVar {param($X)     Add-Content -Path ${env:GITHUB_ENV} -Value "$X"}
+
+        ${env:Platform} = "x64"
+        if ("${Platform}" -eq "x86") ${env:PlatformPGAdj} = " (x86)" # "C:\Program Files (x86)"
+        if ("${Platform}" -eq "x64") ${env:PlatformSVCAdj} = "-x64"  #  PostgreSQL service names on windows
+
+        Get-Service
+        ${env:pgWINServiceNameHostDefault} = "notset"
+        ${env:pgWINServiceNameHostDefault} = (Get-Service -ErrorAction SilentlyContinue | where-object {$_.name -like "*postgres*"}).
+        if("${env:pgWINServiceNameHostDefault}" -eq "") {"${env:pgWINServiceExists}" = $false} else {"${env:pgWINServiceExists}" = $true}
+
+        ${env:pgwinmajor} = "notset"
+        if(${env:pgWINServiceExists}) {
+          echo "pgWINServiceNameHostDefault: ${env:pgWINServiceNameHostDefault}"
+          Stop-Service -Name "${env:pgWINServiceNameHostDefault}"
+          Start-Service -Name "${env:pgWINServiceNameHostDefault}"
+          Stop-Service -Name "${env:pgWINServiceNameHostDefault}"
+          $matches = @()
+          "${env:pgWINServiceNameHostDefault}" -match "(\d+[.]{0,1}\d+$)"
+          ${env:pgwinmajor} = $matches[1]
+          $matches = @()
+        } else {
+          ${env:pgwinmajor} = "none"
+        }
+
+        if("${env:pgWINServiceExists}) {
+          # remove the service name only
+          sc delete "postgresql${env:PlatformSVCAdj}-${env:pgwinmajor}"
+          & "C:\Program Files${env:PlatformPGAdj}\PostgreSQL\{env:pgwinmajor}\uninstall-postgresql.exe" "--mode unattended "
+          Remove-Item "C:\Program Files${env:PlatformPGAdj}\PostgreSQL" -Recurse -Force
+          Remove-Item -Path "HKLM:\SOFTWARE\PostgreSQL" -Recurse -Force
+        }
+
