@@ -7,6 +7,7 @@ jobs:
     runs-on: windows-latest
 
     steps:
+
     - name: Action 1
       shell: cmd
       run: |
@@ -15,7 +16,6 @@ jobs:
         sc query state= all | find "DISPLAY_NAME"
         rem DISPLAY_NAME: postgresql-x64-17 - PostgreSQL Server 17
 
-    steps:
     - name: Action 2
       shell: powershell
       run: |
@@ -33,9 +33,9 @@ jobs:
         ${env:pgwinmajor} = "notset"
         if(${env:pgWINServiceExists}) {
           echo "pgWINServiceNameHostDefault: ${env:pgWINServiceNameHostDefault}"
-          Stop-Service -Name "${env:pgWINServiceNameHostDefault}"
+          Stop-Service  -Name "${env:pgWINServiceNameHostDefault}"
           Start-Service -Name "${env:pgWINServiceNameHostDefault}"
-          Stop-Service -Name "${env:pgWINServiceNameHostDefault}"
+          Stop-Service  -Name "${env:pgWINServiceNameHostDefault}"
           $matches = @()
           "${env:pgWINServiceNameHostDefault}" -match "(\d+[.]{0,1}\d+$)"
           ${env:pgwinmajor} = $matches[1]
