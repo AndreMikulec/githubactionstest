@@ -14,8 +14,7 @@ jobs:
         echo  list of the human-readable names
         # DISPLAY_NAME: postgresql-x64-17 - PostgreSQL Server 17
         sc query state= all | find "DISPLAY_NAME" 
-        sc query state= all | find "DISPLAY_NAME" | find postgres
         # only removes the Windows service registration. 
         # It does not delete your database files, application binaries, or registry entries
         sc delete "postgresql-x64-17 - PostgreSQL Server 17"
-        sc query state= all | find "DISPLAY_NAME" | find postgres
+        sc query state= all | find "DISPLAY_NAME"
