@@ -7,9 +7,15 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - name: Set the value
+    - name: Action
       shell: cmd
       run: |
         echo on
         echo  list of the human-readable names
-        sc query state= all | find "DISPLAY_NAME"
+        # DISPLAY_NAME: postgresql-x64-17 - PostgreSQL Server 17
+        sc query state= all | find "DISPLAY_NAME" 
+        sc query state= all | find "DISPLAY_NAME" | find postgres
+        # only removes the Windows service registration. 
+        # It does not delete your database files, application binaries, or registry entries
+        sc delete "postgresql-x64-17 - PostgreSQL Server 17"
+        sc query state= all | find "DISPLAY_NAME" | find postgres
