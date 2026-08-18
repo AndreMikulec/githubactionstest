@@ -58,8 +58,8 @@ jobs:
         if("${env:pgWINServiceExists}" -eq "true") {
           echo "pgWINServiceNameHostDefault: ${env:pgWINServiceNameHostDefault}"
           Stop-Service  -Name "${env:pgWINServiceNameHostDefault}"
-          Start-Service -Name "${env:pgWINServiceNameHostDefault}"
-          Stop-Service  -Name "${env:pgWINServiceNameHostDefault}"
+          # Start-Service -Name "${env:pgWINServiceNameHostDefault}"
+          # Stop-Service  -Name "${env:pgWINServiceNameHostDefault}"
           $matches = @()
           "${env:pgWINServiceNameHostDefault}" -match "(\d+[.]{0,1}\d+$)"
           ${env:pgwinmajor} = $matches[1]
