@@ -3,7 +3,7 @@ on: [push]
 
 jobs:
 
-  build:
+  destroy-default-PG-for-Windows:
     runs-on: windows-latest
 
     steps:
@@ -57,10 +57,8 @@ jobs:
         ${env:pgwinmajor} = "notset"
         if("${env:pgWINServiceExists}" -eq "true") {
           echo "pgWINServiceNameHostDefault: ${env:pgWINServiceNameHostDefault}"
-          # 30 seconds - can not do after a Start-Service
+          # 1-30 seconds - can not do after a Start-Service
           Stop-Service  -Name "${env:pgWINServiceNameHostDefault}"
-          # Start-Service -Name "${env:pgWINServiceNameHostDefault}"
-          # Stop-Service  -Name "${env:pgWINServiceNameHostDefault}"
           $matches = @()
           "${env:pgWINServiceNameHostDefault}" -match "(\d+[.]{0,1}\d+$)"
           ${env:pgwinmajor} = $matches[1]
@@ -71,20 +69,20 @@ jobs:
         Set-EnvVar "pgwinmajor=${env:pgwinmajor}"
         echo "pgwinmajor: ${env:pgwinmajor}"
 
-#   - name: Remove the default Windows PostgreSQL Server service (except for the registry)
-#     if: {{ env.pgWINServiceExists == 'true' }}
-#     shell: bash
-#     run: |
-#       echo Deleting Service
-#       sc delete "postgresql${PlatformSVCAdj}-${pgwinmajor}"
-#       echo Uninstalling Service Software
-#       $(cygpath "C:\Program Files${PlatformPGAdj}\PostgreSQL\${pgwinmajor}\uninstall-postgresql.exe") --mode unattended
-#       echo Deleting files and the directory
-#       rm -Rf $(cygpath "C:\Program Files${PlatformPGAdj}\PostgreSQL")
-#
-#   - name: Remove the default Windows PostgreSQL Server service registry entry
-#     if: {{ env.pgWINServiceExists == 'true' }}
-#     shell: powershell
-#     run: |
-#       echo Removing registry entry
-#       Remove-Item -Path "HKLM:\SOFTWARE\PostgreSQL" -Recurse -Force
+    - name: Remove the default Windows PostgreSQL Server service (except for the registry)
+      if: {{ env.pgWINServiceExists == 'true' }}
+      shell: bash
+      run: |
+        echo Deleting Service
+        sc delete "postgresql${PlatformSVCAdj}-${pgwinmajor}"
+        echo Uninstalling Service Software
+        $(cygpath "C:\Program Files${PlatformPGAdj}\PostgreSQL\${pgwinmajor}\uninstall-postgresql.exe") --mode unattended
+        echo Deleting Files and the Directory
+        rm -Rf $(cygpath "C:\Program Files${PlatformPGAdj}\PostgreSQL")
+ 
+    - name: Remove the default Windows PostgreSQL Server service registry entry
+      if: {{ env.pgWINServiceExists == 'true' }}
+      shell: powershell
+      run: |
+        echo Removing registry entry
+        Remove-Item -Path "HKLM:\SOFTWARE\PostgreSQL" -Recurse -Force
