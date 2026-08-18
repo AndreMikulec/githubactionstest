@@ -68,19 +68,20 @@ jobs:
         Set-EnvVar "pgwinmajor=${env:pgwinmajor}"
         echo "pgwinmajor: ${env:pgwinmajor}"
 
-    - name: Remove the default Windows PostgreSQL Server service (except for the registry)
-      if: {{ env.pgWINServiceExists == 'true' }}
-      shell: bash
-      run: |
-        echo Deleting Service
-        sc delete "postgresql${PlatformSVCAdj}-${pgwinmajor}"
-        echo Uninstalling Service Software
-        $(cygpath "C:\Program Files${PlatformPGAdj}\PostgreSQL\${pgwinmajor}\uninstall-postgresql.exe") --mode unattended
-        echo Deleting files and the directory
-        rm -Rf $(cygpath "C:\Program Files${PlatformPGAdj}\PostgreSQL")
-
-    - name: Remove the default Windows PostgreSQL Server service registry entry
-      if: {{ env.pgWINServiceExists == 'true' }}
-      shell: powershell
-      run: |
-        Remove-Item -Path "HKLM:\SOFTWARE\PostgreSQL" -Recurse -Force
+#   - name: Remove the default Windows PostgreSQL Server service (except for the registry)
+#     if: {{ env.pgWINServiceExists == 'true' }}
+#     shell: bash
+#     run: |
+#       echo Deleting Service
+#       sc delete "postgresql${PlatformSVCAdj}-${pgwinmajor}"
+#       echo Uninstalling Service Software
+#       $(cygpath "C:\Program Files${PlatformPGAdj}\PostgreSQL\${pgwinmajor}\uninstall-postgresql.exe") --mode unattended
+#       echo Deleting files and the directory
+#       rm -Rf $(cygpath "C:\Program Files${PlatformPGAdj}\PostgreSQL")
+#
+#   - name: Remove the default Windows PostgreSQL Server service registry entry
+#     if: {{ env.pgWINServiceExists == 'true' }}
+#     shell: powershell
+#     run: |
+#       echo Removing registry entry
+#       Remove-Item -Path "HKLM:\SOFTWARE\PostgreSQL" -Recurse -Force
