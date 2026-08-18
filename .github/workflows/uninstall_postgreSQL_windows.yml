@@ -30,8 +30,10 @@ jobs:
         
         ${env:PlatformPGAdj} = "notset"
         ${env:PlatformSVCAdj} = "notset"
-        if ("${env:Platform}" -eq "x86") { ${env:PlatformPGAdj} = " (x86)" } # "C:\Program Files (x86)"
-        if ("${env:Platform}" -eq "x64") { ${env:PlatformSVCAdj} = "-x64"  } #  x64 PostgreSQL service names on windows
+        # "C:\Program Files (x86)"
+        if ("${env:Platform}" -eq "x86") { ${env:PlatformPGAdj} = " (x86)" } else { ${env:PlatformPGAdj} = "" }
+        #  x64 PostgreSQL service names on windows
+        if ("${env:Platform}" -eq "x64") { ${env:PlatformSVCAdj} = "-x64"  } else { ${env:PlatformSVCAdj} = "" }
 
         Set-EnvVar "PlatformPGAdj=${env:PlatformPGAdj}"
         echo "PlatformPGAdj: ${env:PlatformPGAdj}"
