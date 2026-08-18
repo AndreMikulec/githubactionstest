@@ -27,7 +27,7 @@ jobs:
 
         Get-Service
         ${env:pgWINServiceNameHostDefault} = "notset"
-        ${env:pgWINServiceNameHostDefault} = (Get-Service -ErrorAction SilentlyContinue | where-object {$_.name -like "*postgres*"}).
+        ${env:pgWINServiceNameHostDefault} = (Get-Service -ErrorAction SilentlyContinue | where-object {$_.name -like "*postgres*"})
         if("${env:pgWINServiceNameHostDefault}" -eq "") {${env:pgWINServiceExists} = $false} else {${env:pgWINServiceExists} = $true}
 
         ${env:pgwinmajor} = "notset"
