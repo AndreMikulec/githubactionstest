@@ -75,10 +75,15 @@ jobs:
       run: |
         echo Deleting Service
         sc delete "postgresql${PlatformSVCAdj}-${pgwinmajor}"
-        echo Uninstalling Service Software
-        export EXECUTABLE="$(cygpath "C:\Program Files\\${PlatformPGAdj}\PostgreSQL\\${pgwinmajor}\uninstall-postgresql.exe")"
-        echo "EXECUTABLE: ${EXECUTABLE}"
-        "$(EXECUTABLE)" --mode unattended
+        echo Uninstalling Service Software (only if from EDB)
+        export UNINSTALLER="$(cygpath "C:\Program Files\\${PlatformPGAdj}\PostgreSQL\\${pgwinmajor}\uninstall-postgresql.exe")"
+        echo "possible UNINSTALLER: ${UNINSTALLER} ?"
+        if [ -f "${UNINSTALLER}" ]
+        then
+          "$(EXECUTABLE)" --mode unattended
+        else
+          echo "UNINSTALLER not found.  This was not an EDB database."
+        fi
         echo Deleting Files and the Directory
         rm -Rf "$(cygpath "C:\Program Files${PlatformPGAdj}\PostgreSQL")"
  
