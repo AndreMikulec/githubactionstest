@@ -78,12 +78,12 @@ jobs:
         echo "Uninstalling Service Software (only if from EDB)"
         # uninstall-postgresql.exe
         export UNINSTALLER_PATH="$(cygpath "C:\Program Files\\${PlatformPGAdj}\PostgreSQL\\${pgwinmajor}")"
-        ls -alrt "${INSTALLER_PATH}"
-        echo "possible potential UNINSTALLER: ${INSTALLER_PATH}\uninstall-postgresql.exe"
-        if [ -f "${INSTALLER_PATH}\uninstall-postgresql.exe" ]
+        echo "possible potential UNINSTALLER: ${UNINSTALLER_PATH}\uninstall-postgresql.exe"
+        ls -alrt "${UNINSTALLER_PATH}"
+        if [ -f "${UNINSTALLER_PATH}\uninstall-postgresql.exe" ]
         then
           echo "UNINSTALLER found"
-          "${INSTALLER_PATH}\uninstall-postgresql.exe" --mode unattended
+          "${UNINSTALLER_PATH}\uninstall-postgresql.exe" --mode unattended
         else
           echo "UNINSTALLER not found.  This was not an EDB PostgreSQL database."
         fi
