@@ -68,6 +68,8 @@ jobs:
         }
         Set-EnvVar "pgwinmajor=${env:pgwinmajor}"
         echo "pgwinmajor: ${env:pgwinmajor}"
+        
+        & "C:\Program Files\PostgreSQL\17\uninstall-postgresql.exe" --mode unattended
 
     - name: Remove the default Windows PostgreSQL Server service (except for the registry)
       if: ${{ env.pgWINServiceExists == 'true' }}
@@ -88,14 +90,16 @@ jobs:
         then
           echo "UNINSTALLER found"
           ls -alrt "${UNINSTALLER_PATH_FILE}"
-          # silently does not work
+          # silently does NOT WORK
           "${UNINSTALLER_PATH_FILE}" --debuglevel 3 --mode unattended
+          echo After attempted uninstallation ...
           ls -alrt "${UNINSTALLER_PATH}"
         else
           echo "UNINSTALLER not found.  This was not an EDB PostgreSQL database."
         fi
-        # echo Deleting Files and the Directory
-        # rm -Rf "$(cygpath "C:\Program Files${PlatformPGAdj}\PostgreSQL")"
+        echo "Manually Deleting Files and the Directory"
+        rm -Rf   "${UNINSTALLER_PATH}"
+        echo "After Manually Deleting Files and the Directory"
         ls -alrt "${UNINSTALLER_PATH}"
  
     - name: Remove the default Windows PostgreSQL Server service registry entry
