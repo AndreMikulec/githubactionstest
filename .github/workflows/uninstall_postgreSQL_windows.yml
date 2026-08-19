@@ -68,8 +68,36 @@ jobs:
         }
         Set-EnvVar "pgwinmajor=${env:pgwinmajor}"
         echo "pgwinmajor: ${env:pgwinmajor}"
+
+        # PRESS FOR A NEW CONTROLLABLE 17
+
+        # supplied in the matrix
+        ${env:pgWINversion} = "17.11-1"
         
-        & "C:\Program Files\PostgreSQL\17\uninstall-postgresql.exe" --mode unattended
+        echo "pgWINversion: ${env:pgWINversion}"
+
+        ${env:pgWINversionlong} = "notset"
+
+        if("${env:Platform}" -eq "x64" -and "${env:pgWINversion}" -ne "notset") {
+          ${env:pgWINversionlong} = "postgresql-${env:pgWINversion}-windows-x64"
+        }
+        if("${env:Platform}" -eq "notset" -or "${env:pgWINversion}" -eq "notset") {
+          ${env:pgWINversionlong} = "notset"
+        }
+        Set-EnvVar "pgWINversionlong=${env:pgWINversionlong}"
+
+        echo "pgWINversionlong: ${env:pgWINversionlong}"
+
+        if("${env:pgWINversionlong}" -ne "notset") {
+          ${env:ENTDB_PG_DOWNLOAD_URL} = "http://get.enterprisedb.com/postgresql/${env:pgWINversionlong}.exe"
+        }
+        if("${env:pgWINversionlong}" -eq "notset") {
+          ${env:ENTDB_PG_DOWNLOAD_URL} = "notset"
+        }
+        Set-EnvVar "ENTDB_PG_DOWNLOAD_URL=${env:ENTDB_PG_DOWNLOAD_URL}"
+
+        echo "ENTDB_PG_DOWNLOAD_URL: ${env:ENTDB_PG_DOWNLOAD_URL}"
+
 
     - name: Remove the default Windows PostgreSQL Server service (except for the registry)
       if: ${{ env.pgWINServiceExists == 'true' }}
@@ -120,3 +148,19 @@ jobs:
       run: |
         echo Removing registry entry
         Remove-Item -Path "HKLM:\SOFTWARE\PostgreSQL" -Recurse -Force
+
+    - name: Download PostgreSQL for Windows
+      uses: suisei-cn/actions-download-file@v1.6.1
+      with:
+        url: ${{ env.ENTDB_PG_DOWNLOAD_URL }}
+
+    - name: Install PostgreSQL for Windows and Stop PostgreSQL
+      shell: cmd
+      run: |
+        echo on
+        "${{ env.pgWINversionlong }}.exe" --unattendedmodeui none --mode unattended --enable-components server,commandlinetools --disable-components pgAdmin,stackbuilder --superpassword "root" > nul
+
+        rem Installation will also start PostgreSQL
+        net stop  postgresql-x64-17
+        net start postgresql-x64-17
+        net stop  postgresql-x64-17
