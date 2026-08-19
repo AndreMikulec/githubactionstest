@@ -16,6 +16,32 @@ jobs:
         sc query state= all | find "DISPLAY_NAME"
         rem DISPLAY_NAME: postgresql-x64-17 - PostgreSQL Server 17
 
+
+    - name: Start PostgreSQL for Windows
+      env:
+        PGVER2: 17
+        Platform: x64
+      shell: cmd
+      run: |
+        echo on
+        if "%Platform%"=="x64" (net start postgresql-x64-%PGVER2%)
+        if "%Platform%"=="x86" (net start postgresql-%PGVER2%)
+        if "%Platform%"=="notset" (echo Platform is not set, therefore no net start happens.)
+
+
+    - name: Stop PostgreSQL for Windows
+      env:
+        PGVER2: 17
+        Platform: x64
+      shell: cmd
+      run: |
+        echo on
+        if "%Platform%"=="x64" (net stop postgresql-x64-%PGVER2%)
+        if "%Platform%"=="x86" (net stop postgresql-%PGVER2%)
+        if "%Platform%"=="notset" (echo Platform is not set, therefore no net stop happens.)
+
+
+
     - name: Gather facts about the default Windows PostgreSQL Server service
       shell: powershell
       run: |
@@ -126,7 +152,12 @@ jobs:
           echo "UNINSTALLER not found.  This was not an EDB PostgreSQL database."
         fi
         
-        # Disabled to begin with
+        # ServiceName  postgresql-x64-17
+        # Version  17.10
+        # ServiceStatus  Stopped
+        # ServiceStartType  Disabled
+        # https://github.com/actions/runner-images/blob/main/images/windows/Windows2025-VS2026-Readme.md
+        
         # echo "Attempting - enabling"
         # # enabling required before any stop or start attempt
         # sc config "${pgWINServiceNameHostDefault}" start=auto
@@ -135,11 +166,13 @@ jobs:
         # # error below if the service is not started
         # # echo "Attempting - sc stop"
         # sc stop "${pgWINServiceNameHostDefault}"
+        echo "See the service"
+        sc query state= all | grep postgres | echo ""
         sc query                "${pgWINServiceNameHostDefault}"
         echo "Deleting Service - ${pgWINServiceNameHostDefault}"
         sc delete               "${pgWINServiceNameHostDefault}"
-        echo "See all services (that haves a display)"
-        net start
+        echo "See the service"
+        sc query state= all | grep postgres | echo ""
 
         echo "Manually Deleting Files and the Directory"
         rm -Rf   "${UNINSTALLER_PATH}"
@@ -170,18 +203,6 @@ jobs:
         echo "See all services (that haves a display)"
         net start
 
-    - name: Start PostgreSQL for Windows
-      env:
-        PGVER2: 17
-        Platform: x64
-      shell: cmd
-      run: |
-        echo on
-        if "%Platform%"=="x64" (net start postgresql-x64-%PGVER2%)
-        if "%Platform%"=="x86" (net start postgresql-%PGVER2%)
-        if "%Platform%"=="notset" (echo Platform is not set, therefore no net start happens.)
-
-
     - name: Stop PostgreSQL for Windows
       env:
         PGVER2: 17
@@ -193,3 +214,14 @@ jobs:
         if "%Platform%"=="x86" (net stop postgresql-%PGVER2%)
         if "%Platform%"=="notset" (echo Platform is not set, therefore no net stop happens.)
 
+
+    - name: Start PostgreSQL for Windows
+      env:
+        PGVER2: 17
+        Platform: x64
+      shell: cmd
+      run: |
+        echo on
+        if "%Platform%"=="x64" (net start postgresql-x64-%PGVER2%)
+        if "%Platform%"=="x86" (net start postgresql-%PGVER2%)
+        if "%Platform%"=="notset" (echo Platform is not set, therefore no net start happens.)
