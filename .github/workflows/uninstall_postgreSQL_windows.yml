@@ -73,14 +73,17 @@ jobs:
       if: ${{ env.pgWINServiceExists == 'true' }}
       shell: bash
       run: |
-        echo Deleting Service
-        sc delete "postgresql${PlatformSVCAdj}-${pgwinmajor}"
+        # echo Deleting Service
+        # sc delete "postgresql${PlatformSVCAdj}-${pgwinmajor}"
         echo "Uninstalling Service Software (only if from EDB)"
         # uninstall-postgresql.exe
         export POSTGRES_PATH="$(cygpath "C:\Program Files\\${PlatformPGAdj}\PostgreSQL")"
+        echo "POSTGRES_PATH: ${POSTGRES_PATH}"
         export UNINSTALLER_PATH="$(cygpath "${POSTGRES_PATH}\\${pgwinmajor}")"
+        echo "UNINSTALLER_PATH: ${UNINSTALLER_PATH}"
         export UNINSTALLER_PATH_FILE="$(cygpath "${POSTGRES_PATH}\uninstall-postgresql.exe")"
-        echo "possible potential UNINSTALLER: ${UNINSTALLER_PATH_FILE}"
+        echo "UNINSTALLER_PATH_FILE: ${UNINSTALLER_PATH_FILE}"
+        echo "Investigating possible potential UNINSTALLER: ${UNINSTALLER_PATH_FILE}"
         if [ -f "${UNINSTALLER_PATH_FILE}" ]
         then
           echo "UNINSTALLER found"
