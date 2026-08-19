@@ -88,6 +88,7 @@ jobs:
         then
           echo "UNINSTALLER found"
           ls -alrt "${UNINSTALLER_PATH_FILE}"
+          # silently does not work
           "${UNINSTALLER_PATH_FILE}" --debuglevel 3 --mode unattended
           ls -alrt "${UNINSTALLER_PATH}"
         else
@@ -95,7 +96,7 @@ jobs:
         fi
         # echo Deleting Files and the Directory
         # rm -Rf "$(cygpath "C:\Program Files${PlatformPGAdj}\PostgreSQL")"
-        ls -alrt "${UNINSTALLER_PATH"}
+        ls -alrt "${UNINSTALLER_PATH}"
  
     - name: Remove the default Windows PostgreSQL Server service registry entry
       if: ${{ env.pgWINServiceExists == 'true' }}
