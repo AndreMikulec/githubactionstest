@@ -75,8 +75,6 @@ jobs:
       if: ${{ env.pgWINServiceExists == 'true' }}
       shell: bash
       run: |
-        # echo Deleting Service
-        # sc delete "postgresql${PlatformSVCAdj}-${pgwinmajor}"
         echo "Uninstalling Service Software (only if from EDB)"
         # uninstall-postgresql.exe
         export POSTGRES_PATH="$(cygpath "C:\Program Files\\${PlatformPGAdj}\PostgreSQL")"
@@ -97,10 +95,13 @@ jobs:
         else
           echo "UNINSTALLER not found.  This was not an EDB PostgreSQL database."
         fi
+        echo "Deleting Service - ${pgWINServiceNameHostDefault}"
+        sc delete "postgresql${PlatformSVCAdj}-${pgwinmajor}"
+
         echo "Manually Deleting Files and the Directory"
         rm -Rf   "${UNINSTALLER_PATH}"
         echo "After Manually Deleting Files and the Directory"
-        ls -alrt "${UNINSTALLER_PATH}"
+        ls -alrt "${POSTGRES_PATH}"
  
     - name: Remove the default Windows PostgreSQL Server service registry entry
       if: ${{ env.pgWINServiceExists == 'true' }}
