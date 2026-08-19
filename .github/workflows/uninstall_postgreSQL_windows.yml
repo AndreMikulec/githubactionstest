@@ -97,6 +97,8 @@ jobs:
         fi
         
         echo "Attempting - net stop"
+        net start "${pgWINServiceNameHostDefault}"
+        # error below if the service is not started
         net stop "${pgWINServiceNameHostDefault}"
         echo "Attempting - sc stop"
         sc stop  "${pgWINServiceNameHostDefault}"
