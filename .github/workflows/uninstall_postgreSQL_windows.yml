@@ -81,7 +81,7 @@ jobs:
         echo "POSTGRES_PATH: ${POSTGRES_PATH}"
         export UNINSTALLER_PATH="$(cygpath "${POSTGRES_PATH}\\${pgwinmajor}")"
         echo "UNINSTALLER_PATH: ${UNINSTALLER_PATH}"
-        export UNINSTALLER_PATH_FILE="$(cygpath "${POSTGRES_PATH}\uninstall-postgresql.exe")"
+        export UNINSTALLER_PATH_FILE="$(cygpath "${UNINSTALLER_PATH}\uninstall-postgresql.exe")"
         echo "UNINSTALLER_PATH_FILE: ${UNINSTALLER_PATH_FILE}"
         echo "Investigating possible potential UNINSTALLER: ${UNINSTALLER_PATH_FILE}"
         if [ -f "${UNINSTALLER_PATH_FILE}" ]
