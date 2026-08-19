@@ -96,14 +96,15 @@ jobs:
           echo "UNINSTALLER not found.  This was not an EDB PostgreSQL database."
         fi
         
-        echo "Attempting - enabling"
-        # enabling required before any stop or start attempt
-        sc config "${pgWINServiceNameHostDefault}" start=auto
-        echo "Attempting - net stop"
-        net start "${pgWINServiceNameHostDefault}"
-        # error below if the service is not started
-        # echo "Attempting - sc stop"
-        net stop "${pgWINServiceNameHostDefault}"
+        # Disabled to begin with
+        # echo "Attempting - enabling"
+        # # enabling required before any stop or start attempt
+        # sc config "${pgWINServiceNameHostDefault}" start=auto
+        # echo "Attempting - net stop"
+        # net start "${pgWINServiceNameHostDefault}"
+        # # error below if the service is not started
+        # # echo "Attempting - sc stop"
+        sc stop "${pgWINServiceNameHostDefault}"
         sc query                "${pgWINServiceNameHostDefault}"
         echo "Deleting Service - ${pgWINServiceNameHostDefault}"
         sc delete               "${pgWINServiceNameHostDefault}"
