@@ -150,6 +150,8 @@ jobs:
       run: |
         echo Removing registry entry
         Remove-Item -Path "HKLM:\SOFTWARE\PostgreSQL" -Recurse -Force
+        echo Removing the service registry entry
+        Remove-Item -Path "HKLM:\SYSTEM\CurrentControlSet\Services\${pgWINServiceNameHostDefault}" -Recurse -Force
 
     - name: Download PostgreSQL for Windows
       uses: suisei-cn/actions-download-file@v1.6.1
