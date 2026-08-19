@@ -104,7 +104,7 @@ jobs:
         # net start "${pgWINServiceNameHostDefault}"
         # # error below if the service is not started
         # # echo "Attempting - sc stop"
-        sc stop "${pgWINServiceNameHostDefault}"
+        # sc stop "${pgWINServiceNameHostDefault}"
         sc query                "${pgWINServiceNameHostDefault}"
         echo "Deleting Service - ${pgWINServiceNameHostDefault}"
         sc delete               "${pgWINServiceNameHostDefault}"
