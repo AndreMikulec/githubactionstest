@@ -57,7 +57,7 @@ jobs:
         ${env:pgwinmajor} = "notset"
         if("${env:pgWINServiceExists}" -eq "true") {
           echo "pgWINServiceNameHostDefault: ${env:pgWINServiceNameHostDefault}"
-          # 1-30 seconds - can not do after a Start-Service
+          # 1-30 seconds - silently fails
           Stop-Service  -Name "${env:pgWINServiceNameHostDefault}"
           $matches = @()
           "${env:pgWINServiceNameHostDefault}" -match "(\d+[.]{0,1}\d+$)"
@@ -95,8 +95,15 @@ jobs:
         else
           echo "UNINSTALLER not found.  This was not an EDB PostgreSQL database."
         fi
+        
+        echo "Attempting - net stop"
+        net stop "${pgWINServiceNameHostDefault}"
+        echo "Attempting - sc stop"
+        sc stop  "${pgWINServiceNameHostDefault}"
+        sc query                "${pgWINServiceNameHostDefault}"
         echo "Deleting Service - ${pgWINServiceNameHostDefault}"
-        sc delete "postgresql${PlatformSVCAdj}-${pgwinmajor}"
+        sc delete               "${pgWINServiceNameHostDefault}"
+        sc query                "${pgWINServiceNameHostDefault}"
 
         echo "Manually Deleting Files and the Directory"
         rm -Rf   "${UNINSTALLER_PATH}"
