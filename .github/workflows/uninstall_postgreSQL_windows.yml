@@ -76,7 +76,7 @@ jobs:
         echo Deleting Service
         sc delete "postgresql${PlatformSVCAdj}-${pgwinmajor}"
         echo Uninstalling Service Software
-        export EXECUTABLE="$(cygpath "C:\Program Files${PlatformPGAdj}\PostgreSQL\${pgwinmajor}\uninstall-postgresql.exe")"
+        export EXECUTABLE="$(cygpath "C:\Program Files\\${PlatformPGAdj}\PostgreSQL\\${pgwinmajor}\uninstall-postgresql.exe")"
         echo "EXECUTABLE: ${EXECUTABLE}"
         "$(EXECUTABLE)" --mode unattended
         echo Deleting Files and the Directory
