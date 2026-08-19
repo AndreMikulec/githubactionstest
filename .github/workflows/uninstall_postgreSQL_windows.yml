@@ -103,6 +103,8 @@ jobs:
       if: ${{ env.pgWINServiceExists == 'true' }}
       shell: bash
       run: |
+        echo "See all services"
+        net start
         echo "Uninstalling Service Software (only if from EDB)"
         # uninstall-postgresql.exe
         export POSTGRES_PATH="$(cygpath "C:\Program Files\\${PlatformPGAdj}\PostgreSQL")"
@@ -151,7 +153,8 @@ jobs:
         echo Removing registry entry
         Remove-Item -Path "HKLM:\SOFTWARE\PostgreSQL" -Recurse -Force
         echo Removing the service registry entry
-        Remove-Item -Path "HKLM:\SYSTEM\CurrentControlSet\Services\${pgWINServiceNameHostDefault}" -Recurse -Force
+        # Cannot delete a subkey tree because the subkey does not exist
+        # Remove-Item -Path "HKLM:\SYSTEM\CurrentControlSet\Services\${env:pgWINServiceNameHostDefault}" -Recurse -Force
 
     - name: Download PostgreSQL for Windows
       uses: suisei-cn/actions-download-file@v1.6.1
