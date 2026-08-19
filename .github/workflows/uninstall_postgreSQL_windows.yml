@@ -136,7 +136,7 @@ jobs:
         sc query                "${pgWINServiceNameHostDefault}"
         echo "Deleting Service - ${pgWINServiceNameHostDefault}"
         sc delete               "${pgWINServiceNameHostDefault}"
-        rem "See all services (that haves a display)"
+        echo "See all services (that haves a display)"
         net start
 
         echo "Manually Deleting Files and the Directory"
@@ -162,7 +162,7 @@ jobs:
         echo on
         "${{ env.pgWINversionlong }}.exe" --unattendedmodeui none --mode unattended --enable-components server,commandlinetools --disable-components pgAdmin,stackbuilder --superpassword "root" > nul
         rem Installation will also start PostgreSQL
-        rem "See all services (that haves a display)"
+        echo "See all services (that haves a display)"
         net start
 
     - name: Start PostgreSQL for Windows
