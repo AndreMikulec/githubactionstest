@@ -136,6 +136,8 @@ jobs:
         sc query                "${pgWINServiceNameHostDefault}"
         echo "Deleting Service - ${pgWINServiceNameHostDefault}"
         sc delete               "${pgWINServiceNameHostDefault}"
+        rem "See all services (that haves a display)"
+        net start
 
         echo "Manually Deleting Files and the Directory"
         rm -Rf   "${UNINSTALLER_PATH}"
@@ -159,8 +161,30 @@ jobs:
       run: |
         echo on
         "${{ env.pgWINversionlong }}.exe" --unattendedmodeui none --mode unattended --enable-components server,commandlinetools --disable-components pgAdmin,stackbuilder --superpassword "root" > nul
-
         rem Installation will also start PostgreSQL
-        net stop  postgresql-x64-17
-        net start postgresql-x64-17
-        net stop  postgresql-x64-17
+        rem "See all services (that haves a display)"
+        net start
+
+    - name: Start PostgreSQL for Windows
+      env:
+        PGVER2: 17
+        Platform: x64
+      shell: cmd
+      run: |
+        echo on
+        if "%Platform%"=="x64" (net start postgresql-x64-%PGVER2%)
+        if "%Platform%"=="x86" (net start postgresql-%PGVER2%)
+        if "%Platform%"=="notset" (echo Platform is not set, therefore no net start happens.)
+
+
+    - name: Stop PostgreSQL for Windows
+      env:
+        PGVER2: 17
+        Platform: x64
+      shell: cmd
+      run: |
+        echo on
+        if "%Platform%"=="x64" (net stop postgresql-x64-%PGVER2%)
+        if "%Platform%"=="x86" (net stop postgresql-%PGVER2%)
+        if "%Platform%"=="notset" (echo Platform is not set, therefore no net stop happens.)
+
