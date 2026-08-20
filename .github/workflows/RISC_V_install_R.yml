@@ -25,7 +25,7 @@ jobs:
 
           export DEBIAN_FRONTEND=noninteractive
           
-########### THIS WORKS
+#         # THIS WORKS
 #         # To build PostgreSQL and its C client library (libpq) from source
 #         # E Unable to locate package libreadline-dev
 #         # libreadline-dev 
