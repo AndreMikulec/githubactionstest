@@ -22,7 +22,8 @@ jobs:
         run: |
           set -x -v -e
 
-          sudo apt update -y
-          
+          sudo apt update
+          sudo apt-get upgrade -y
+          sudo apt-get install -y r-base r-base-dev
 
 #         sudo apt-get install -qq --no-install-recommends build-essential ca-certificates curl gcc gfortran libblas-dev libbz2-dev libcairo2-dev libcurl4-openssl-dev libicu-dev libjpeg-dev liblapack-dev liblzma-dev libpcre2-dev libpng-dev libreadline-dev libssl-dev libtiff-dev libx11-dev libxml2-dev libxt-dev zlib1g-dev -y
