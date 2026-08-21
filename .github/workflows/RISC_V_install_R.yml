@@ -45,17 +45,13 @@ jobs:
           sudo apt-get upgrade -qq -y
           sudo apt-get install -qq acl -y
 
-          # Seems PG does not come pre-installed
           sudo /etc/init.d/postgresql stop
           sudo apt-get remove --purge postgresql\*
           sudo rm -rf /etc/postgresql /var/lib/postgresql
-          sudo apt-get install postgresql-${PG}
-          sudo apt-get install postgresql-server-dev-${PG}
-          echo 'local   all             postgres                                trust' | sudo tee /etc/postgresql/$PG/main/pg_hba.conf > /dev/null
+          sudo apt-get install -qq postgresql-${PG} postgresql-server-dev-${PG} -y
           # Builds under "runner"
           # Github Actions require elevated priviledges
-          sudo setfacl -Rm u:postgres:rwx,d:u:runner:rwx /home/runner
-          sudo pg_ctlcluster ${PG} main reload
+          # sudo setfacl -Rm u:postgres:rwx,d:u:runner:rwx /home/runner
           which pg_config
           pg_config
           psql -d postgres -c "SELECT version();"
