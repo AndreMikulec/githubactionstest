@@ -71,10 +71,15 @@ jobs:
           # export PATH=/usr/local/pgsql/lib:${PATH}
           # export LD_LIBRARY_PATH=/usr/local/pgsql/lib:${LD_LIBRARY_PATH}
           # export PATH=/usr/local/bin:$PATH
+          
+          pg_lsclusters
           which pg_config
           pg_config
-          pg_ctl status
-          pg_ctl start
+          # pg_ctl status
+          # pg_ctl start
+          
+          sudo systemctl status postgresql.service
+          sudo systemctl start postgresql.service
 
           # initdb pg_ctl psql pg_config (via /usr/bin/pg_config simlink)
           # export PATH=/usr/lib/postgresql/${PG}/bin
