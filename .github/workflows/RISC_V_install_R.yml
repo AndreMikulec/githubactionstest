@@ -43,17 +43,25 @@ jobs:
 
           sudo apt-get update -qq
           sudo apt-get upgrade -qq -y
-          sudo apt-get install -qq acl -y
+          sudo apt-get install apt-file -y
 
-          sudo /etc/init.d/postgresql stop
+          if [ -f /etc/init.d/postgresql ]
+          then
+            sudo /etc/init.d/postgresql stop
+          fi
+          
+          dpkg -L postgresql
+
           sudo apt-get remove --purge postgresql\*
           sudo rm -rf /etc/postgresql /var/lib/postgresql
+          
+          apt-file list postgresql
           sudo apt-get install -qq postgresql-${PG} postgresql-server-dev-${PG} -y
-          # Builds under "runner"
-          # Github Actions require elevated priviledges
-          # sudo setfacl -Rm u:postgres:rwx,d:u:runner:rwx /home/runner
+
           which pg_config
           pg_config
+          initdb -D /usr/local/pgsql/data
+          pg_ctl -D /usr/local/pgsql/data -l logfile start
           psql -d postgres -c "SELECT version();"
           psql -d postgres -c "SELECT current_setting('server_version_num');"
 
