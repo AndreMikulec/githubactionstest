@@ -32,7 +32,7 @@ jobs:
         run: |
           set -x -v -e
           sudo apt-get install -qq r-base r-base-dev -y
-          sudo apt-get install -qq build-essential ca-certificates curl gcc gfortran libcurl libblas-dev libbz2-dev libjpeg-turbo8-dev libjpeg8-dev liblapack-dev liblzma-dev libncurses-dev libpcre2-dev libpng-dev libreadline-dev libjpeg-dev libcurl4-openssl-dev -y
+          sudo apt-get install -qq build-essential ca-certificates curl gcc gfortran libcurl libblas-dev libbz2-dev libjpeg-turbo8-dev libjpeg8-dev liblapack-dev liblzma-dev libncurses-dev libpcre2-dev libpng-dev libreadline-dev libjpeg-dev r-cran-curl -y
           sudo apt-get install -qq subversion -y
 
       - name: Acquire R Source
