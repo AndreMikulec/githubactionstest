@@ -39,7 +39,6 @@ jobs:
           cat /proc/cpuinfo
           cat /etc/os-release
           set +x +v +e
-          echo Building plr with PostgreSQL $PG
 
           export DEBIAN_FRONTEND=noninteractive
 
@@ -60,6 +59,13 @@ jobs:
           
           apt-file list postgresql
           sudo apt-get install -qq postgresql-${PG} postgresql-server-dev-${PG} -y
+
+          echo "PATH: ${PATH}"
+          echo "LD_LIBRARY_PATH: ${LD_LIBRARY_PATH}"
+          ls -alrt /usr/bin
+          ls -alrt /usr/lib/postgresql/${PG}/bin
+          ls -alrt /usr/local/bin
+          ls -alrt /usr/local/pgsql/bin
 
           export PATH=/usr/local/pgsql/bin:$PATH
           export PATH=/usr/local/pgsql/lib:${PATH}
