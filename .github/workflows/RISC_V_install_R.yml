@@ -8,19 +8,19 @@ on:
 
 jobs:
   job_master_ubuntu-24_04-riscv:
-    name: PG master ubuntu-24.04-riscv
-    runs-on: ubuntu-24.04-riscv
-    env:
-      PG: 18
-    steps:
-      - name: Echo site details
-        run: echo PG $PG
+  name: PG master ubuntu-24.04-riscv
+  runs-on: ubuntu-24.04-riscv
+  env:
+    PG: 18
+  steps:
+    - name: Echo site details
+      run: echo PG $PG
 
-      - name: Echo site details
-        run: echo building master
- 
-      - name: Checkout code
-        uses: actions/checkout@v6
+    - name: Echo site details
+      run: echo building master
+
+    - name: Checkout code
+      uses: actions/checkout@v6
 
      - name: Before Script
         run: |
