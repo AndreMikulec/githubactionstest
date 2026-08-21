@@ -22,7 +22,7 @@ jobs:
     # https://cloud.r-project.org/
     runs-on: ubuntu-24.04-riscv
     env:
-      PG: 18
+      PG: 16
     steps:
       - name: Echo site details
         run: echo PG $PG
@@ -49,13 +49,13 @@ jobs:
           sudo /etc/init.d/postgresql stop
           sudo apt-get remove --purge postgresql\*
           sudo rm -rf /etc/postgresql /var/lib/postgresql
-          sudo apt-get install postgresql-$PG
-          sudo apt-get install postgresql-server-dev-$PG
+          sudo apt-get install postgresql-${PG}
+          sudo apt-get install postgresql-server-dev-${PG}
           echo 'local   all             postgres                                trust' | sudo tee /etc/postgresql/$PG/main/pg_hba.conf > /dev/null
           # Builds under "runner"
           # Github Actions require elevated priviledges
           sudo setfacl -Rm u:postgres:rwx,d:u:runner:rwx /home/runner
-          sudo pg_ctlcluster $PG main reload
+          sudo pg_ctlcluster ${PG} main reload
           which pg_config
           pg_config
           psql -d postgres -c "SELECT version();"
