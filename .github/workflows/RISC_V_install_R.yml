@@ -59,6 +59,8 @@ jobs:
           # 
           # apt-file list postgresql
           # sudo apt-get install -qq postgresql-${PG} postgresql-server-dev-${PG} -y
+          
+          sudo apt-get install -qq postgresql-server-dev-${PG} -y
 
           # echo "PATH: ${PATH}"
           # echo "LD_LIBRARY_PATH: ${LD_LIBRARY_PATH}"
@@ -81,7 +83,9 @@ jobs:
           # sudo systemctl status postgresql.service
           # sudo systemctl start postgresql.service
 
-          sudo -u postgres pg_ctl -D /var/lib/postgresql/data start
+          # sudo -u postgres pg_ctl -D /var/lib/postgresql/data start
+
+          sudo systemctl restart postgresql
 
           # initdb pg_ctl psql pg_config (via /usr/bin/pg_config simlink)
           # export PATH=/usr/lib/postgresql/${PG}/bin
