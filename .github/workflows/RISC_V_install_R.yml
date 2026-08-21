@@ -39,46 +39,51 @@ jobs:
           cat /proc/cpuinfo
           cat /etc/os-release
           set +x +v +e
-
+          echo "whoami: $(whoami)"
           export DEBIAN_FRONTEND=noninteractive
 
           sudo apt-get update -qq
           sudo apt-get upgrade -qq -y
-          sudo apt-get install apt-file -y
-          apt-file update
+          # sudo apt-get install apt-file -y
+          # apt-file update
 
-          if [ -f /etc/init.d/postgresql ]
-          then
-            sudo /etc/init.d/postgresql stop
-          fi
+          # if [ -f /etc/init.d/postgresql ]
+          # then
+          #   sudo /etc/init.d/postgresql stop
+          # fi
+          # 
+          # dpkg -L postgresql
+          # 
+          # sudo apt-get remove --purge postgresql\*
+          # sudo rm -rf /etc/postgresql /var/lib/postgresql
+          # 
+          # apt-file list postgresql
+          # sudo apt-get install -qq postgresql-${PG} postgresql-server-dev-${PG} -y
 
-          dpkg -L postgresql
+          # echo "PATH: ${PATH}"
+          # echo "LD_LIBRARY_PATH: ${LD_LIBRARY_PATH}"
+          # ls -alrt /usr/bin
+          # ls -alrt /usr/lib/postgresql/${PG}/bin
+          # ls -alrt /usr/local/bin
+          # ls -alrt /usr/local/pgsql/bin
 
-          sudo apt-get remove --purge postgresql\*
-          sudo rm -rf /etc/postgresql /var/lib/postgresql
-          
-          apt-file list postgresql
-          sudo apt-get install -qq postgresql-${PG} postgresql-server-dev-${PG} -y
-
-          echo "PATH: ${PATH}"
-          echo "LD_LIBRARY_PATH: ${LD_LIBRARY_PATH}"
-          ls -alrt /usr/bin
-          ls -alrt /usr/lib/postgresql/${PG}/bin
-          ls -alrt /usr/local/bin
-          ls -alrt /usr/local/pgsql/bin
-
-          export PATH=/usr/local/pgsql/bin:$PATH
-          export PATH=/usr/local/pgsql/lib:${PATH}
-          export LD_LIBRARY_PATH=/usr/local/pgsql/lib:${LD_LIBRARY_PATH}
-          export PATH=/usr/local/bin:$PATH
+          # export PATH=/usr/local/pgsql/bin:$PATH
+          # export PATH=/usr/local/pgsql/lib:${PATH}
+          # export LD_LIBRARY_PATH=/usr/local/pgsql/lib:${LD_LIBRARY_PATH}
+          # export PATH=/usr/local/bin:$PATH
           which pg_config
           pg_config
+          pg_ctl status
+          pg_ctl start
+
           # initdb pg_ctl psql pg_config (via /usr/bin/pg_config simlink)
-          export PATH=/usr/lib/postgresql/${PG}/bin
-          initdb -D /usr/local/pgsql/data
-          psql -d postgres -c "SELECT version();"
-          psql -d postgres -c "SELECT current_setting('server_version_num');"
-          pg_ctl -D /usr/local/pgsql/data -l logfile start
+          # export PATH=/usr/lib/postgresql/${PG}/bin
+          # initdb -D /usr/local/pgsql/data
+          # psql -d postgres -c "SELECT version();"
+          # psql -d postgres -c "SELECT current_setting('server_version_num');"
+          psql -c "SELECT version();"
+          psql -c "SELECT current_setting('server_version_num');"
+          # pg_ctl -D /usr/local/pgsql/data -l logfile start
           sudo apt-get install -qq r-base r-base-dev -y
           sudo R --version
 
