@@ -78,8 +78,10 @@ jobs:
           # pg_ctl status
           # pg_ctl start
           
-          sudo systemctl status postgresql.service
-          sudo systemctl start postgresql.service
+          # sudo systemctl status postgresql.service
+          # sudo systemctl start postgresql.service
+
+          sudo -u postgres pg_ctl -D /var/lib/postgresql/data start
 
           # initdb pg_ctl psql pg_config (via /usr/bin/pg_config simlink)
           # export PATH=/usr/lib/postgresql/${PG}/bin
