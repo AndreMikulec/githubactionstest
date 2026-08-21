@@ -11,106 +11,121 @@ jobs:
 
   job_master_ubuntu-24_04-riscv:
     name: PG master ubuntu-24.04-riscv
-    # JUL 18 2026 AUG 17 2026
-    # ubuntu-22.04-arm
-    # https://docs.github.com/en/actions/reference/runners/github-hosted-runners
-    # noble (24.04) arm64 (64-bit ARM)
-    # https://wiki.postgresql.org/wiki/Apt
-    # https://ftp.postgresql.org/pub/repos/apt/dists/noble-pgdg/main/binary-arm64/Packages.gz
-    # arm64 (i.e., M1/M2/M3, graviton etc) CPUs
-    # 24.04 (“noble”, amd64 and arm64),
-    # https://cloud.r-project.org/
     runs-on: ubuntu-24.04-riscv
-    env:
-      PG: 16
+
     steps:
-      - name: Echo site details
-        run: echo PG $PG
- 
-      - name: Checkout code
+
+      - name: Download This Repository Code
         uses: actions/checkout@v6
  
-      - name: Before Script
+      - name: Update and Upgradae
         run: |
           set -x -v -e
-          echo "Minimal"
-          uname -m
           uname -a
-          cat /proc/cpuinfo
-          cat /etc/os-release
-          set +x +v +e
-          echo "whoami: $(whoami)"
-          export DEBIAN_FRONTEND=noninteractive
-
-          sudo apt-get update -qq
-          sudo apt-get upgrade -qq -y
-          # sudo apt-get install apt-file -y
-          # apt-file update
-
-          # if [ -f /etc/init.d/postgresql ]
-          # then
-          #   sudo /etc/init.d/postgresql stop
-          # fi
-          # 
-          # dpkg -L postgresql
-          # 
-          # sudo apt-get remove --purge postgresql\*
-          # sudo rm -rf /etc/postgresql /var/lib/postgresql
-          # 
-          # apt-file list postgresql
-          # sudo apt-get install -qq postgresql-${PG} postgresql-server-dev-${PG} -y
           
-          sudo apt-get install -qq postgresql-server-dev-${PG} -y
+          sudo apt update
+          sudo apt-get upgrade -y
 
-          # echo "PATH: ${PATH}"
-          # echo "LD_LIBRARY_PATH: ${LD_LIBRARY_PATH}"
-          # ls -alrt /usr/bin
-          # ls -alrt /usr/lib/postgresql/${PG}/bin
-          # ls -alrt /usr/local/bin
-          # ls -alrt /usr/local/pgsql/bin
-
-          # export PATH=/usr/local/pgsql/bin:$PATH
-          # export PATH=/usr/local/pgsql/lib:${PATH}
-          # export LD_LIBRARY_PATH=/usr/local/pgsql/lib:${LD_LIBRARY_PATH}
-          # export PATH=/usr/local/bin:$PATH
-          
-          pg_lsclusters
-          which pg_config
-          pg_config
-          # pg_ctl status
-          # pg_ctl start
-          
-          # sudo systemctl status postgresql.service
-          # sudo systemctl start postgresql.service
-
-          # sudo -u postgres pg_ctl -D /var/lib/postgresql/data start
-
-          sudo systemctl restart postgresql
-
-          # initdb pg_ctl psql pg_config (via /usr/bin/pg_config simlink)
-          # export PATH=/usr/lib/postgresql/${PG}/bin
-          # initdb -D /usr/local/pgsql/data
-          # psql -d postgres -c "SELECT version();"
-          # psql -d postgres -c "SELECT current_setting('server_version_num');"
-          psql -c "SELECT version();"
-          psql -c "SELECT current_setting('server_version_num');"
-          # pg_ctl -D /usr/local/pgsql/data -l logfile start
-          sudo apt-get install -qq r-base r-base-dev -y
-          sudo R --version
-
-      - name: Script
+      - name: Install the repository R
         run: |
-          sudo pg_lsclusters
+          set -x -v -e
+          sudo apt-get install -qq r-base r-base-dev -y
+
+      - name: Test the repository R
+        run: |
+          set -x -v -e
+          R --version
+
+      - name: Shutdown Any Running PostgreSQL
+        run: |
+          set -x -v -e
+          if [ -f /etc/init.d/postgresql ]
+          then
+            sudo /etc/init.d/postgresql stop
+          fi
+
+      - name: UnInstall any Found PostgreSQL
+        run: |
+          set -x -v -e
+          sudo apt-get -qq remove --purge postgresql\* -y
+          sudo rm -rf /etc/postgresql /var/lib/postgresql
+
+      - name: Place Down New PostgreSQL Source Files
+        run: |
+          set -x -v -e
+          sudo apt-get install -qq build-essential zlib1g-dev flex bison libssl-dev -y
+          git clone --branch master --depth 1 https://github.com/postgres/postgres.git postgres-src
+
+      - name: Configure a New PostgreSQL from source
+        run: |
+          set -x -v -e
+          pushd postgres-src
+          git checkout master
+          ./configure --help
+          ./configure --without-icu --without-readline --without-zlib --disable-rpath --enable-depend --without-readline
+          popd
+
+      - name: Make a New PostgreSQL from source
+        run: |
+          set -x -v -e
+          pushd postgres-src
+          make 
+          popd
+          
+      - name: Install a New PostgreSQL from source
+        run: |
+          set -x -v -e
+          pushd postgres-src
+          sudo make install
+          popd
+
+      - name: Start a New PostgreSQL 
+        run: |
+          set -x -v -e
+          export PATH=/usr/local/pgsql/bin:$PATH
+          export PATH=/usr/local/pgsql/lib:${PATH}
+          export LD_LIBRARY_PATH=/usr/local/pgsql/lib:${LD_LIBRARY_PATH}
+          initdb -D data
+          pg_ctl -D data -l logfile start
+
+      - name: Check New PostgreSQL 
+        run: |
+          set -x -v -e
+          export PATH=/usr/local/pgsql/bin:$PATH
+          export PATH=/usr/local/pgsql/lib:${PATH}
+          export LD_LIBRARY_PATH=/usr/local/pgsql/lib:${LD_LIBRARY_PATH}
+          psql -d postgres -c "SELECT version();"
+          psql -d postgres -c "SELECT current_setting('server_version_num');"
+
+      - name: Make PL/R
+        run: |
+          set -x -v -e
           export USE_PGXS=1
+          export PATH=/usr/local/pgsql/bin:$PATH
+          export PATH=/usr/local/pgsql/lib:${PATH}
+          export LD_LIBRARY_PATH=/usr/local/pgsql/lib:${LD_LIBRARY_PATH}
           SHLIB_LINK=-lgcov PG_CPPFLAGS="-fprofile-arcs -ftest-coverage -O0" make
-          # USE_PGXS=1 is not required in Travis, and it is required in Github Actions
-          sudo USE_PGXS=1 make install
-          /usr/lib/postgresql/$PG/bin/pg_config
-          make installcheck PGUSER=postgres || (cat regression.diffs && false)
+        env:
+          USE_PGXS: 1
 
-      - name: After Success
-        # success() returns true, when none of the previous steps have failed or been canceled.
-        if: ${{ success() }}
-        # Uploads code coverage to codecov.io
-        run: bash <(curl -s https://codecov.io/bash)
+      - name: Install PL/R
+        run: |
+          set -x -v -e
+          export USE_PGXS=1
+          export PATH=/usr/local/pgsql/bin:$PATH
+          export PATH=/usr/local/pgsql/lib:${PATH}
+          export LD_LIBRARY_PATH=/usr/local/pgsql/lib:${LD_LIBRARY_PATH}
+          sudo USE_PGXS=1 PATH=/usr/local/pgsql/bin:$PATH make install
+        env:
+          USE_PGXS: 1
 
+      - name: Test PL/R
+        run: |
+          set -x -v -e
+          export USE_PGXS=1
+          export PATH=/usr/local/pgsql/bin:$PATH
+          export PATH=/usr/local/pgsql/lib:${PATH}
+          export LD_LIBRARY_PATH=/usr/local/pgsql/lib:${LD_LIBRARY_PATH}
+          make installcheck || (cat regression.diffs && false)
+        env:
+          USE_PGXS: 1
