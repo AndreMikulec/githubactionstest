@@ -1,23 +1,58 @@
 name: CI
 
-on: [push, pull_request, workflow_dispatch]
+on:
+  pull_request:
+  push:
+  workflow_dispatch:
+      # Then go to Actions -> your workflow -> Run workflow, check debug_enabled, 
+      #   and start it.
+      debug_enabled:
+        type: boolean
+        required: false
+        default: false
 
 jobs:
   build:
     name: Job Start
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
-    - name: step 1
-      run: |
-        date > install_date1.txt
 
-    - name: Setup upterm session
-      uses: owenthereal/action-upterm@v1
+    - name: Git Checkout this Repository Code
+      uses: actions/checkout@v6
+
+    - name: Install Windows mingw Software
+      uses: msys2/setup-msys2@v2
       with:
-        wait-timeout-minutes: 1
-        limit-access-to-actor: true
-        limit-access-to-users: AndreMikulec
+        path-type: strict
+        msystem: UCRT64
 
-    - name: step 3
+    - name: Msys Run Something
+      env:
+        shell: bash
+        msystem: UCRT64
       run: |
-        date > install_date3.txt
+        set -x -v -e
+        echo "Hello" >  Hello.txt
+
+#   - name: Setup upterm session
+#     uses: owenthereal/action-upterm@v1
+#     with:
+#       wait-timeout-minutes: 1
+#       limit-access-to-actor: true
+#       limit-access-to-users: AndreMikulec
+
+    - name: Debug with SSH
+      if: ${{ github.event_name == 'workflow_dispatch' && inputs.debug_enabled }}
+      uses: mxschmitt/action-tmate@v3
+      with:
+        limit-access-to-actor: true
+        timeout-minutes: 1
+
+    - name: Msys Run Something More
+      env:
+        shell: bash
+        msystem: UCRT64
+      run: |
+        set -x -v -e
+        echo " There" >>  Hello.txt
+        cat Hello.txt
