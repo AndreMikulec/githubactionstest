@@ -3,10 +3,9 @@ name: CI
 on: [push, pull_request, workflow_dispatch]
 
 jobs:
-  install:
+  build:
     name: Job Start
     runs-on: ubuntu-latest
-
     steps:
     - name: step 1
       run: |
@@ -14,7 +13,7 @@ jobs:
 
     - name: Setup upterm session
       uses: owenthereal/action-upterm@v1
-        ## Shut down the server if unconnected after 1 minutes.
+      with:
         wait-timeout-minutes: 1
         limit-access-to-actor: true
         limit-access-to-users: AndreMikulec
