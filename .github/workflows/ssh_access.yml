@@ -14,22 +14,40 @@ on:
 jobs:
   build:
     name: Job Start
+    continue-on-error: ${{ matrix.GithubActionsIgnoreFail }}
     runs-on: windows-latest
+    strategy:
+      matrix:
+        fail-fast: false
+        include:
+          - matid: '02'
+            os: windows-2025-vs2026
+            GithubActionsIgnoreFail: false
+            compilerEnv: UCRT64
+            shellEnv: msys2 {0}
+
+    defaults:
+      run:
+        shell: ${{ matrix.shellEnv || 'bash' }}
+
     steps:
 
     - name: Git Checkout this Repository Code
       uses: actions/checkout@v6
 
     - name: Install Windows mingw Software
+      if: ${{ matrix.os == 'windows-2025-vs2026' }}
       uses: msys2/setup-msys2@v2
       with:
         path-type: strict
-        msystem: UCRT64
+        msystem: ${{ env.compilerEnv }}
+        install: >-
+          tmux
 
     - name: Msys Run Something
+      if: ${{ matrix.os == 'windows-2025-vs2026' }}
       env:
-        shell: bash
-        msystem: UCRT64
+        msystem: ${{ env.compilerEnv }}
       run: |
         set -x -v -e
         echo "Hello" >  Hello.txt
@@ -49,10 +67,12 @@ jobs:
         timeout-minutes: 1
 
     - name: Msys Run Something More
+      if: ${{ matrix.os == 'windows-2025-vs2026' }}
       env:
-        shell: bash
-        msystem: UCRT64
+        msystem: ${{ env.compilerEnv }}
       run: |
         set -x -v -e
+        echo "Hello" >  Hello.txt
         echo " There" >>  Hello.txt
         cat Hello.txt
+
