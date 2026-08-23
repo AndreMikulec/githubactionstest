@@ -60,7 +60,7 @@ jobs:
 #       limit-access-to-users: AndreMikulec
 
     - name: Debug with SSH
-      if: ${{ inputs.debug_enabled == true || 1 = 1 }}
+      if: ${{ inputs.debug_enabled == true || '1' == '1' }}
       uses: mxschmitt/action-tmate@v3
       with:
         limit-access-to-actor: true
