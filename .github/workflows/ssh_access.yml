@@ -1,8 +1,6 @@
 name: CI
 
 on:
-  # Then go to Actions -> your workflow -> Run workflow, check debug_enabled
-  #   and start it.
   pull_request:
   push:
   workflow_dispatch:
@@ -53,10 +51,6 @@ jobs:
       run: |
         set -x -v -e
         echo "Hello" >  Hello.txt
-        echo github.event_name:          ${{ github.event_name }}
-        echo inputs.debug_enabled:       ${{ inputs.debug_enabled }}
-        # echo secrets.ACTIONS_STEP_DEBUG: ${{ secrets.ACTIONS_STEP_DEBUG }} # Unrecognized named-value: 'secrets'
-        echo env.ACTIONS_STEP_DEBUG:     ${{ env.ACTIONS_STEP_DEBUG }}
 
 #   - name: Setup upterm session
 #     uses: owenthereal/action-upterm@v1
@@ -66,7 +60,7 @@ jobs:
 #       limit-access-to-users: AndreMikulec
 
     - name: Debug with SSH
-      if: ${{ inputs.debug_enabled == true || env.ACTIONS_STEP_DEBUG == 'true' }}
+      if: ${{ inputs.debug_enabled == true || 1 = 1 }}
       uses: mxschmitt/action-tmate@v3
       with:
         limit-access-to-actor: true
