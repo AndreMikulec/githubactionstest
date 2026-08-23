@@ -4,6 +4,7 @@ on:
   pull_request:
   push:
   workflow_dispatch:
+    inputs:
       # Then go to Actions -> your workflow -> Run workflow, check debug_enabled, 
       #   and start it.
       debug_enabled:
@@ -51,6 +52,8 @@ jobs:
       run: |
         set -x -v -e
         echo "Hello" >  Hello.txt
+        echo github.event_name: ${{ github.event_name }}
+        echo inputs.debug_enabled: ${{ inputs.debug_enabled }}
 
 #   - name: Setup upterm session
 #     uses: owenthereal/action-upterm@v1
