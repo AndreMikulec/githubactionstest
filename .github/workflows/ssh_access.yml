@@ -86,27 +86,35 @@ jobs:
         SHELLOPTS:         ${{ env.compilerClass == 'cygwin' && 'igncr' || '' }}
         CHERE_INVOKING:    ${{ env.compilerClass == 'cygwin' && '1' || '' }}
         msystem:           ${{ env.compilerClass == 'MSYS2' && env.compilerEnv || '' }}
-        MSYS2_LOCATION:    ${{ env.compilerClass == 'MSYS2' && steps.msys2_install.outputs.msys2-location }}
+        MSYS2_LOCATION:    ${{ env.compilerClass == 'MSYS2' && steps.msys2_install.outputs.msys2-location || '' }}
       run: |
         echo "BEGIN Test for ${{ env.compilerEnv }}"
         if [ "${compilerClass}" == "cygwin" ]; then export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin; fi
         echo "DONE."
 
-      # very good - but does not have SFTP access "mxschmitt/action-tmate" DOES HAVE SFTP
-      # Warning: Unexpected input(s) 'timeout-minutes', 
-      # valid inputs are [
-      #   'sudo', 'install-dependencies', 'limit-access-to-actor', 
-      #   'detached', 'connect-timeout-seconds', 
-      #   'tmate-server-host', 
-      #   'tmate-server-port', 
-      #   'tmate-server-rsa-fingerprint', 'tmate-server-ed25519-fingerprint', 
-      #   'msys2-location', 'github-token']
-    - name: Debug with SSH mxschmitt/action-tmate@v3
-      if: ${{ inputs.debug_enabled == true || '1' == '1' || github.run_attempt > 1 }}
-      uses: mxschmitt/action-tmate@v3
+#     # very good - but does not have SFTP access. in contrary - "mxschmitt/action-tmate" DOES HAVE SFTP
+#     # Warning: Unexpected input(s) 'timeout-minutes', 
+#     # valid inputs are [
+#     #   'sudo', 'install-dependencies', 'limit-access-to-actor', 
+#     #   'detached', 'connect-timeout-seconds', 
+#     #   'tmate-server-host', 
+#     #   'tmate-server-port', 
+#     #   'tmate-server-rsa-fingerprint', 'tmate-server-ed25519-fingerprint', 
+#     #   'msys2-location', 'github-token']
+#   - name: Debug with SSH mxschmitt/action-tmate@v3
+#     if: ${{ inputs.debug_enabled == true || '1' == '1' || github.run_attempt > 1 }}
+#     uses: mxschmitt/action-tmate@v3
+#     with:
+#       limit-access-to-actor: true
+#       connect-timeout-seconds: 120
+
+    - name: Debug with SSH owenthereal/action-upterm@v1
+      uses: owenthereal/action-upterm@v1
       with:
+        wait-timeout-minutes: 2
         limit-access-to-actor: true
-        connect-timeout-seconds: 120
+        limit-access-to-users: AndreMikulec
+
 
     - name: Test2
       env:
