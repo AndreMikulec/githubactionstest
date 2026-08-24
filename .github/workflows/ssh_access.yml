@@ -11,7 +11,6 @@ jobs:
 
   build:
     name: matid ${{ matrix.matid }} ${{ matrix.compilerEnv }} ${{ matrix.platform }} ${{ matrix.os }}
-    needs: setup
     runs-on: ${{ matrix.os }}
     continue-on-error: ${{ matrix.GithubActionsIgnoreFail }}
     strategy:
