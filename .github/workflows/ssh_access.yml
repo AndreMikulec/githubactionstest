@@ -21,8 +21,7 @@ jobs:
       matrix:
         include:
           - matid: '02'
-            # os: windows-2025-vs2026
-            os: windows-latest
+            os: windows-2025-vs2026
             GithubActionsIgnoreFail: false
             compilerEnv: UCRT64
             compilerClass: MSYS2
@@ -38,17 +37,29 @@ jobs:
     - name: Git Checkout this Repository Code
       uses: actions/checkout@v6
 
+    - name: Environments Setup
+      env:
+        shell: bash
+      run: |
+        set -x -v -e
+        export compilerEnv="${{ matrix.compilerEnv }}"
+        echo "compilerEnv: ${compilerEnv}"
+        echo "compilerEnv=${compilerEnv}" >> ${GITHUB_ENV}
+        export compilerClass="${{ matrix.compilerClass }}"
+        echo "compilerClass: ${compilerClass}"
+        echo "compilerClass=${compilerClass}" >> ${GITHUB_ENV}
+
     - name: Install Windows mingw Software
       if: ${{ matrix.os == 'windows-2025-vs2026' }}
       uses: msys2/setup-msys2@v2
       with:
         path-type: strict
-        msystem: ${{ matrix.compilerEnv }}
+        msystem: ${{ env.compilerEnv }}
 
     - name: Msys Run Something
       # if: ${{ matrix.os == 'windows-2025-vs2026' }}
       env:
-        msystem: ${{ matrix.compilerEnv  }} # useless on ubuntu-latest
+        msystem: ${{ env.compilerEnv  }} # useless on ubuntu-latest
       run: |
         set -x -v -e
         echo "Hello" >  Hello.txt
@@ -62,7 +73,6 @@ jobs:
 #       limit-access-to-actor: true
 #       limit-access-to-users: AndreMikulec
 
-      
       # very good - but does not have SFTP access "mxschmitt/action-tmate" DOES HAVE SFTP
       # Warning: Unexpected input(s) 'timeout-minutes', 
       # valid inputs are [
@@ -82,7 +92,7 @@ jobs:
     - name: Msys Run Something More
       # if: ${{ matrix.os == 'windows-2025-vs2026' }}
       env:
-        msystem: ${{ matrix.compilerEnv }}  # useless on ubuntu-latest
+        msystem: ${{ env.compilerEnv }}  # useless on ubuntu-latest
       run: |
         set -x -v -e
         echo "Hello" >  Hello.txt
