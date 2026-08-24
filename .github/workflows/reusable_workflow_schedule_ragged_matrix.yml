@@ -1,0 +1,16 @@
+name: Call Reusable Workflow
+
+on:
+  push:
+
+jobs:
+  call-ragged:
+    uses: ./.github/workflows/reusable_workflow_build_ragged_matrix.yml
+    with:
+      # A ragged matrix where items have varying properties/keys
+      ragged-matrix: >
+        [
+          {"os": "ubuntu-latest", "node": "18", "extra_flag": "--fast"},
+          {"os": "windows-latest", "node": "20"},
+          {"os": "macos-latest", "node": "16", "debug": true, "extra_flag": "--slow"}
+        ]

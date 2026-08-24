@@ -92,6 +92,7 @@ jobs:
         if [ "${compilerClass}" == "cygwin" ]; then export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin; fi
         echo "DONE."
 
+#     # PuTTy MobaXterm
 #     # very good - but does not have SFTP access. in contrary - "mxschmitt/action-tmate" DOES HAVE SFTP
 #     # Warning: Unexpected input(s) 'timeout-minutes', 
 #     # valid inputs are [
@@ -108,6 +109,7 @@ jobs:
 #       limit-access-to-actor: true
 #       connect-timeout-seconds: 120
 
+#   # PuTTy MobaXterm WinSCP FileZilla
     - name: Debug with SSH owenthereal/action-upterm@v1
       uses: owenthereal/action-upterm@v1
       with:

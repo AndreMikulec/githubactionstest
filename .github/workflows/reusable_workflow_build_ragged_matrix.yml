@@ -1,0 +1,23 @@
+name: Reusable Ragged Matrix
+
+on:
+  workflow_call:
+    inputs:
+      ragged-matrix:
+        type: string
+        required: true
+
+jobs:
+  run-matrix:
+    strategy:
+      matrix:
+        include: ${{ fromJSON(inputs.ragged-matrix) }}
+    
+    runs-on: ${{ matrix.os }}
+    
+    steps:
+      - name: Show Matrix Values
+        run: |
+          echo "Node version: ${{ matrix.node }}"
+          echo "Extra flag: ${{ matrix.extra_flag }}"
+          echo "Debug mode: ${{ matrix.debug }}"
