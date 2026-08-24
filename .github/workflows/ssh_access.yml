@@ -36,12 +36,24 @@ jobs:
     - name: Git Checkout this Repository Code
       uses: actions/checkout@v6
 
+    - name: Environments Setup
+      env:
+        shell: bash
+      run: |
+        set -x -v -e
+        export compilerEnv="${{ matrix.compilerEnv }}"
+        echo "compilerEnv: ${compilerEnv}"
+        echo "compilerEnv=${compilerEnv}" >> ${GITHUB_ENV}
+        export compilerClass="${{ matrix.compilerClass }}"
+        echo "compilerClass: ${compilerClass}"
+        echo "compilerClass=${compilerClass}" >> ${GITHUB_ENV}
+
     - name: Install Windows mingw Software
       if: ${{ matrix.os == 'windows-2025-vs2026' }}
       uses: msys2/setup-msys2@v2
       with:
         path-type: strict
-        msystem: ${{ matrix.compilerEnv }}
+        msystem: ${{ env.compilerEnv }}
 
     - name: Msys Run Something
       if: ${{ matrix.os == 'windows-2025-vs2026' }}
