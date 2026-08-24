@@ -18,18 +18,18 @@ jobs:
       matrix:
         include:
 
-#       - matid: '01'
-#         os: ubuntu-latest
-#         compilerEnv: linux
-#         compilerClass: linux
-#         GithubActionsIgnoreFail: false
-
-        - matid: '02'
-          os: windows-2025-vs2026
-          compilerEnv: cygwin
-          compilerClass: cygwin
+        - matid: '01'
+          os: ubuntu-latest
+          compilerEnv: linux
+          compilerClass: linux
           GithubActionsIgnoreFail: false
 
+#       - matid: '02'
+#         os: windows-2025-vs2026
+#         compilerEnv: cygwin
+#         compilerClass: cygwin
+#         GithubActionsIgnoreFail: false
+#
 #       - matid: '03'
 #         os: windows-2025-vs2026
 #         compilerEnv: UCRT64
