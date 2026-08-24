@@ -18,11 +18,11 @@ jobs:
       matrix:
         include:
 
-        - matid: '01'
-          os: ubuntu-latest
-          compilerEnv: linux
-          compilerClass: linux
-          GithubActionsIgnoreFail: false
+#       - matid: '01'
+#         os: ubuntu-latest
+#         compilerEnv: linux
+#         compilerClass: linux
+#         GithubActionsIgnoreFail: false
 
         - matid: '02'
           os: windows-2025-vs2026
@@ -30,12 +30,12 @@ jobs:
           compilerClass: cygwin
           GithubActionsIgnoreFail: false
 
-        - matid: '03'
-          os: windows-2025-vs2026
-          compilerEnv: UCRT64
-          compilerClass: MSYS2
-          shellEnv: msys2 {0}
-          GithubActionsIgnoreFail: false
+#       - matid: '03'
+#         os: windows-2025-vs2026
+#         compilerEnv: UCRT64
+#         compilerClass: MSYS2
+#         shellEnv: msys2 {0}
+#         GithubActionsIgnoreFail: false
 
     defaults:
       run:
@@ -56,6 +56,9 @@ jobs:
         export compilerClass="${{ matrix.compilerClass }}"
         echo "compilerClass: ${compilerClass}"
         echo "compilerClass=${compilerClass}" >> ${GITHUB_ENV}
+        export os="${{ matrix.os }}"
+        echo "os: ${os}"
+        echo "os=${os}" >> ${GITHUB_ENV}
 
     - name: Windows host $${{ matrix.os }}
       if: ${{ matrix.os == 'windows-2025-vs2026'  }}
@@ -89,3 +92,29 @@ jobs:
         if [ "${compilerClass}" == "cygwin" ]; then export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin; fi
         echo "DONE."
 
+      # very good - but does not have SFTP access "mxschmitt/action-tmate" DOES HAVE SFTP
+      # Warning: Unexpected input(s) 'timeout-minutes', 
+      # valid inputs are [
+      #   'sudo', 'install-dependencies', 'limit-access-to-actor', 
+      #   'detached', 'connect-timeout-seconds', 
+      #   'tmate-server-host', 
+      #   'tmate-server-port', 
+      #   'tmate-server-rsa-fingerprint', 'tmate-server-ed25519-fingerprint', 
+      #   'msys2-location', 'github-token']
+    - name: Debug with SSH mxschmitt/action-tmate@v3
+      if: ${{ inputs.debug_enabled == true || '1' == '1' || github.run_attempt > 1 }}
+      uses: mxschmitt/action-tmate@v3
+      with:
+        limit-access-to-actor: true
+        connect-timeout-seconds: 120
+
+    - name: Test2
+      env:
+        SHELLOPTS:         ${{ env.compilerClass == 'cygwin' && 'igncr' || '' }}
+        CHERE_INVOKING:    ${{ env.compilerClass == 'cygwin' && '1' || '' }}
+        msystem:           ${{ env.compilerClass == 'MSYS2' && env.compilerEnv || '' }}
+        MSYS2_LOCATION:    ${{ env.compilerClass == 'MSYS2' && steps.msys2_install.outputs.msys2-location }}
+      run: |
+        echo "BEGIN Test for ${{ env.compilerEnv }}"
+        if [ "${compilerClass}" == "cygwin" ]; then export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin; fi
+        echo "DONE."
