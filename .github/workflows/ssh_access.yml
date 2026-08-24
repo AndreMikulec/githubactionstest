@@ -24,6 +24,8 @@ jobs:
             compilerEnv: UCRT64
             shellEnv: msys2 {0}
 
+    steps:
+
     - name: Environments Setup
       env:
         shell: bash
@@ -36,20 +38,21 @@ jobs:
         echo "compilerClass: ${compilerClass}"
         echo "compilerClass=${compilerClass}" >> ${GITHUB_ENV}
 
-      - name: Install Windows mingw Software
-        if: ${{ env.osClass == 'windows' && env.compilerClass == 'MSYS2' }}
-        uses: msys2/setup-msys2@v2
-        with: 
-          update: true
-          path-type: strict
-          msystem: ${{ env.compilerEnv }}
+    - name: Install Windows mingw Software
+      if: ${{ env.osClass == 'windows' && env.compilerClass == 'MSYS2' }}
+      uses: msys2/setup-msys2@v2
+      with: 
+        update: true
+        path-type: strict
+        msystem: ${{ env.compilerEnv }}
 
-      - name: Ops
-        if: ${{ env.osClass == 'windows' && env.compilerClass == 'MSYS2' }}
-        env:
-          # Msys OS variable
-          msystem: ${{ env.compilerEnv }}
-        run: |
-          echo "Ops"
-          set -x -v -e
-          echo "msystem: ${msystem}"
+    - name: Ops
+      if: ${{ env.osClass == 'windows' && env.compilerClass == 'MSYS2' }}
+      env:
+        # Msys OS variable
+        msystem: ${{ env.compilerEnv }}
+      run: |
+        echo "Ops"
+        set -x -v -e
+        echo "msystem: ${msystem}"
+
