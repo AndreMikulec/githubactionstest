@@ -1,21 +1,19 @@
-name: CI
+name: Builds
+run-name: Builds
+
+permissions:
+  contents: write
 
 on:
-  pull_request:
-  push:
-  workflow_dispatch:
-    inputs:
-      debug_enabled:
-        type: boolean
-        description: 'Enable debug mode'
-        required: false
-        default: false
+   push:
+   pull_request:
+   workflow_dispatch:
 
 jobs:
   build:
-    name: Job Start
+    name: matid ${{ matrix.matid }} 
+    runs-on: ${{ matrix.os }}
     continue-on-error: ${{ matrix.GithubActionsIgnoreFail }}
-    runs-on: windows-latest
     strategy:
       fail-fast: false
       matrix:
@@ -25,16 +23,6 @@ jobs:
             GithubActionsIgnoreFail: false
             compilerEnv: UCRT64
             shellEnv: msys2 {0}
-
-    defaults:
-      run:
-        shell: ${{ matrix.shellEnv || 'bash' }}
-
-    steps:
-
-      # REQUIRED for any debug session MAYBE
-    - name: Git Checkout this Repository Code
-      uses: actions/checkout@v6
 
     - name: Environments Setup
       env:
@@ -48,42 +36,20 @@ jobs:
         echo "compilerClass: ${compilerClass}"
         echo "compilerClass=${compilerClass}" >> ${GITHUB_ENV}
 
-    - name: Install Windows mingw Software
-      if: ${{ matrix.os == 'windows-2025-vs2026' }}
-      uses: msys2/setup-msys2@v2
-      with:
-        path-type: strict
-        msystem: ${{ env.compilerEnv }}
+      - name: Install Windows mingw Software
+        if: ${{ env.osClass == 'windows' && env.compilerClass == 'MSYS2' }}
+        uses: msys2/setup-msys2@v2
+        with: 
+          update: true
+          path-type: strict
+          msystem: ${{ env.compilerEnv }}
 
-    - name: Msys Run Something
-      if: ${{ matrix.os == 'windows-2025-vs2026' }}
-      env:
-        msystem: ${{ env.compilerEnv }}
-      run: |
-        set -x -v -e
-        echo "Hello" >  Hello.txt
-        echo "GREETING=Hello" >> ${GITHUB_ENV}
-
-#   - name: Setup upterm session
-#     uses: owenthereal/action-upterm@v1
-#     with:
-#       wait-timeout-minutes: 1
-#       limit-access-to-actor: true
-#       limit-access-to-users: AndreMikulec
-
-    - name: Debug with SSH
-      if: ${{ inputs.debug_enabled == true || '1' == '1' || github.run_attempt > 1 }}
-      uses: mxschmitt/action-tmate@v3
-      with:
-        limit-access-to-actor: true
-        timeout-minutes: 1
-
-    - name: Msys Run Something More
-      if: ${{ matrix.os == 'windows-2025-vs2026' }}
-      env:
-        msystem: ${{ env.compilerEnv }}
-      run: |
-        set -x -v -e
-        echo "Hello" >  Hello.txt
-        echo " There" >>  Hello.txt
-        cat Hello.txt
+      - name: Ops
+        if: ${{ env.osClass == 'windows' && env.compilerClass == 'MSYS2' }}
+        env:
+          # Msys OS variable
+          msystem: ${{ env.compilerEnv }}
+        run: |
+          echo "Ops"
+          set -x -v -e
+          echo "msystem: ${msystem}"
