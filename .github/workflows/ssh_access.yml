@@ -10,7 +10,7 @@ on:
 jobs:
 
   build:
-    name: matid ${{ matrix.matid }} ${{ matrix.compilerEnv }} ${{ matrix.platform }} ${{ matrix.os }}
+    name: matid ${{ matrix.matid }} ${{ matrix.compilerEnv }} ${{ matrix.compilerEnv }} ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     continue-on-error: ${{ matrix.GithubActionsIgnoreFail }}
     strategy:
@@ -20,14 +20,21 @@ jobs:
 
         - matid: '01'
           os: ubuntu-latest
-          platform: linux
           compilerEnv: linux
+          compilerClass: linux
           GithubActionsIgnoreFail: false
 
         - matid: '02'
           os: windows-2025-vs2026
-          platform: windows-cygwin
           compilerEnv: cygwin
+          compilerClass: cygwin
+          GithubActionsIgnoreFail: false
+
+        - matid: '03'
+          os: windows-2025-vs2026
+          compilerEnv: UCRT64
+          compilerClass: MSYS2
+          shellEnv: msys2 {0}
           GithubActionsIgnoreFail: false
 
     defaults:
@@ -36,29 +43,49 @@ jobs:
 
     steps:
 
-    - name: Pre-build check
-      id: build_check
-      shell: bash
-      run: |
-        echo "BEGIN Pre-build check"
-        set -x -v -e
-        echo "Preparing environment..."
-
-
-    - name: Skip This Matrix Item matid ${{ matrix.matid }}
-      shell: bash                     # redundant, because it is my defined matrix default
-      run: |
-        set -x -v -e
-        echo "Hello"
-
     - name: Checkout
       uses: actions/checkout@v6
 
+    - name: Pre-build 
+      shell: bash
+      run: |
+        set -x -v -e
+        export compilerEnv="${{ matrix.compilerEnv }}"
+        echo "compilerEnv: ${compilerEnv}"
+        echo "compilerEnv=${compilerEnv}" >> ${GITHUB_ENV}
+        export compilerClass="${{ matrix.compilerClass }}"
+        echo "compilerClass: ${compilerClass}"
+        echo "compilerClass=${compilerClass}" >> ${GITHUB_ENV}
 
-    - name: Windows Machine Stats for $${{ matrix.os }}
+    - name: Windows host $${{ matrix.os }}
       if: ${{ matrix.os == 'windows-2025-vs2026'  }}
       shell: cmd
       run: |
         systeminfo
 
+    - name: Setup for MSYS2
+      id: msys2_install
+      if:  ${{ env.compilerClass == 'MSYS2' }}
+      uses: msys2/setup-msys2@v2
+      with:
+        update: true
+        path-type: strict
+        msystem: ${{ env.compilerEnv }}
+
+    - name: Set up for cygwin
+      if:  ${{ env.compilerClass == 'cygwin' }}
+      uses: cygwin/cygwin-install-action@v6
+      with:
+        install-dir: 'C:\cygwin'
+
+    - name: Test
+      env:
+        SHELLOPTS:         ${{ env.compilerClass = 'cygwin' && 'igncr' || '' }}
+        CHERE_INVOKING:    ${{ env.compilerClass = 'cygwin' && '1' || '' }}
+        msystem:           ${{ env.compilerClass = 'MSYS2' && env.compilerEnv || '' }}
+        MSYS2_LOCATION:    ${{ env.compilerClass = 'MSYS2' && steps.msys2_install.outputs.msys2-location }}
+      run: |
+        echo "BEGIN Test for ${{ env.compilerEnv }}"
+        if [ "${compilerClass}" == "Cygwin" ]; then export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin; fi
+        echo "DONE."
 
