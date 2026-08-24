@@ -1,17 +1,58 @@
+
+
 name: Builds
-run-name: Builds
+
+run-name: Builds - ${{ github.event.head_commit.message }}
+
+on:
+  push:
+    paths-ignore:
+      - '**.md'
+      - 'LICENSE'
+
+  pull_request:
+    paths-ignore:
+      - '**.md'
+      - 'LICENSE'
+
+  workflow_dispatch:
+
+# FUTURE
+# GitHub Actions scheduled workflows (the on: schedule trigger)
+#   must exist on the default branch (usually main or master) of your repository to be triggered.
 
 permissions:
   contents: write
 
-on:
-   push:
-   pull_request:
-   workflow_dispatch:
-
 jobs:
+
+  setup:
+    runs-on: windows-2025-vs2026
+    steps:
+    - name: Pre-build check
+      id: build_check
+      shell: bash
+      run: |
+        echo "BEGIN Pre-build check"
+        set -x -v -e
+        echo "Preparing environment..."
+
+        export IS_SKIPTAG="notset"
+        export IS_SKIPTAG="${{ github.ref_type == 'tag' && startsWith(github.ref_name, 'SKIP') && 'true' || 'false' }}"
+        if [ "${IS_SKIPTAG}" == "" ]; then export IS_SKIPTAG="notset" ; fi
+        echo  "IS_SKIPTAG=${IS_SKIPTAG}" >> ${GITHUB_OUTPUT}
+
+        echo  "IS_SKIPTAG: ${IS_SKIPTAG}"
+
+        echo "END   Pre-build check"
+
+    outputs:
+      IS_SKIPTAG: ${{ steps.build_check.outputs.IS_SKIPTAG }}
+
   build:
-    name: matid ${{ matrix.matid }} 
+    name: >-
+      matid ${{ matrix.matid }} ${{ matrix.compilerEnv }} ${{ matrix.provider }} ${{ matrix.ExtraJobTitleInfo != 'notset' && matrix.ExtraJobTitleInfo }}
+    needs: setup
     runs-on: ${{ matrix.os }}
     continue-on-error: ${{ matrix.GithubActionsIgnoreFail }}
     strategy:
@@ -19,11 +60,34 @@ jobs:
       matrix:
         include:
 
-          - matid: '02'
-            os: windows-2025-vs2026
-            GithubActionsIgnoreFail: false
-            compilerEnv: UCRT64
-            shellEnv: msys2 {0}
+          #
+          # APR 2025
+          # Commit a140b6a
+          # Merge pull request erikkaashoek#177 from heitbaum/patch-1
+          # Fix build with gcc-15 and -std=c23
+          # master(erikkaashoek/Comskip#177) https://github.com/erikkaashoek/Comskip/pull/177
+          # 2 parents 9497bf2 + 2c667bf commit a140b6a
+          # https://github.com/AndreMikulec/heitbaum_Comskip/commit/a140b6ac8bc8f596729e9052819affc779c3b377
+          # https://github.com/heitbaum/Comskip/commit/a140b6ac8bc8f596729e9052819affc779c3b377
+          # https://github.com/sgscaffidi3/Comskip/commit/a140b6ac8bc8f596729e9052819affc779c3b377
+          #
+          # ComskipSRCversion: a140b6ac8bc8f596729e9052819affc779c3b377
+
+        - matid: '01'
+          os: ubuntu-latest
+          platform: linux
+          ExtraJobTitleInfo: linux ubuntu
+          GithubActionsIgnoreFail: false
+
+          # Explanation of "specific" matrix items -"Architecture" and "shell"-default
+        - matid: '02'
+          # Architecture: x64 - currently, only used by cygwin (default - Architecture: x64 )
+          os: windows-2025-vs2026
+          platform: windows-cygwin
+          compilerEnv: cygwin
+          # shell -- environment (defaults - run - shell - bash)
+          provider: repository
+          GithubActionsIgnoreFail: false
 
     defaults:
       run:
@@ -31,33 +95,150 @@ jobs:
 
     steps:
 
-    - name: Environments Setup
-      env:
-        shell: bash
+
+    - name: Skip This Matrix Item matid ${{ matrix.matid }}
+      shell: bash                     # redundant, because it is my defined matrix default
+      run: |
+        echo "BEGIN Skip This Matrix Item matid ${{ matrix.matid }}"
+        set -x -v -e
+
+        # allows me to run older/other code
+        export ComskipSRCversion="${{ matrix.ComskipSRCversion }}"
+        if [ "${ComskipSRCversion}" == "" ]; then export ComskipSRCversion="notset"; fi
+        echo "ComskipSRCversion=${ComskipSRCversion}" >> ${GITHUB_ENV}
+
+        echo "ComskipSRCversion: ${ComskipSRCversion}"
+
+        export SKIPImmune="${{ matrix.SKIPImmune }}"
+        if [ "${SKIPImmune}" == "" ]; then export SKIPImmune="notset"; fi
+        echo "SKIPImmune=${SKIPImmune}" >> ${GITHUB_ENV}
+
+        echo "SKIPImmune: ${SKIPImmune}"
+
+        export IS_SKIPTAG="${{ needs.setup.outputs.IS_SKIPTAG }}"
+        if [ "${IS_SKIPTAG}" == "" ]; then export IS_SKIPTAG="notset"; fi
+        echo "IS_SKIPTAG=${IS_SKIPTAG}" >> ${GITHUB_ENV}
+
+        echo "IS_SKIPTAG: ${IS_SKIPTAG}"
+
+        export SKIP="true"
+        if [ "${IS_SKIPTAG}" == "true" ] && [ "${SKIPImmune}" == "true" ]
+        then
+          export SKIP="false"
+        fi
+
+        if [ "${IS_SKIPTAG}" == "false" ]
+        then
+          export SKIP="false"
+        fi
+        echo "SKIP=${SKIP}" >> ${GITHUB_ENV}
+
+        echo "SKIP: ${SKIP}"
+
+        echo "END   Skip This Matrix Item matid ${{ matrix.matid }}"
+
+
+    # ** BASED ON THIS ONE ***
+    # MAY 2026
+    # ubuntu, builds
+    # macos@ffmpeg5 macos@ffmpeg6 macos@ffmpeg7,macos@ffmpeg8 build
+    # msys2@ffmpegy6, msys2@ffmpegy7, msys2@ffmpegy8 build
+    # msys2@ffmpeg5 DOES NOT BUILD
+    # https://github.com/AndreMikulec/heitbaum_Comskip/actions/runs/25801600601
+    # MAY 2025
+    # Commit 9aa9f85
+    # sgscaffidi3 committed on May 9, 2025
+    # Update mpeg2dec.c
+    # ticks_per_frame is deprecated. See: nschlia/ffmpegfs#149
+    # master
+    # 1 parent 5796506 commit  9aa9f85
+    # https://github.com/sgscaffidi3/Comskip/commit/9aa9f85571a183be9fd9a91608a1151148d5d011
+    # . . . SAME . . .
+    # Commit 8725a3c
+    # sgscaffidi3 authored and heitbaum committed on Sep 13, 2025
+    # Update mpeg2dec.c
+    # ticks_per_frame is deprecated. See: nschlia/ffmpegfs#149 https://github.com/nschlia/ffmpegfs/issues/149
+    # 1 parent a140b6a commit 8725a3c
+    # ticks(erikkaashoek/Comskip#187) https://github.com/erikkaashoek/Comskip/pull/187
+    # https://github.com/heitbaum/Comskip/commit/8725a3c15bc9e0a6e2797e04c1433dd8bd43b5e4
+    # ticks_try_MSYS2_old_ffmpeg7_260513_experiments
+    # https://github.com/AndreMikulec/heitbaum_Comskip/commit/8725a3c15bc9e0a6e2797e04c1433dd8bd43b5e4
+    #
+    #
+    # APRIL MAY SEPTEMER 2025
+    # ubuntu builds
+    # macos@ffmpeg6, macos@ffmpeg7 builds
+    # msys2@ffmpeg5 built one year ago,
+    # macos@ffmpeg5 DID NOT BUILD
+    # https://github.com/heitbaum/Comskip/actions/runs/17692079752/job/50286990604
+    # APR 2025
+    # Commit a140b6a
+    # Merge pull request erikkaashoek#177 from heitbaum/patch-1
+    # Fix build with gcc-15 and -std=c23
+    # master(erikkaashoek/Comskip#177) https://github.com/erikkaashoek/Comskip/pull/177
+    # 2 parents 9497bf2 + 2c667bf commit a140b6a
+    # https://github.com/AndreMikulec/Comskip/commit/a140b6ac8bc8f596729e9052819affc779c3b377
+    # https://github.com/AndreMikulec/heitbaum_Comskip/commit/a140b6ac8bc8f596729e9052819affc779c3b377
+    # master(#177) https://github.com/erikkaashoek/Comskip/pull/177
+    # https://github.com/erikkaashoek/Comskip/commit/a140b6ac8bc8f596729e9052819affc779c3b377
+    # master(erikkaashoek/Comskip#177) https://github.com/erikkaashoek/Comskip/pull/177
+    # https://github.com/heitbaum/Comskip/commit/a140b6ac8bc8f596729e9052819affc779c3b377
+    # master(#1, erikkaashoek/Comskip#177) https://github.com/erikkaashoek/Comskip/pull/177
+    # https://github.com/sgscaffidi3/Comskip/commit/a140b6ac8bc8f596729e9052819affc779c3b377
+    #
+    - name: Checkout
+      if: >-
+        ${{ env.SKIP != 'true'
+        }}
+      uses: actions/checkout@v6
+      with:
+        #
+        # Allow to build on a PREVIOUS COMMIT
+        #
+        # 'HEAD' does not work
+        # ''     does     work
+        # 'Commit SHA
+        # '${{ github.sha }} — This is the commit SHA that triggered the workflow run.
+        # 'Commit Message
+        # '${{ github.event.head_commit.message }} — Useful for filtering jobs based on words
+        #
+        # If your string is wrapped in single quotes, escape a literal single quote by doubling it.
+        ref: '${{ env.ComskipSRCversion != ''notset'' && env.ComskipSRCversion || '''' }}'
+
+
+    - name: Windows Machine Stats for $${{ matrix.os }}
+      if: >-
+        ${{ env.SKIP != 'true' && (
+        matrix.os == 'windows-2025-vs2026'
+        ) }}
+      shell: cmd
+      run: |
+        systeminfo
+
+
+    - name: General Shell Environment Variables for windows-2025-vs2026 made using Bash
+      # Early and RARE case that I use "matrix." variable in "if"
+      if: >-
+        ${{ env.SKIP != 'true' && (
+        matrix.os == 'windows-2025-vs2026'
+        ) }}
+      shell: bash                     # redundant, because it is my defined matrix default
       run: |
         set -x -v -e
-        export compilerEnv="${{ matrix.compilerEnv }}"
-        echo "compilerEnv: ${compilerEnv}"
-        echo "compilerEnv=${compilerEnv}" >> ${GITHUB_ENV}
-        export compilerClass="${{ matrix.compilerClass }}"
-        echo "compilerClass: ${compilerClass}"
-        echo "compilerClass=${compilerClass}" >> ${GITHUB_ENV}
+        echo "BEGIN General Shell Environment Variables for windows-2025-vs2026 made using Bash"
 
-    - name: Install Windows mingw Software
-      if: ${{ env.osClass == 'windows' && env.compilerClass == 'MSYS2' }}
-      uses: msys2/setup-msys2@v2
-      with: 
-        update: true
-        path-type: strict
-        msystem: ${{ env.compilerEnv }}
+        export TODAYSDATETIME=$(date -u +"%Y-%m-%d-%H-%M")
+        if [ "${TODAYSDATETIME}" == "" ]; then export TODAYSDATETIME="notset" ; fi
+        echo  "TODAYSDATETIME=${TODAYSDATETIME}" >> ${GITHUB_ENV}
 
-    - name: Ops
-      if: ${{ env.osClass == 'windows' && env.compilerClass == 'MSYS2' }}
-      env:
-        # Msys OS variable
-        msystem: ${{ env.compilerEnv }}
-      run: |
-        echo "Ops"
-        set -x -v -e
-        echo "msystem: ${msystem}"
+        echo  "TODAYSDATETIME: ${TODAYSDATETIME}"
+
+        export  HEAD7_GITHUB_SHA="$(echo "${GITHUB_SHA}" | cut -c -7)"
+        if [ "${HEAD7_GITHUB_SHA}" == "" ]; then export HEAD7_GITHUB_SHA="notset" ; fi
+        echo   "HEAD7_GITHUB_SHA=${HEAD7_GITHUB_SHA}" >> ${GITHUB_ENV}
+
+        echo   "HEAD7_GITHUB_SHA: ${HEAD7_GITHUB_SHA}"
+
+        echo "END   General Shell Environment Variables for windows-2025-vs2026 made using Bash"
+
 
