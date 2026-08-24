@@ -18,11 +18,16 @@ jobs:
       fail-fast: false
       matrix:
         include:
+
           - matid: '02'
             os: windows-2025-vs2026
             GithubActionsIgnoreFail: false
             compilerEnv: UCRT64
             shellEnv: msys2 {0}
+
+    defaults:
+      run:
+        shell: ${{ matrix.shellEnv || 'bash' }}
 
     steps:
 
