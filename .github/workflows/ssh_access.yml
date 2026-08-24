@@ -30,7 +30,7 @@ jobs:
 
     defaults:
       run:
-        shell: ${{ matrix.compilerClass == 'MSYS2' && matrix.shellEnv || 'bash' }}
+        shell: ${{ matrix.shellEnv || 'bash' }}
 
     steps:
 
@@ -48,7 +48,7 @@ jobs:
     - name: Msys Run Something
       # if: ${{ matrix.os == 'windows-2025-vs2026' }}
       env:
-        msystem: ${{ matrix.compilerClass == 'MSYS2' && matrix.compilerEnv || '' }} # useless on ubuntu-latest
+        msystem: ${{ matrix.compilerEnv  }} # useless on ubuntu-latest
       run: |
         set -x -v -e
         echo "Hello" >  Hello.txt
@@ -82,7 +82,7 @@ jobs:
     - name: Msys Run Something More
       # if: ${{ matrix.os == 'windows-2025-vs2026' }}
       env:
-        msystem: ${{ matrix.compilerClass == 'MSYS2' && matrix.compilerEnv || '' }}  # useless on ubuntu-latest
+        msystem: ${{ matrix.compilerEnv }}  # useless on ubuntu-latest
       run: |
         set -x -v -e
         echo "Hello" >  Hello.txt
