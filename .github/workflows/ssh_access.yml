@@ -80,12 +80,12 @@ jobs:
 
     - name: Test
       env:
-        SHELLOPTS:         ${{ env.compilerClass = 'cygwin' && 'igncr' || '' }}
-        CHERE_INVOKING:    ${{ env.compilerClass = 'cygwin' && '1' || '' }}
-        msystem:           ${{ env.compilerClass = 'MSYS2' && env.compilerEnv || '' }}
-        MSYS2_LOCATION:    ${{ env.compilerClass = 'MSYS2' && steps.msys2_install.outputs.msys2-location }}
+        SHELLOPTS:         ${{ env.compilerClass == 'cygwin' && 'igncr' || '' }}
+        CHERE_INVOKING:    ${{ env.compilerClass == 'cygwin' && '1' || '' }}
+        msystem:           ${{ env.compilerClass == 'MSYS2' && env.compilerEnv || '' }}
+        MSYS2_LOCATION:    ${{ env.compilerClass == 'MSYS2' && steps.msys2_install.outputs.msys2-location }}
       run: |
         echo "BEGIN Test for ${{ env.compilerEnv }}"
-        if [ "${compilerClass}" == "Cygwin" ]; then export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin; fi
+        if [ "${compilerClass}" == "cygwin" ]; then export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin; fi
         echo "DONE."
 
