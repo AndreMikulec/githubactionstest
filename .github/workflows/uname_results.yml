@@ -53,7 +53,7 @@ jobs:
 
         - matid: '06'
           os: windows-11-vs2026-arm
-          compilerEnv: UCRT64
+          compilerEnv: CLANGARM64
           compilerClass: MSYS2
           shellEnv: msys2 {0}
           GithubActionsIgnoreFail: false
