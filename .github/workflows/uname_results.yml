@@ -1,0 +1,218 @@
+
+
+name: Builds
+run-name: Builds - ${{ github.event.head_commit.message }}
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+
+# https://github.com/actions/runner-images
+
+  build:
+    name: matid ${{ matrix.matid }} ${{ matrix.os }} ${{ matrix.compilerEnv }}
+    runs-on: ${{ matrix.os }}
+    continue-on-error: ${{ matrix.GithubActionsIgnoreFail }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+
+        - matid: '01'
+          os: ubuntu-24.04
+          compilerEnv: linux
+          compilerClass: linux
+          GithubActionsIgnoreFail: false
+
+        - matid: '02'
+          os: ubuntu-24.04-arm
+          compilerEnv: linux
+          compilerClass: linux
+          GithubActionsIgnoreFail: false
+
+        - matid: '03'
+          os: ubuntu-24.04-riscv
+          compilerEnv: linux
+          compilerClass: linux
+          GithubActionsIgnoreFail: false
+
+        - matid: '04'
+          os: macos-26
+          compilerEnv: linux
+          compilerClass: linux
+          GithubActionsIgnoreFail: false
+
+        - matid: '05'
+          os: windows-2025-vs2026
+          compilerEnv: UCRT64
+          compilerClass: MSYS2
+          shellEnv: msys2 {0}
+          GithubActionsIgnoreFail: false
+
+        - matid: '06'
+          os: windows-11-vs2026-arm
+          compilerEnv: UCRT64
+          compilerClass: MSYS2
+          shellEnv: msys2 {0}
+          GithubActionsIgnoreFail: false
+
+        - matid: '07'
+          os: windows-2025-vs2026
+          compilerEnv: cygwin
+          compilerClass: cygwin
+          GithubActionsIgnoreFail: false
+ 
+        - matid: '08'
+          os: windows-11-vs2026-arm
+          compilerEnv: cygwin
+          compilerClass: cygwin
+          GithubActionsIgnoreFail: false
+
+    defaults:
+      run:
+        shell: ${{ matrix.shellEnv || 'bash' }}
+
+    steps:
+
+    - name: Checkout - everywhere
+      uses: actions/checkout@v6
+
+    - name: Pre-build - everywhere
+      shell: bash
+      run: |
+        set -x -v -e
+        export compilerEnv="${{ matrix.compilerEnv }}"
+        echo "compilerEnv=${compilerEnv}" >> ${GITHUB_ENV}
+        echo "compilerEnv: ${compilerEnv}"
+        export compilerClass="${{ matrix.compilerClass }}"
+        echo "compilerClass=${compilerClass}" >> ${GITHUB_ENV}
+        echo "compilerClass: ${compilerClass}"
+        export os="${{ matrix.os }}"
+        echo "os=${os}" >> ${GITHUB_ENV}
+        echo "os: ${os}"
+
+    - name: Windows host on $${{ matrix.os }}
+      if: ${{ matrix.os == 'windows-2025-vs2026' || matrix.os == 'windows-11-vs2026-arm' }}
+      shell: cmd
+      run: |
+        systeminfo
+        .\uname.ps1 -m
+        .\uname.ps1 -o
+
+    - name: Setup for MSYS2 - compilerClass MSYS2
+      id: msys2_install
+      if:  ${{ env.compilerClass == 'MSYS2' }}
+      uses: msys2/setup-msys2@v2
+      with:
+        update: true
+        path-type: strict
+        msystem: ${{ env.compilerEnv }}
+
+    - name: Set up for cygwin - compilerClass cygwin
+      if:  ${{ env.compilerClass == 'cygwin' }}
+      uses: cygwin/cygwin-install-action@v6
+      with:
+        install-dir: 'C:\cygwin'
+
+      # https://github.com/michaliskambi/test-arm-runner-for-cge/blob/master/.github/workflows/build.yml
+      # https://github.com/pguyot/arm-runner-action
+      # https://github.com/pguyot/arm-runner-action/blob/main/.github/workflows/test-cpu_info.yml
+    - name: Raspberry Pi on ubuntu-24.04
+      if: ${{ matrix.os == 'ubuntu-24.04' }}
+      uses: pguyot/arm-runner-action@v2
+      with:
+        image_additional_mb: 20480
+        bind_mount_repository: true
+        cpu: cortex-a76
+        base_image: raspios_lite_arm64:latest
+        commands: |
+
+            export SystemInformation=$(uname -a)
+            echo "SystemInformation=${SystemInformation}" >> ${GITHUB_ENV}
+            echo "SystemInformation: ${SystemInformation}"
+
+            export KernelName=$(uname -s)
+            echo "KernelName=${KernelName}" >> ${GITHUB_ENV}
+            echo "KernelName: ${KernelName}"
+
+            export NetworkNodeHostName=$(uname -n)
+            echo "NetworkNodeHostName=${NetworkNodeHostName}" >> ${GITHUB_ENV}
+            echo "NetworkNodeHostName: ${NetworkNodeHostName}"
+
+            export KernelRelease=$(uname -r)
+            echo "KernelRelease=${KernelRelease}" >> ${GITHUB_ENV}
+            echo "KernelRelease: ${KernelRelease}"
+
+            export KernelVersion=$(uname -v)
+            echo "KernelVersion=${KernelVersion}" >> ${GITHUB_ENV}
+            echo "KernelVersion: ${KernelVersion}"
+
+            export MachineHardwareName=$(uname -m)
+            echo "MachineHardwareName=${MachineHardwareName}" >> ${GITHUB_ENV}
+            echo "MachineHardwareName: ${MachineHardwareName}"
+
+            export Processor=$(uname -p)
+            echo "Processor=${Processor}" >> ${GITHUB_ENV}
+            echo "Processor: ${Processor}"
+
+            export HardwarePlatform=$(uname -i)
+            echo "HardwarePlatform=${HardwarePlatform}" >> ${GITHUB_ENV}
+            echo "HardwarePlatform: ${HardwarePlatform}"
+
+            export OperatingSystem=$(uname -o)
+            echo "OperatingSystem=${OperatingSystem}" >> ${GITHUB_ENV}
+            echo "OperatingSystem: ${OperatingSystem}"
+
+            echo "DONE."
+
+    - name: Test - everywhere
+      env:
+        SHELLOPTS:         ${{ env.compilerClass == 'cygwin' && 'igncr' || '' }}
+        CHERE_INVOKING:    ${{ env.compilerClass == 'cygwin' && '1' || '' }}
+        msystem:           ${{ env.compilerClass == 'MSYS2' && env.compilerEnv || '' }}
+        MSYS2_LOCATION:    ${{ env.compilerClass == 'MSYS2' && steps.msys2_install.outputs.msys2-location || '' }}
+      run: |
+        set -x -v -e
+        echo "BEGIN Test for ${{ env.compilerEnv }}"
+        if [ "${compilerClass}" == "cygwin" ]; then export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin; fi
+
+        export SystemInformation=$(uname -a)
+        echo "SystemInformation=${SystemInformation}" >> ${GITHUB_ENV}
+        echo "SystemInformation: ${SystemInformation}"
+
+        export KernelName=$(uname -s)
+        echo "KernelName=${KernelName}" >> ${GITHUB_ENV}
+        echo "KernelName: ${KernelName}"
+
+        export NetworkNodeHostName=$(uname -n)
+        echo "NetworkNodeHostName=${NetworkNodeHostName}" >> ${GITHUB_ENV}
+        echo "NetworkNodeHostName: ${NetworkNodeHostName}"
+
+        export KernelRelease=$(uname -r)
+        echo "KernelRelease=${KernelRelease}" >> ${GITHUB_ENV}
+        echo "KernelRelease: ${KernelRelease}"
+
+        export KernelVersion=$(uname -v)
+        echo "KernelVersion=${KernelVersion}" >> ${GITHUB_ENV}
+        echo "KernelVersion: ${KernelVersion}"
+
+        export MachineHardwareName=$(uname -m)
+        echo "MachineHardwareName=${MachineHardwareName}" >> ${GITHUB_ENV}
+        echo "MachineHardwareName: ${MachineHardwareName}"
+
+        export Processor=$(uname -p)
+        echo "Processor=${Processor}" >> ${GITHUB_ENV}
+        echo "Processor: ${Processor}"
+
+        export HardwarePlatform=$(uname -i)
+        echo "HardwarePlatform=${HardwarePlatform}" >> ${GITHUB_ENV}
+        echo "HardwarePlatform: ${HardwarePlatform}"
+
+        export OperatingSystem=$(uname -o)
+        echo "OperatingSystem=${OperatingSystem}" >> ${GITHUB_ENV}
+        echo "OperatingSystem: ${OperatingSystem}"
+
+        echo "DONE."
+
