@@ -93,11 +93,16 @@ jobs:
         echo "os=${os}" >> ${GITHUB_ENV}
         echo "os: ${os}"
 
-    - name: Windows host on $${{ matrix.os }}
+    - name: SystemIinfo of Windows host on $${{ matrix.os }}
       if: ${{ matrix.os == 'windows-2025-vs2026' || matrix.os == 'windows-11-vs2026-arm' }}
       shell: cmd
       run: |
         systeminfo
+        
+    - name: SystemIinfo of Windows host on $${{ matrix.os }}
+      if: ${{ matrix.os == 'windows-2025-vs2026' || matrix.os == 'windows-11-vs2026-arm' }}
+      shell: powershell
+      run: |
         .\uname.ps1 -m
         .\uname.ps1 -o
 
@@ -130,39 +135,30 @@ jobs:
         commands: |
 
             export SystemInformation=$(uname -a)
-            echo "SystemInformation=${SystemInformation}" >> ${GITHUB_ENV}
             echo "SystemInformation: ${SystemInformation}"
 
             export KernelName=$(uname -s)
-            echo "KernelName=${KernelName}" >> ${GITHUB_ENV}
             echo "KernelName: ${KernelName}"
 
             export NetworkNodeHostName=$(uname -n)
-            echo "NetworkNodeHostName=${NetworkNodeHostName}" >> ${GITHUB_ENV}
             echo "NetworkNodeHostName: ${NetworkNodeHostName}"
 
             export KernelRelease=$(uname -r)
-            echo "KernelRelease=${KernelRelease}" >> ${GITHUB_ENV}
             echo "KernelRelease: ${KernelRelease}"
 
             export KernelVersion=$(uname -v)
-            echo "KernelVersion=${KernelVersion}" >> ${GITHUB_ENV}
             echo "KernelVersion: ${KernelVersion}"
 
             export MachineHardwareName=$(uname -m)
-            echo "MachineHardwareName=${MachineHardwareName}" >> ${GITHUB_ENV}
             echo "MachineHardwareName: ${MachineHardwareName}"
 
             export Processor=$(uname -p)
-            echo "Processor=${Processor}" >> ${GITHUB_ENV}
             echo "Processor: ${Processor}"
 
             export HardwarePlatform=$(uname -i)
-            echo "HardwarePlatform=${HardwarePlatform}" >> ${GITHUB_ENV}
             echo "HardwarePlatform: ${HardwarePlatform}"
 
             export OperatingSystem=$(uname -o)
-            echo "OperatingSystem=${OperatingSystem}" >> ${GITHUB_ENV}
             echo "OperatingSystem: ${OperatingSystem}"
 
             echo "DONE."
