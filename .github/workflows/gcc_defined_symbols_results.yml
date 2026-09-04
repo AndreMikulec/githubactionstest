@@ -185,6 +185,11 @@ jobs:
             clang --version || true
             clang -dM -E -xc /dev/null | sort || true
 
+            echo "Check out INTERESTED predefined symbols"
+            cat   print_all.c
+            gcc   print_all.c -o print_all; chmod +x print_all; ./print_all || true
+            clang print_all.c -o print_all; chmod +x print_all; ./print_all || true
+
             echo "DONE."
 
     - name: Test - everywhere
@@ -240,6 +245,11 @@ jobs:
         gcc  -dM -E -xc /dev/null | sort || true
         clang --version || true
         clang -dM -E -xc /dev/null | sort || true
+
+        echo "Check out INTERESTED predefined symbols"
+        cat   print_all.c
+        gcc   print_all.c -o print_all; chmod +x print_all; ./print_all || true
+        clang print_all.c -o print_all; chmod +x print_all; ./print_all || true
 
         echo "DONE."
 
