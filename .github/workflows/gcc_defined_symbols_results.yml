@@ -128,6 +128,7 @@ jobs:
         update: true
         path-type: strict
         msystem: ${{ env.compilerEnv }}
+        # compiler is not installed by default
         install: >- 
           mingw-w64-${{ env.compilerEnv  == 'UCRT64' && 'ucrt-x86_64-gcc' || '' }}${{ env.compilerEnv  == 'CLANGARM64' && 'clang-aarch64-clang' || '' }}
 
@@ -137,7 +138,9 @@ jobs:
       uses: cygwin/cygwin-install-action@v6
       with:
         install-dir: 'C:\cygwin'
-        gcc-core
+        # compiler is not installed by default
+        packages: |
+          gcc-core
 
       # https://github.com/michaliskambi/test-arm-runner-for-cge/blob/master/.github/workflows/build.yml
       # https://github.com/pguyot/arm-runner-action
@@ -181,8 +184,10 @@ jobs:
 
             echo "Check out the predefined symbols"
             # https://www.cygwin.com/faq.html
-            gcc --version
-            gcc  -dM -E -xc /dev/null | sort
+            gcc --version || true
+            gcc  -dM -E -xc /dev/null | sort || true
+            clang --version || true
+            clang -dM -E -xc /dev/null | sort || true
 
             echo "DONE."
 
