@@ -40,11 +40,7 @@ jobs:
           compilerClass: linux
           GithubActionsIgnoreFail: false
 
-        - matid: '04'
-          os: macos-26
-          compilerEnv: linux
-          compilerClass: linux
-          GithubActionsIgnoreFail: false
+        # no matrix item '04'
 
         - matid: '05'
           os: windows-2025-vs2026
