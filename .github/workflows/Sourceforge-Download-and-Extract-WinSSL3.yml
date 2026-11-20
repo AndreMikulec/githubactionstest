@@ -43,6 +43,8 @@ jobs:
         7z x  openssl-3.6.2.zip            -o"C:\OTHERBIN"
         REM copy  openssl-3.6.2.zip          "C:\OTHERBIN\openssl-3"
         dir                                  "C:\OTHERBIN\openssl-3"
+        dir                                  "C:\OTHERBIN\openssl-3\bin"
+        dir                                  "C:\OTHERBIN\openssl-3\lib"
         tree /f                              "C:\OTHERBIN\openssl-3"
         rem - man7.org/linux/man-pages/man1/printf.1.html
         printf                               "C:\\OTHERBIN\\openssl-3\\bin" >> %GITHUB_PATH%
