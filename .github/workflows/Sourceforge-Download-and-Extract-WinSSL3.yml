@@ -39,9 +39,9 @@ jobs:
       run: |
         rem MKDIR creates any intermediate directories in the path, if needed.
         mkdir                                "C:\OTHERBIN\openssl-3"
-        rem 7z is provided by Github Actions
-        7z x  openssl-3.6.2.zip            -o"C:\OTHERBIN\openssl-3"
-        copy  openssl-3.6.2.zip              "C:\OTHERBIN\openssl-3"
+        REM 7z is provided by Github Actions
+        7z x  openssl-3.6.2.zip            -o"C:\OTHERBIN"
+        REM copy  openssl-3.6.2.zip          "C:\OTHERBIN\openssl-3"
         dir                                  "C:\OTHERBIN\openssl-3"
         tree /f                              "C:\OTHERBIN\openssl-3"
         rem - man7.org/linux/man-pages/man1/printf.1.html
