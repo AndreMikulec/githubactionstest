@@ -13,8 +13,8 @@ jobs:
       uses: actions/cache@v5
       id: cacheWinSSL3Zip
       with:
-        path: openssl-3.6.2.6.2.zip
-        key:  openssl-3.6.2.6.2.zip
+        path: openssl-3.6.2.zip
+        key:  openssl-3.6.2.zip
       env:
         SEGMENT_DOWNLOAD_TIMEOUT_MINS: 1
 
@@ -30,17 +30,18 @@ jobs:
         # verified NOV 20 2026
         # last file update 2026-05-03
         # url from Google Chrome triple verticle dots Download page
-        url: https://psychz.dl.sourceforge.net/project/openssl/openssl-3.6.2.6.2-x64/openssl-3.6.2.6.2.zip?viasf=1&fid=78c6a18ebfd9607f&e=1795230732&st=ZVbNUVCS0gFL-koE9NOjhg
+        url: https://psychz.dl.sourceforge.net/project/openssl/openssl-3.6.2-x64/openssl-3.6.2.zip?viasf=1&fid=78c6a18ebfd9607f&e=1795230732&st=ZVbNUVCS0gFL-koE9NOjhg
 
     # Install WinSSL3
     - name: Extract WinSSL3Zip and add WinSSL3Zip bin and lib directories to the PATH for Test on PostgreSQL for Windows
       # if: ${{ ( env.os == 'windows-2025-vs2026' && env.compilerClass == 'Mingw' && env.WinSSL3 == 'true' ) }}
       shell: cmd
       run: |
+        @echo on
         rem MKDIR creates any intermediate directories in the path, if needed.
         mkdir                                "C:\OTHERBIN"
         rem 7z is provided by Github Actions
-        7z x  openssl-3.6.2.6.2.zip        -o"C:\OTHERBIN"
+        7z x  openssl-3.6.2.zip            -o"C:\OTHERBIN"
         dir                                  "C:\OTHERBIN\openssl-3.6.2"
         dir                                  "C:\OTHERBIN\openssl-3.6.2\bin"
         dir                                  "C:\OTHERBIN\openssl-3.6.2\lib"
